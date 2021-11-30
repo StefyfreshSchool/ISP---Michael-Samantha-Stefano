@@ -43,7 +43,7 @@ public class GUI {
         output.setLineWrap(true);
         output.setEditable(false);
         output.setBackground(Color.BLACK);
-        // output.setText(lotsOfText);
+        output.setSelectionColor(Color.LIGHT_GRAY);
         output.setMargin(new Insets(5,5,5,5));
         output.setFont(new Font("Consolas", Font.PLAIN, 14));
         output.setForeground(Color.LIGHT_GRAY);
@@ -97,12 +97,9 @@ public class GUI {
         input.setBackground(Color.BLACK);
         input.setForeground(Color.WHITE);
         input.setSelectionColor(Color.LIGHT_GRAY);
-        // input.setMargin(new Insets(5,2,5,2));
-        // input.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         input.setBorder(BorderFactory.createEmptyBorder());
         input.setFont(new Font("Consolas", Font.PLAIN, 14));
         input.setForeground(Color.LIGHT_GRAY);
-
         //add key listener for the input box to check when a command is entered
         input.addKeyListener(new KeyListener(){
             @Override
@@ -307,8 +304,6 @@ public class GUI {
         flush();
     }
 
-
-
     /**
      * FLushes the output JTextArea by resetting the cursor/scroll position.
      */
@@ -316,9 +311,8 @@ public class GUI {
         JScrollPane scroll = (JScrollPane) gameContainer.getComponent(0);
         scroll.getVerticalScrollBar().setValue(0);
         try {
-            Thread.sleep(10);
+            Thread.sleep(12);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         scroll.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
