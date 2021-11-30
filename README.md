@@ -1,2 +1,2 @@
-# ISP---Michael-Samantha-Stefano
-ZORK ISP
+# ISP - Michael, Samantha & Stefano
+Zork is a simple text adventure game.
