@@ -5,9 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GUI {
-    //testing variables
-    static String lotsOfText = "FHDJSKF\nFHDJGSKF\nFHDJSKF\nFHDJGSKF\nFHDJSGKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSWKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJ13SKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\nFHDJSKF\n";
-
     //instance variables
     private JFrame frame;
     private JPanel gameContainer;
@@ -15,9 +12,7 @@ public class GUI {
     private boolean isLoaded = false;
     private static GUI gui;
 
-    private GUI(){
-
-    }
+    private GUI(){}
 
     public static GUI getGUI() {
         if (gui == null) gui = new GUI();
@@ -31,7 +26,7 @@ public class GUI {
         frame = new JFrame("ZORK - An Epic Text Adventure Game!");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 400);
-        frame.setIconImage(new ImageIcon(getClass().getResource("images\\icon.png")).getImage());
+        frame.setIconImage(new ImageIcon(getClass().getResource("images/icon.png")).getImage());
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
 
@@ -191,6 +186,8 @@ public class GUI {
         spacer.setBackground(Color.BLACK);
         return spacer;
     }
+
+    //Below are all the print methods
 
     /**
      * Prints a stream to the output JTextArea and adds a new line.
