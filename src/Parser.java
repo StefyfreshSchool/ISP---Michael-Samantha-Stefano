@@ -15,8 +15,6 @@
  * the known commands, and if the input is not one of the known commands, it
  * returns a command object that is marked as an unknown command.
  */
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Parser {
@@ -26,17 +24,22 @@ public class Parser {
     commands = new CommandWords();
   }
 
+  //Not used, here for reference
   public Command getCommand() {
     String inputLine = ""; // will hold the full input line
     String word1;
     String word2;
-    System.out.print("> "); // print prompt
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    try {
-      inputLine = reader.readLine();
-    } catch (java.io.IOException exc) {
-      System.out.println("There was an error during reading: " + exc.getMessage());
+    GUI gui = GUI.getGUI();
+
+    inputLine = gui.readCommand();
+
+    while (inputLine == null){
+      inputLine = gui.readCommand();
+      try {
+        Thread.sleep(1);
+      } catch (InterruptedException e) {}
     }
+
     StringTokenizer tokenizer = new StringTokenizer(inputLine);
     if (tokenizer.hasMoreTokens())
       word1 = tokenizer.nextToken(); // get first word

@@ -20,6 +20,8 @@ import java.util.Scanner;
  * the parser returns.
  */
 public class Game {
+  private GUI gui;
+
   private Parser parser;
   private Room currentRoom;
   // This is a MASTER object that contains all of the rooms and is easily
@@ -99,6 +101,9 @@ public class Game {
    * Main play routine. Loops until end of play.
    */
   public void play() {
+    gui = GUI.getGUI();
+    gui.createWindow();
+    while(!gui.isLoaded()){}
     printWelcome();
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
@@ -108,19 +113,25 @@ public class Game {
       Command command = parser.getCommand();
       finished = processCommand(command);
     }
-    System.out.println("Thank you for playing.  Good bye.");
+    gui.println("Thank you for playing.  Good bye.");
+
+    //Nice transition to exit the game
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {}
+    System.exit(0);
   }
 
   /**
    * Print out the opening message for the player.
    */
   private void printWelcome() {
-    System.out.println();
-    System.out.println("Welcome to Zork!");
-    System.out.println("Zork is a new, incredibly boring adventure game.");
-    System.out.println("Type 'help' if you need help.");
-    System.out.println();
-    System.out.println(currentRoom.longDescription());
+    gui.println();
+    gui.println("Welcome to Zork!");
+    gui.println("Zork is a new, incredibly boring adventure game.");
+    gui.println("Type 'help' if you need help.");
+    gui.println();
+    gui.println(currentRoom.longDescription());
   }
 
   /**
@@ -129,7 +140,7 @@ public class Game {
    */
   private boolean processCommand(Command command) {
     if (command.isUnknown()) {
-      System.out.println("I don't know what you mean...");
+      gui.println("I don't know what you mean...");
       return false;
     }
     String commandWord = command.getCommandWord();
@@ -139,11 +150,11 @@ public class Game {
       goRoom(command);
     else if (commandWord.equals("quit")) {
       if (command.hasSecondWord())
-        System.out.println("Quit what?");
+        gui.println("Quit what?");
       else
         return true; // signal that we want to quit
     } else if (commandWord.equals("eat")) {
-      System.out.println("Do you really think you should be eating at a time like this?");
+      gui.println("Do you really think you should be eating at a time like this?");
     } else if (commandWord.equals("yell")){
       yell(command.getSecondWord());
     
@@ -157,11 +168,11 @@ public class Game {
    */
   private void yell(String secondWord) {
     if (secondWord != null){
-      System.out.println(secondWord.toUpperCase() + "!!!!!!");
-      System.out.println("Feel better?");
+      gui.println(secondWord.toUpperCase() + "!!!!!!");
+      gui.println("Feel better?");
     }else{
-      System.out.println("ARGHHHHH!!!!!!");
-      System.out.println("Feel better?");
+      gui.println("ARGHHHHH!!!!!!");
+      gui.println("Feel better?");
     }
   }
 
@@ -171,10 +182,10 @@ public class Game {
    * and a list of the command words.
    */
   private void printHelp() {
-    System.out.println("You are lost. You are alone. You wander");
-    System.out.println("around at Monash Uni, Peninsula Campus.");
-    System.out.println();
-    System.out.println("Your command words are:");
+    gui.println("You are lost. You are alone. You wander");
+    gui.println("around at Monash Uni, Peninsula Campus.");
+    gui.println();
+    gui.println("Your command words are:");
     parser.showCommands();
   }
 
@@ -185,17 +196,21 @@ public class Game {
   private void goRoom(Command command) {
     if (!command.hasSecondWord()) {
       // if there is no second word, we don't know where to go...
-      System.out.println("Go where?");
+      gui.println("Go where?");
       return;
     }
     String direction = command.getSecondWord();
     // Try to leave current room.
     Room nextRoom = currentRoom.nextRoom(direction);
     if (nextRoom == null)
-      System.out.println("There is no door!");
+      gui.println("There is no door!");
     else {
       currentRoom = nextRoom;
-      System.out.println(currentRoom.longDescription());
+      gui.println(currentRoom.longDescription());
     }
+  }
+
+  public GUI getGUI(){
+    return gui;
   }
 }
