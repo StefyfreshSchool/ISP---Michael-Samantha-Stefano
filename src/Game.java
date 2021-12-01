@@ -1,11 +1,8 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Scanner;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,65 +15,6 @@ public class Game {
   
   private Parser parser;
   private Room currentRoom;
-  // This is a MASTER object that contains all of the rooms and is easily
-  // accessible.
-  // The key will be the name of the room -> no spaces (Use all caps and
-  // underscore -> Great Room would have a key of GREAT_ROOM
-  // In a hashmap keys are case sensitive.
-  // masterRoomMap.get("GREAT_ROOM") will return the Room Object that is the Great
-  // Room (assuming you have one).
-  private HashMap<String, Room> masterRoomMap;
-  
-  // private void initRooms(String fileName) throws Exception {
-  //   masterRoomMap = new HashMap<String, Room>();
-  //   Scanner roomScanner;
-  //   try {
-  //     HashMap<String, HashMap<String, String>> exits = new HashMap<String, HashMap<String, String>>();
-  //     roomScanner = new Scanner(new File(fileName));
-  //     while (roomScanner.hasNext()) {
-  //       Room room = new Room();
-  //       // Read the Name
-  //       String roomName = roomScanner.nextLine();
-  //       room.setRoomName(roomName.split(":")[1].trim());
-  //       // Read the Description
-  //       String roomDescription = roomScanner.nextLine();
-  //       room.setDescription(roomDescription.split(":")[1].replaceAll("<br>", "\n").trim());
-  //       // Read the Exits
-  //       String roomExits = roomScanner.nextLine();
-  //       // An array of strings in the format E-RoomName
-  //       String[] rooms = roomExits.split(":")[1].split(",");
-  //       HashMap<String, String> temp = new HashMap<String, String>();
-  //       for (String s : rooms) {
-  //         temp.put(s.split("-")[0].trim(), s.split("-")[1]);
-  //       }
-
-  //       exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ", "_"), temp);
-
-  //       // This puts the room we created (Without the exits in the masterMap)
-  //       masterRoomMap.put(roomName.toUpperCase().substring(10).trim().replaceAll(" ", "_"), room);
-
-  //       // Now we better set the exits.
-  //     }
-
-  //     for (String key : masterRoomMap.keySet()) {
-  //       Room roomTemp = masterRoomMap.get(key);
-  //       HashMap<String, String> tempExits = exits.get(key);
-  //       for (String s : tempExits.keySet()) {
-  //         // s = direction
-  //         // value is the room.
-
-  //         String roomName2 = tempExits.get(s.trim());
-  //         Room exitRoom = masterRoomMap.get(roomName2.toUpperCase().replaceAll(" ", "_"));
-  //         roomTemp.setExit(s.trim(), exitRoom);
-  //       }
-  //     }
-
-  //     roomScanner.close();
-  //   } catch (FileNotFoundException e) {
-  //     e.printStackTrace();
-  //   }
-  // }
-
 
   /**
    * Create the game and initialise its internal map.
