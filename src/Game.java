@@ -167,7 +167,7 @@ public class Game {
   private void printWelcome() {
     gui.println();
     gui.println("Welcome to Zork!");
-    gui.println("Zork is a new, incredibly boring adventure game.");
+    gui.println("Zork is an amazing text adventure game!");
     gui.println("Type 'help' if you need help.");
     gui.println();
     gui.println(currentRoom.longDescription());
