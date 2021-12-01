@@ -2,6 +2,7 @@ public class Item extends OpenableObject {
     private int weight;
     private String name;
     private boolean isOpenable;
+    private GUI gui = GUI.getGUI();
   
     public Item(int weight, String name, boolean isOpenable) {
       this.weight = weight;
@@ -11,7 +12,7 @@ public class Item extends OpenableObject {
   
     public void open() {
       if (!isOpenable)
-        System.out.println("The " + name + " cannot be opened.");
+        gui.println("The " + name + " cannot be opened.");
   
     }
   

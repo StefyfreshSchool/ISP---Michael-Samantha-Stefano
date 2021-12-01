@@ -4,6 +4,7 @@ public class Inventory {
   private ArrayList<Item> items;
   private int maxWeight;
   private int currentWeight;
+  private GUI gui = GUI.getGUI();
 
   public Inventory(int maxWeight) {
     this.items = new ArrayList<Item>();
@@ -23,7 +24,7 @@ public class Inventory {
     if (item.getWeight() + currentWeight <= maxWeight)
       return items.add(item);
     else {
-      System.out.println("There is no room to add the item.");
+      gui.println("There is no room to add the item.");
       return false;
     }
   }

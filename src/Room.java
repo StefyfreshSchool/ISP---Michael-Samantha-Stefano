@@ -5,6 +5,7 @@ public class Room {
   private String roomName;
   private String description;
   private ArrayList<Exit> exits;
+  private GUI gui = GUI.getGUI();
 
   public ArrayList<Exit> getExits() {
     return exits;
@@ -79,11 +80,11 @@ public class Room {
 
       }
     } catch (IllegalArgumentException ex) {
-      System.out.println(direction + " is not a valid direction.");
+      gui.println(direction + " is not a valid direction.");
       return null;
     }
 
-    System.out.println(direction + " is not a valid direction.");
+    gui.println(direction + " is not a valid direction.");
     return null;
   }
 
