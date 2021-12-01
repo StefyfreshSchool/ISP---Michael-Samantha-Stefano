@@ -137,9 +137,19 @@ public class GUI {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     inputCommand = input.getText();
                     commandIndex = browseIndex;
-                    commandsEntered.subList(browseIndex, commandsEntered.size()).clear();
-                    commandsEntered.add(commandIndex, input.getText());
-                    commandIndex++;
+                    if (commandIndex != commandsEntered.size()){
+                        commandsEntered.subList(browseIndex + 1, commandsEntered.size()).clear();
+                        if (!commandsEntered.get(commandIndex).equals(input.getText())){
+                            commandsEntered.add(commandIndex + 1, input.getText());
+                            commandIndex += 2;
+                        } else {
+                            commandIndex++;
+                        }
+                    }
+                    else {
+                        commandsEntered.add(commandIndex, input.getText());
+                        commandIndex++;
+                    }
                     browseIndex = commandIndex;
                     input.setText("");
                     flush();
@@ -147,10 +157,14 @@ public class GUI {
                 if(e.getKeyCode() == KeyEvent.VK_UP && browseIndex > 0){
                     browseIndex--;
                     input.setText(commandsEntered.get(browseIndex));
-                }
-                if(e.getKeyCode() == KeyEvent.VK_DOWN && browseIndex < commandsEntered.size() - 1){
+                } 
+                else if (e.getKeyCode() == KeyEvent.VK_DOWN && browseIndex < commandsEntered.size() - 1){
                     browseIndex++;
                     input.setText(commandsEntered.get(browseIndex));
+                }
+                else if(e.getKeyCode() == KeyEvent.VK_DOWN && browseIndex == commandsEntered.size() - 1){
+                    browseIndex++;
+                    input.setText("");
                 }
             }
 
@@ -327,12 +341,11 @@ public class GUI {
 
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
-        scroll.getVerticalScrollBar().setValue(0);
+        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
         try {
-            Thread.sleep(12);
+            Thread.sleep(20);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-        scroll.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
+        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
     }    
 }
