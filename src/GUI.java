@@ -130,40 +130,27 @@ public class GUI {
         input.addKeyListener(new KeyListener(){
             ArrayList<String> commandsEntered = new ArrayList<String>();
             int commandIndex = 0;
-            int browseIndex = 0;
 
             @Override
             public void keyPressed(KeyEvent e){
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     inputCommand = input.getText();
-                    commandIndex = browseIndex;
-                    if (commandIndex != commandsEntered.size()){
-                        commandsEntered.subList(browseIndex + 1, commandsEntered.size()).clear();
-                        if (!commandsEntered.get(commandIndex).equals(input.getText())){
-                            commandsEntered.add(commandIndex + 1, input.getText());
-                            commandIndex += 2;
-                        } else {
-                            commandIndex++;
-                        }
-                    }
-                    else {
-                        commandsEntered.add(commandIndex, input.getText());
-                        commandIndex++;
-                    }
-                    browseIndex = commandIndex;
+                    commandIndex = commandsEntered.size();
+                    commandsEntered.add(input.getText());
+                    commandIndex++;
                     input.setText("");
                     flush();
                 }
-                if(e.getKeyCode() == KeyEvent.VK_UP && browseIndex > 0){
-                    browseIndex--;
-                    input.setText(commandsEntered.get(browseIndex));
+                if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
+                    commandIndex--;
+                    input.setText(commandsEntered.get(commandIndex));
                 } 
-                else if (e.getKeyCode() == KeyEvent.VK_DOWN && browseIndex < commandsEntered.size() - 1){
-                    browseIndex++;
-                    input.setText(commandsEntered.get(browseIndex));
+                else if (e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex < commandsEntered.size() - 1){
+                    commandIndex++;
+                    input.setText(commandsEntered.get(commandIndex));
                 }
-                else if(e.getKeyCode() == KeyEvent.VK_DOWN && browseIndex == commandsEntered.size() - 1){
-                    browseIndex++;
+                else if(e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex == commandsEntered.size() - 1){
+                    commandIndex++;
                     input.setText("");
                 }
             }
