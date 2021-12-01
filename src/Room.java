@@ -1,25 +1,18 @@
-/*
- * Class Room - a room in an adventure game.
- *
- * Author:  Michael Kolling
- * Version: 1.1
- * Date:    August 2000
- * 
- * This class is part of Zork. Zork is a simple, text based adventure game.
- *
- * "Room" represents one location in the scenery of the game.  It is 
- * connected to at most four other rooms via exits.  The exits are labelled
- * north, east, south, west.  For each direction, the room stores a reference
- * to the neighbouring room, or null if there is no exit in that direction.
- */
-import java.util.Set;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 public class Room {
+
   private String roomName;
   private String description;
-  private HashMap<String, Room> exits; // stores exits of this room.
+  private ArrayList<Exit> exits;
+
+  public ArrayList<Exit> getExits() {
+    return exits;
+  }
+
+  public void setExits(ArrayList<Exit> exits) {
+    this.exits = exits;
+  }
 
   /**
    * Create a room described "description". Initially, it has no exits.
@@ -27,59 +20,17 @@ public class Room {
    */
   public Room(String description) {
     this.description = description;
-    exits = new HashMap<String, Room>();
+    exits = new ArrayList<Exit>();
   }
 
   public Room() {
-    // default constructor.
     roomName = "DEFAULT ROOM";
     description = "DEFAULT DESCRIPTION";
-    exits = new HashMap<String, Room>();
+    exits = new ArrayList<Exit>();
   }
 
-  public void setExit(String direction, Room r) throws Exception {
-    String dir = "";
-    if (direction.equals("E")) 
-      dir = "east";
-    else if (direction.equals("W")) 
-      dir = "west";
-    else if (direction.equals("N")) 
-      dir = "north";
-    else if (direction.equals("S")) 
-      dir = "south";
-    else if (direction.equals("U")) 
-      dir = "up";
-    else if (direction.equals("D")) 
-      dir = "down";
-    else if (direction.equals("SW")) 
-      dir = "southwest";
-    else
-      throw new Exception("Invalid Direction");
-    
-    exits.put(dir, r);
-
-
-  }
-
-  /**
-   * Define the exits of this room. Every direction either leads to another room
-   * or is null (no exit there).
-   */
-  public void setExits(Room north, Room east, Room south, Room west, Room up, Room down, Room southwest) {
-    if (north != null)
-      exits.put("north", north);
-    if (east != null)
-      exits.put("east", east);
-    if (south != null)
-      exits.put("south", south);
-    if (west != null)
-      exits.put("west", west);
-    if (up != null)
-      exits.put("up", up);
-    if (up != null)
-      exits.put("down", down);
-    if (southwest != null)
-      exits.put("southwest", southwest);
+  public void addExit(Exit exit) throws Exception {
+    exits.add(exit);
   }
 
   /**
@@ -104,10 +55,11 @@ public class Room {
    * ".
    */
   private String exitString() {
-    String returnString = "Exits:";
-    Set keys = exits.keySet();
-    for (Iterator iter = keys.iterator(); iter.hasNext();)
-      returnString += " " + iter.next();
+    String returnString = "Exits: ";
+    for (Exit exit : exits) {
+      returnString += exit.getDirection() + " ";
+    }
+
     return returnString;
   }
 
@@ -116,9 +68,32 @@ public class Room {
    * "direction". If there is no room in that direction, return null.
    */
   public Room nextRoom(String direction) {
-    return (Room) exits.get(direction);
+    try {
+      for (Exit exit : exits) {
+
+        if (exit.getDirection().equalsIgnoreCase(direction)) {
+          String adjacentRoom = exit.getAdjacentRoom();
+
+          return Game.roomMap.get(adjacentRoom);
+        }
+
+      }
+    } catch (IllegalArgumentException ex) {
+      System.out.println(direction + " is not a valid direction.");
+      return null;
+    }
+
+    System.out.println(direction + " is not a valid direction.");
+    return null;
   }
 
+  /*
+   * private int getDirectionIndex(String direction) { int dirIndex = 0; for
+   * (String dir : directions) { if (dir.equals(direction)) return dirIndex; else
+   * dirIndex++; }
+   * 
+   * throw new IllegalArgumentException("Invalid Direction"); }
+   */
   public String getRoomName() {
     return roomName;
   }

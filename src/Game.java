@@ -2,27 +2,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
-/**
- * Class Game - the main class of the "Zork" game.
- *
- * Author: Michael Kolling Version: 1.1 Date: March 2000
- * 
- * This class is the main class of the "Zork" application. Zork is a very
- * simple, text based adventure game. Users can walk around some scenery. That's
- * all. It should really be extended to make it more interesting!
- * 
- * To play this game, create an instance of this class and call the "play"
- * routine.
- * 
- * This main class creates and initialises all the others: it creates all rooms,
- * creates the parser and starts the game. It also evaluates the commands that
- * the parser returns.
- */
 public class Game {
   private GUI gui;
   private MusicPlayer music;
 
+  public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
+  
   private Parser parser;
   private Room currentRoom;
   // This is a MASTER object that contains all of the rooms and is easily
@@ -33,69 +26,101 @@ public class Game {
   // masterRoomMap.get("GREAT_ROOM") will return the Room Object that is the Great
   // Room (assuming you have one).
   private HashMap<String, Room> masterRoomMap;
+  
+  // private void initRooms(String fileName) throws Exception {
+  //   masterRoomMap = new HashMap<String, Room>();
+  //   Scanner roomScanner;
+  //   try {
+  //     HashMap<String, HashMap<String, String>> exits = new HashMap<String, HashMap<String, String>>();
+  //     roomScanner = new Scanner(new File(fileName));
+  //     while (roomScanner.hasNext()) {
+  //       Room room = new Room();
+  //       // Read the Name
+  //       String roomName = roomScanner.nextLine();
+  //       room.setRoomName(roomName.split(":")[1].trim());
+  //       // Read the Description
+  //       String roomDescription = roomScanner.nextLine();
+  //       room.setDescription(roomDescription.split(":")[1].replaceAll("<br>", "\n").trim());
+  //       // Read the Exits
+  //       String roomExits = roomScanner.nextLine();
+  //       // An array of strings in the format E-RoomName
+  //       String[] rooms = roomExits.split(":")[1].split(",");
+  //       HashMap<String, String> temp = new HashMap<String, String>();
+  //       for (String s : rooms) {
+  //         temp.put(s.split("-")[0].trim(), s.split("-")[1]);
+  //       }
 
-  private void initRooms(String fileName) throws Exception {
-    masterRoomMap = new HashMap<String, Room>();
-    Scanner roomScanner;
-    try {
-      HashMap<String, HashMap<String, String>> exits = new HashMap<String, HashMap<String, String>>();
-      roomScanner = new Scanner(new File(fileName));
-      while (roomScanner.hasNext()) {
-        Room room = new Room();
-        // Read the Name
-        String roomName = roomScanner.nextLine();
-        room.setRoomName(roomName.split(":")[1].trim());
-        // Read the Description
-        String roomDescription = roomScanner.nextLine();
-        room.setDescription(roomDescription.split(":")[1].replaceAll("<br>", "\n").trim());
-        // Read the Exits
-        String roomExits = roomScanner.nextLine();
-        // An array of strings in the format E-RoomName
-        String[] rooms = roomExits.split(":")[1].split(",");
-        HashMap<String, String> temp = new HashMap<String, String>();
-        for (String s : rooms) {
-          temp.put(s.split("-")[0].trim(), s.split("-")[1]);
-        }
+  //       exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ", "_"), temp);
 
-        exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ", "_"), temp);
+  //       // This puts the room we created (Without the exits in the masterMap)
+  //       masterRoomMap.put(roomName.toUpperCase().substring(10).trim().replaceAll(" ", "_"), room);
 
-        // This puts the room we created (Without the exits in the masterMap)
-        masterRoomMap.put(roomName.toUpperCase().substring(10).trim().replaceAll(" ", "_"), room);
+  //       // Now we better set the exits.
+  //     }
 
-        // Now we better set the exits.
-      }
+  //     for (String key : masterRoomMap.keySet()) {
+  //       Room roomTemp = masterRoomMap.get(key);
+  //       HashMap<String, String> tempExits = exits.get(key);
+  //       for (String s : tempExits.keySet()) {
+  //         // s = direction
+  //         // value is the room.
 
-      for (String key : masterRoomMap.keySet()) {
-        Room roomTemp = masterRoomMap.get(key);
-        HashMap<String, String> tempExits = exits.get(key);
-        for (String s : tempExits.keySet()) {
-          // s = direction
-          // value is the room.
+  //         String roomName2 = tempExits.get(s.trim());
+  //         Room exitRoom = masterRoomMap.get(roomName2.toUpperCase().replaceAll(" ", "_"));
+  //         roomTemp.setExit(s.trim(), exitRoom);
+  //       }
+  //     }
 
-          String roomName2 = tempExits.get(s.trim());
-          Room exitRoom = masterRoomMap.get(roomName2.toUpperCase().replaceAll(" ", "_"));
-          roomTemp.setExit(s.trim(), exitRoom);
-        }
-      }
+  //     roomScanner.close();
+  //   } catch (FileNotFoundException e) {
+  //     e.printStackTrace();
+  //   }
+  // }
 
-      roomScanner.close();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-  }
 
   /**
    * Create the game and initialise its internal map.
    */
   public Game() {
     try {
-      initRooms("data/rooms.dat");
-      currentRoom = masterRoomMap.get("ROOM_2");
+      initRooms("src\\data\\rooms.json");
+      currentRoom = roomMap.get("Bedroom");
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     parser = new Parser();
+  }
+
+  private void initRooms(String fileName) throws Exception {
+    Path path = Path.of(fileName);
+    String jsonString = Files.readString(path);
+    JSONParser parser = new JSONParser();
+    JSONObject json = (JSONObject) parser.parse(jsonString);
+
+    JSONArray jsonRooms = (JSONArray) json.get("rooms");
+
+    for (Object roomObj : jsonRooms) {
+      Room room = new Room();
+      String roomName = (String) ((JSONObject) roomObj).get("name");
+      String roomId = (String) ((JSONObject) roomObj).get("id");
+      String roomDescription = (String) ((JSONObject) roomObj).get("description");
+      room.setDescription(roomDescription);
+      room.setRoomName(roomName);
+
+      JSONArray jsonExits = (JSONArray) ((JSONObject) roomObj).get("exits");
+      ArrayList<Exit> exits = new ArrayList<Exit>();
+      for (Object exitObj : jsonExits) {
+        String direction = (String) ((JSONObject) exitObj).get("direction");
+        String adjacentRoom = (String) ((JSONObject) exitObj).get("adjacentRoom");
+        String keyId = (String) ((JSONObject) exitObj).get("keyId");
+        Boolean isLocked = (Boolean) ((JSONObject) exitObj).get("isLocked");
+        Boolean isOpen = (Boolean) ((JSONObject) exitObj).get("isOpen");
+        Exit exit = new Exit(direction, adjacentRoom, isLocked, keyId, isOpen);
+        exits.add(exit);
+      }
+      room.setExits(exits);
+      roomMap.put(roomId, room);
+    }
   }
 
   /**
@@ -113,8 +138,14 @@ public class Game {
 
     boolean finished = false;
     while (!finished) {
-      Command command = parser.getCommand();
-      finished = processCommand(command);
+      Command command;
+      try {
+        command = parser.getCommand();
+        finished = processCommand(command);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      
     }
     gui.println("Thank you for playing.  Good bye.");
 
@@ -123,8 +154,9 @@ public class Game {
     System.exit(0);
   }
 
+  /**Starts the background music. */
   private void startMusic() {
-    music = new MusicPlayer("data/audio/background.wav");
+    music = new MusicPlayer("src/audio/background.wav");
     music.setVolume(-25f);
     music.play();
   }
@@ -206,6 +238,7 @@ public class Game {
   }
 
   // implementations of user commands:
+
   /**
    * Print out some help information. Here we print some stupid, cryptic message
    * and a list of the command words.
@@ -228,9 +261,12 @@ public class Game {
       gui.println("Go where?");
       return;
     }
+
     String direction = command.getSecondWord();
+
     // Try to leave current room.
     Room nextRoom = currentRoom.nextRoom(direction);
+    
     if (nextRoom == null)
       gui.println("There is no door!");
     else {
@@ -239,10 +275,12 @@ public class Game {
     }
   }
 
-  public GUI getGUI(){
-    return gui;
-  }
-
+  /**
+   * Causes the currently executing thread to sleep (temporarily cease execution) 
+   * for the specified number of milliseconds, subject to the precision and accuracy 
+   * of system timers and schedulers.
+   * @param m - milliseconds to sleep for.
+   */
   public void sleep(long m){
     try {
       Thread.sleep(m);
