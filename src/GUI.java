@@ -68,6 +68,7 @@ public class GUI {
         output = new JTextArea();
         output.setLineWrap(true);
         output.setEditable(false);
+        output.setWrapStyleWord(true);
         output.setBackground(Color.BLACK);
         output.setSelectionColor(Color.LIGHT_GRAY);
         output.setMargin(new Insets(5,5,5,5));
