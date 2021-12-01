@@ -21,6 +21,7 @@ import java.util.Scanner;
  */
 public class Game {
   private GUI gui;
+  private MusicPlayer music;
 
   private Parser parser;
   private Room currentRoom;
@@ -105,6 +106,8 @@ public class Game {
     gui.createWindow();
     while(!gui.isLoaded()){}
     printWelcome();
+    startMusic();
+    
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
 
@@ -116,10 +119,14 @@ public class Game {
     gui.println("Thank you for playing.  Good bye.");
 
     //Nice transition to exit the game
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {}
+    sleep(1000);
     System.exit(0);
+  }
+
+  private void startMusic() {
+    music = new MusicPlayer("data/audio/background.wav");
+    music.setVolume(-20f);
+    music.play();
   }
 
   /**
@@ -158,6 +165,28 @@ public class Game {
     } else if (commandWord.equals("yell")){
       yell(command.getSecondWord());
     
+    } else if (commandWord.equals("music")) {
+      if (!command.hasSecondWord()) gui.println("What do you want to do with the music?");
+      else if (command.getSecondWord().equals("stop")){
+        music.stop();
+        gui.println("Music stopped.");
+      } 
+      else if (command.getSecondWord().equals("play")){
+        music.play();
+        gui.println("Music started!");
+      } 
+      else if (music.getVolume() > -75.1f && command.getSecondWord().equals("volume-down")){
+        music.setVolume(music.getVolume() - 5);
+        gui.println("Music volume down.");
+      } 
+      else if (music.getVolume() < -5f && command.getSecondWord().equals("volume-up")){
+        music.setVolume(music.getVolume() + 5);
+        gui.println("Music volume up.");
+      } 
+      else {
+        gui.println("Invalid music operation!");
+      }
+
     }
     return false;
   }
@@ -212,5 +241,13 @@ public class Game {
 
   public GUI getGUI(){
     return gui;
+  }
+
+  public void sleep(long m){
+    try {
+      Thread.sleep(m);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 }
