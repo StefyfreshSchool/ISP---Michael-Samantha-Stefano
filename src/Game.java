@@ -125,7 +125,7 @@ public class Game {
 
   private void startMusic() {
     music = new MusicPlayer("data/audio/background.wav");
-    music.setVolume(-20f);
+    music.setVolume(-25f);
     music.play();
   }
 
