@@ -4,16 +4,41 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 
+
+/**
+ * The GUI represents the interface between the program and the user.
+ * <p>
+ * A GUI object creates a frame that the user interacts with to play the game.
+ * <p>
+ * The GUI class is a singleton class, meaning the class has only one object. 
+ * To access the GUI object, the constructor is not used. Instead, a call to {@code GUI.getGUI()}
+ * returns the GUI object of the singleton class.
+ */
 public class GUI {
     //instance variables
     private JFrame frame;
     private JPanel gameContainer;
     private String inputCommand;
+    private JTextArea output;
+    private JTextField input;
+    private JScrollPane scroll;
+    private JPanel inputContainer;
+
+    //class variables
     private boolean isLoaded = false;
     private static GUI gui;
 
+    /** The private constructor for the singleton GUI class.*/
     private GUI(){}
 
+    /**
+     * getGUI is an accessor method of the GUI class that returns the singleton object of the class.
+     * <p>
+     * getGUI is the ONLY way to create a GUI object. The constructor for the GUI class is private,
+     * as is the case in a singleton class, so to access the singleton GUI object of the GUI class 
+     * one must call getGUI.
+     * @return A {@ GUI} object.
+     */
     public static GUI getGUI() {
         if (gui == null) gui = new GUI();
         return gui;
@@ -39,7 +64,7 @@ public class GUI {
 
 
         //create the output text area
-        JTextArea output = new JTextArea();
+        output = new JTextArea();
         output.setLineWrap(true);
         output.setEditable(false);
         output.setBackground(Color.BLACK);
@@ -51,7 +76,7 @@ public class GUI {
         
 
         //add scroll bar beside text area
-        JScrollPane scroll = new JScrollPane(output);
+        scroll = new JScrollPane(output);
         scroll.getVerticalScrollBar().setBackground(Color.BLACK);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -72,11 +97,11 @@ public class GUI {
             }
 
             private JButton createZeroButton() {
-                JButton jbutton = new JButton();
-                jbutton.setPreferredSize(new Dimension(0, 0));
-                jbutton.setMinimumSize(new Dimension(0, 0));
-                jbutton.setMaximumSize(new Dimension(0, 0));
-                return jbutton;
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(0, 0));
+                button.setMinimumSize(new Dimension(0, 0));
+                button.setMaximumSize(new Dimension(0, 0));
+                return button;
             }
         });
         gameContainer.add(scroll);
@@ -91,7 +116,7 @@ public class GUI {
 
 
         //add the input text box
-        JTextField input = new JTextField();
+        input = new JTextField();
         input.setEditable(true);
         input.setCaretColor(Color.WHITE);
         input.setBackground(Color.BLACK);
@@ -132,7 +157,7 @@ public class GUI {
         
 
         //add container for the ">" and the text input area
-        JPanel inputContainer = new JPanel();
+        inputContainer = new JPanel();
         inputContainer.setLayout(new BorderLayout());
         inputContainer.add(input, BorderLayout.CENTER);
         inputContainer.add(cmd, BorderLayout.LINE_START);
@@ -145,12 +170,6 @@ public class GUI {
         frame.setVisible(true);
         scroll.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
         isLoaded = true;
-
-        /**
-         * NOTE
-         *                                                                      JScrollPane       JViewport         JTextArea         
-         * JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-         */
     }
     
     /**
@@ -172,8 +191,8 @@ public class GUI {
 
     /**
      * Creates a JPanel spacer with a specified height.
-     * @param height - height of the spacer
-     * @return the new JPanel spacer element
+     * @param height - height of the spacer.
+     * @return The new JPanel spacer element.
      */
     private JPanel spacer(int height) {
         JPanel spacer = new JPanel();
@@ -186,12 +205,9 @@ public class GUI {
 
     //Below are all the print methods
 
-    /**
-     * Prints a stream to the output JTextArea and adds a new line.
-     */
+    /** Prints a stream to the output JTextArea and adds a new line.*/
     public void println() {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append("\n");
+        output.append("\n");
         flush();
     }
 
@@ -200,8 +216,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(int x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x +"\n");
+        output.append(x +"\n");
         flush();
     }
 
@@ -210,8 +225,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(boolean x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x +"\n");
+        output.append(x +"\n");
         flush();
     }
 
@@ -220,8 +234,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(String x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x +"\n");
+        output.append(x +"\n");
         flush();
     }
 
@@ -230,8 +243,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(Object x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x +"\n");
+        output.append(x +"\n");
         flush();
     }
 
@@ -240,17 +252,13 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(double x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x +"\n");
+        output.append(x +"\n");
         flush();
     }
 
-    /**
-     * Prints a stream to the output JTextArea.
-     */
+    /** Prints a stream to the output JTextArea.*/
     public void print() {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append("\n");
+        output.append("\n");
         flush();
     }
 
@@ -259,8 +267,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(int x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x + "\n");
+        output.append(x + "\n");
         flush();
     }
 
@@ -269,8 +276,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(boolean x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x + "\n");
+        output.append(x + "\n");
         flush();
     }
 
@@ -279,8 +285,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(String x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x + "\n");
+        output.append(x + "\n");
         flush();
     }
 
@@ -289,8 +294,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(double x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x + "\n");
+        output.append(x + "\n");
         flush();
     }
 
@@ -299,16 +303,12 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(Object x) {
-        JTextArea jt = (JTextArea) ((JViewport) ((JScrollPane) gameContainer.getComponent(0)).getComponent(0)).getComponent(0);
-        jt.append(x + "\n");
+        output.append(x + "\n");
         flush();
     }
 
-    /**
-     * FLushes the output JTextArea by resetting the cursor/scroll position.
-     */
+    /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
-        JScrollPane scroll = (JScrollPane) gameContainer.getComponent(0);
         scroll.getVerticalScrollBar().setValue(0);
         try {
             Thread.sleep(12);
