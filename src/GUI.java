@@ -3,6 +3,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 
 /**
@@ -127,12 +128,29 @@ public class GUI {
         input.setForeground(Color.LIGHT_GRAY);
         //add key listener for the input box to check when a command is entered
         input.addKeyListener(new KeyListener(){
+            ArrayList<String> commandsEntered = new ArrayList<String>();
+            int commandIndex = 0;
+            int browseIndex = 0;
+
             @Override
             public void keyPressed(KeyEvent e){
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     inputCommand = input.getText();
+                    commandIndex = browseIndex;
+                    commandsEntered.subList(browseIndex, commandsEntered.size()).clear();
+                    commandsEntered.add(commandIndex, input.getText());
+                    commandIndex++;
+                    browseIndex = commandIndex;
                     input.setText("");
                     flush();
+                }
+                if(e.getKeyCode() == KeyEvent.VK_UP && browseIndex > 0){
+                    browseIndex--;
+                    input.setText(commandsEntered.get(browseIndex));
+                }
+                if(e.getKeyCode() == KeyEvent.VK_DOWN && browseIndex < commandsEntered.size() - 1){
+                    browseIndex++;
+                    input.setText(commandsEntered.get(browseIndex));
                 }
             }
 
@@ -180,8 +198,8 @@ public class GUI {
         String command = null;
         if (inputCommand != null){
             command = inputCommand;
-            inputCommand = null;
         }
+        inputCommand = null;
         return command;
     }
 
