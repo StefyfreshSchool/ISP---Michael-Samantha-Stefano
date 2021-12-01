@@ -30,7 +30,7 @@
         },
         {
           "isLocked": false,
-          "direction": "SouthEast",
+          "direction": "South-East",
           "adjacentRoom": "Bathroom"
         },
         {
@@ -53,7 +53,7 @@
         },
         {
           "isLocked": false,
-          "direction": "NorthWest",
+          "direction": "North-West",
           "adjacentRoom": "Bedroom"
         }
       ]
