@@ -1,42 +1,89 @@
 {
   "rooms": [
     {
+      "id": "South of the Cyan House",
+      "name": "South of the Cyan House",
+      "description": "You find yourself south of a Cyan House, weathered by constant winds.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of the Cyan House"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "West of the Cyan House"
+        }
+      ]
+    },
+    {
+      "id": "East of the Cyan House",
+      "name": "East of the Cyan House",
+      "description": "You are east of the Cyan House.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "North of the Cyan House"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "South of the Cyan House"
+        }
+      ]
+    },
+    {
+      "id": "North of the Cyan House",
+      "name": "North of the Cyan House",
+      "description": "You are north of the Cyan House. A loose window sits on the wall. To the north, vast plains spread to the horizon.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of the Cyan House"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "West of the Cyan House"
+        },
+        {
+          "isLocked": true,
+          "direction": "South",
+          "adjacentRoom": "West Room",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "West of the Cyan House",
+      "name": "West of the Cyan House",
+      "description": "You are west of the Cyan House. A cobbled trail leads the west, towards an abandoned city plaza.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "North of the Cyan House"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "South of the Cyan House"
+        }
+      ]
+    },
+    {
       "id": "Hallway",
       "name": "Hallway",
       "description": "You are in a long hallway. There are family pictures on all of the walls.",
       "exits": [
         {
-          "isLocked": false,
-          "direction": "North",
-          "adjacentRoom": "Bedroom"
-        },
-        {
           "isLocked": true,
           "direction": "East",
           "adjacentRoom": "Bathroom",
           "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Bedroom",
-      "name": "Bedroom",
-      "description": "You are in a large bedroom",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "South",
-          "adjacentRoom": "Hallway"
-        },
-        {
-          "isLocked": false,
-          "direction": "South-East",
-          "adjacentRoom": "Bathroom"
-        },
-        {
-          "isLocked": false,
-          "direction": "East",
-          "adjacentRoom": "Closet"
         }
       ]
     },
@@ -50,23 +97,6 @@
           "direction": "West",
           "adjacentRoom": "Hallway",
           "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "North-West",
-          "adjacentRoom": "Bedroom"
-        }
-      ]
-    },
-    {
-      "id": "Closet",
-      "name": "Closet",
-      "description": "You are in the closet. It is dark.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "West",
-          "adjacentRoom": "Bedroom"
         }
       ]
     }
