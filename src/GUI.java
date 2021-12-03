@@ -140,6 +140,7 @@ public class GUI {
                     commandsEntered.add(input.getText());
                     commandIndex++;
                     input.setText("");
+                    output.append("> " + inputCommand + "\n");
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
