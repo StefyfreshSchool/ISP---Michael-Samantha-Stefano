@@ -75,6 +75,79 @@
       ]
     },
     {
+      "id": "Town Plaza",
+      "name": "Town Plaza",
+      "description": "You find an abandoned city plaza. A broken-down fountain sits to the north, and a small clearing is to the south.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Tarnished Fountain"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Plaza Outskirts"
+        }
+      ]
+    },
+    {
+      "id": "Tarnished Fountain",
+      "name": "Tarnished Fountain",
+      "description": "You marvel at a broken-down fountain, with scattered worthless coins inside of it. You see a shabby-looking bridge further north.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Bridge of Lost Souls"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Town Plaza"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Plaza Outskirts"
+        }
+      ]
+    },
+    {
+      "id": "Plaza Outskirts",
+      "name": "Plaza Outskirts",
+      "description": "You stand at the edges of the isloated town plaza. Before your feet, the rushing River of Souls ",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Bridge of Lost Souls"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Town Plaza"
+        }
+      ]
+    },
+    {
+      "id": "Bridge of Lost Souls",
+      "name": "Bridge of Lost Souls",
+      "description": "You stand upon the Bridge of Lost Souls. You feel your soul trying to wrench itself from your body.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Crater South"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Tarnished Fountain"
+        }
+      ]
+    },
+    {
       "id": "Hallway",
       "name": "Hallway",
       "description": "You are in a long hallway. There are family pictures on all of the walls.",
