@@ -71,6 +71,11 @@
           "isLocked": false,
           "direction": "South",
           "adjacentRoom": "South of the Cyan House"
+        },
+        {
+          "isLocked": true,
+          "direction": "West",
+          "adjacentRoom": "City Plaza"
         }
       ]
     },

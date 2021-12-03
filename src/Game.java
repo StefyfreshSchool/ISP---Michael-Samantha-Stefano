@@ -17,7 +17,7 @@ public class Game {
   private Room currentRoom;
 
   /**
-   * Create the game and initialise its internal map.
+   * Create the game and initialize its internal map.
    */
   public Game() {
     try {
@@ -211,6 +211,14 @@ public class Game {
       currentRoom = nextRoom;
       gui.println(currentRoom.longDescription());
     }
+  }
+
+  public void sasquatch(){
+    gui.println("The Sasquatch steps out of the cave");
+    gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
+    gui.println("What would you like to do:");
+    parser.showCommands();
+
   }
 
   /**
