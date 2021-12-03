@@ -67,7 +67,6 @@ public class Game {
   public void play() {
     gui = GUI.getGUI();
     gui.createWindow();
-    while(!gui.isLoaded()){}
     printWelcome();
     startMusic();
     

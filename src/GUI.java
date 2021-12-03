@@ -25,8 +25,7 @@ public class GUI {
     private JScrollPane scroll;
     private JPanel inputContainer;
 
-    //class variables
-    private boolean isLoaded = false;
+    //class variable
     private static GUI gui;
 
     /** The private constructor for the singleton GUI class.*/
@@ -191,7 +190,6 @@ public class GUI {
         pane.add(gameContainer);
         frame.setVisible(true);
         scroll.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
-        isLoaded = true;
     }
     
     /**
@@ -205,10 +203,6 @@ public class GUI {
         }
         inputCommand = null;
         return command;
-    }
-
-    public boolean isLoaded() {
-        return isLoaded;
     }
 
     /**
