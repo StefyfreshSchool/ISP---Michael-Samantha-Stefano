@@ -17,12 +17,12 @@ public class Game {
   private Room currentRoom;
 
   /**
-   * Create the game and initialise its internal map.
+   * Create the game and initialize its internal map.
    */
   public Game() {
     try {
       initRooms("src\\data\\rooms.json");
-      currentRoom = roomMap.get("Bedroom");
+      currentRoom = roomMap.get("South of the Cyan House");
     } catch (Exception e) {
       e.printStackTrace();
     }
