@@ -277,18 +277,12 @@ public class GUI {
         flush();
     }
 
-    /** Prints a stream to the output JTextArea.*/
-    public void print() {
-        output.append("\n");
-        flush();
-    }
-
     /**
      * Prints a stream to the output JTextArea.
      * @param x - to be printed
      */
     public void print(int x) {
-        output.append(x + "\n");
+        output.append(x + "");
         flush();
     }
 
@@ -297,7 +291,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(boolean x) {
-        output.append(x + "\n");
+        output.append(x + "");
         flush();
     }
 
@@ -306,7 +300,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(String x) {
-        output.append(x + "\n");
+        output.append(x + "");
         flush();
     }
 
@@ -315,7 +309,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(double x) {
-        output.append(x + "\n");
+        output.append(x + "");
         flush();
     }
 
@@ -324,17 +318,16 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(Object x) {
-        output.append(x + "\n");
+        output.append(x + "");
         flush();
     }
 
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
-        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-        }
-        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run(){
+                scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum() - scroll.getVerticalScrollBar().getHeight());
+            }
+        });
     }    
 }
