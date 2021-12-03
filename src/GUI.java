@@ -135,12 +135,13 @@ public class GUI {
             @Override
             public void keyPressed(KeyEvent e){
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    inputCommand = input.getText();
+                    String command = input.getText();
+                    inputCommand = command;
                     commandIndex = commandsEntered.size();
-                    commandsEntered.add(input.getText());
+                    commandsEntered.add(command);
                     commandIndex++;
                     input.setText("");
-                    output.append("> " + inputCommand + "\n");
+                    output.append("> " + command + "\n");
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
