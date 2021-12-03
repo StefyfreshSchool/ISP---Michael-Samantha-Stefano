@@ -213,6 +213,14 @@ public class Game {
     }
   }
 
+  public void sasquatch(){
+    gui.println("The Sasquatch steps out of the cave");
+    gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
+    gui.println("What would you like to do:");
+    parser.showCommands();
+
+  }
+
   /**
    * Causes the currently executing thread to sleep (temporarily cease execution) 
    * for the specified number of milliseconds, subject to the precision and accuracy 
