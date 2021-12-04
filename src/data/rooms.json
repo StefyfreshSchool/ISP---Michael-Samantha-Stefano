@@ -58,6 +58,36 @@
       ]
     },
     {
+      "id": "West Room",
+      "name": "West Room",
+      "description": "You climb through the open window, entering the west room of the Cyan House. It seems to have been looted long ago. A doorframe, but no door, is to the east.",
+      "exits": [
+        {
+          "isLocked": true,
+          "direction": "North",
+          "adjacentRoom": "North of the Cyan House",
+          "keyId": "0000"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East Room"
+        }
+      ]
+    },
+    {
+      "id": "East Room",
+      "name": "East Room",
+      "description": "You enter the east room of the Cyan House. In the room sits a magnificent table adorned with a bottle of water, some bandages, and an ancient tome.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "West Room"
+        }
+      ]
+    },
+    {
       "id": "West of the Cyan House",
       "name": "West of the Cyan House",
       "description": "You are west of the Cyan House. A cobbled trail leads the west, towards an abandoned city plaza.",
@@ -149,6 +179,147 @@
           "isLocked": false,
           "direction": "South",
           "adjacentRoom": "Tarnished Fountain"
+        }
+      ]
+    },
+    {
+      "id": "Castle Grounds",
+      "name": "Castle Grounds",
+      "description": "You stand upon the castle crossroads, gazing around the imperial courtyard. A refurbished bridge is to the west, an alabaster gate is to the south, and the castle steps sit north. You spot an overgrown path to the east.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Castle of Alaskan Cheese"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Border Gate"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Overgrown Path"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Bridge of Found Souls"
+        }
+      ]
+    },
+    {
+      "id": "Overgrown Path",
+      "name": "Overgrown Path",
+      "description": "You follow the winding path along the boreal forests. The path continues from the south to the northeast, but you stop at a weathered sign. 'WELCOME to YUKON TERRITORY'",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Northeast",
+          "adjacentRoom": "Frostbitten Tundra"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Castle Grounds"
+        }
+      ]
+    },
+    {
+      "id": "Frostbitten Tundra",
+      "name": "Frostbitten Tundra",
+      "description": "You stand alone in an icy tundra, when snowflakes start falling around you. The path continues from the northwest to the east, where you can see the faint glow of a log cabin.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Northwest",
+          "adjacentRoom": "Overgrown Path"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Snowy Cabin"
+        }
+      ]
+    },
+    {
+      "id": "Snowy Cabin",
+      "name": "Snowy Cabin",
+      "description": "You stand at the door to the log cabin, blanketed by recent snowfall. The sign above the door reads: 'Best Furs in ALL OF CANADA'.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Frostbitten Tundra"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Fur Store"
+        }
+      ]
+    },
+    {
+      "id": "Fur Store",
+      "name": "Fur Store",
+      "description": "You enter the cabin.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Snowy Cabin"
+        }
+      ]
+    },
+    {
+      "id": "Border Gate",
+      "name": "Border Gate",
+      "description": "You stand before the thick iron gates leading to the Castle. There is a small patrol booth, but it seems to be deserted. You can see a lake to the south.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Castle Grounds"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Clock Lake Lookout"
+        }
+      ]
+    },
+    {
+      "id": "Clock Lake Lookout",
+      "name": "Clock Lake Lookout",
+      "description": "You stand on the shoreline of an enormous lake.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Border Gate"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Crossroads of Destiny"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southeast",
+          "adjacentRoom": "Clock Dock"
+        }
+      ]
+    },
+    {
+      "id": "Clock Dock",
+      "name": "Clock Dock",
+      "description": "You sit on the edge of the dock, dipping your shoes into the water. A harmonious feeling washes over you.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Northwest",
+          "adjacentRoom": "Clock Lake Lookout"
         }
       ]
     },
