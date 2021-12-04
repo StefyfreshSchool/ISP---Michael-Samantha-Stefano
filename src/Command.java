@@ -5,7 +5,7 @@ public class Command {
   /**
    * Create a command object. First and second word must be supplied, but either
    * one (or both) can be null. The command word should be null to indicate that
-   * this was a command that is not recognised by this game.
+   * this was a command that is not recognized by this game.
    */
   public Command(String firstWord, String secondWord) {
     commandWord = firstWord;
