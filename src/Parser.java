@@ -12,13 +12,6 @@ public class Parser {
 
     inputLine = gui.readCommand();
 
-    while (inputLine == null){
-      inputLine = gui.readCommand();
-      try {
-        Thread.sleep(1);
-      } catch (InterruptedException e) {}
-    }
-
     words = inputLine.split(" ");
 
     String word1 = words[0];

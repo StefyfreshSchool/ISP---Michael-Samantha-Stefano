@@ -1,6 +1,6 @@
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
-
+import static org.awaitility.Awaitility.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -197,10 +197,9 @@ public class GUI {
      * @return The command String.
      */
     public String readCommand() {
-        String command = null;
-        if (inputCommand != null){
-            command = inputCommand;
-        }
+        String command;
+        await().forever().until(() -> inputCommand != null);
+        command = inputCommand;
         inputCommand = null;
         return command;
     }
