@@ -105,7 +105,7 @@
         {
           "isLocked": true,
           "direction": "West",
-          "adjacentRoom": "City Plaza"
+          "adjacentRoom": "Town Plaza"
         }
       ]
     },
@@ -156,7 +156,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Bridge of Lost Souls"
+          "adjacentRoom": "Tarnished Fountain"
         },
         {
           "isLocked": false,
@@ -173,7 +173,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Crater South"
+          "adjacentRoom": "South of Crater"
         },
         {
           "isLocked": false,
@@ -218,6 +218,23 @@
           "isLocked": false,
           "direction": "Northeast",
           "adjacentRoom": "Frostbitten Tundra"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Castle Grounds"
+        }
+      ]
+    },
+    {
+      "id": "Castle of Alaskan Cheese",
+      "name": "Castle of Alaskan Cheese",
+      "description": "Climbing up the steps, you stand before the tall, bronze castle doors. They're unlocked, but you soul beckons for you to keep quiet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Main Atrium"
         },
         {
           "isLocked": false,
@@ -324,6 +341,18 @@
       ]
     },
     {
+      "id": "Gates of Hell",
+      "name": "Gates of Hell",
+      "description": "You stand before the towering gates, with dread imbued with your soul. Inexplicably, the wooden door to the underground tunnel seems to be locked with an arcane incantation.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Stefano's House"
+        }
+      ]
+    },
+    {
       "id": "Hallway",
       "name": "Hallway",
       "description": "You are in a long hallway. There are family pictures on all of the walls.",
@@ -345,6 +374,74 @@
           "isLocked": true,
           "direction": "West",
           "adjacentRoom": "Hallway",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "South of Crater",
+      "name": "South of Crater",
+      "description": "You are south of a large crater.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Bridge of Lost Souls",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of Crater",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "West of Crater",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "West of Crater",
+      "name": "West of Crater",
+      "description": "You are west of a large crater. Even farther west you can see fog over a gloomy land.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Shrouded Grave",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Lair Entrance",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "South of Crater",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Shrouded Grave",
+      "name": "Shrouded Grave",
+      "description": "You are surrounded by gloom. In front of you is a gravestone that reads: \"Scell E. Ton\".",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Mysterious Entrance",
+          "keyId": "1234"
+        },{
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of Crater",
           "keyId": "1234"
         }
       ]
