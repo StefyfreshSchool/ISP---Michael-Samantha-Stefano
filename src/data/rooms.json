@@ -445,6 +445,69 @@
           "keyId": "1234"
         }
       ]
+    },
+    {
+      "id": "The Lair",
+      "name": "The Lair",
+      "description": "You are in a huge cave.",
+      "exits": [
+        {
+          "isLocked": true,
+          "direction": "South",
+          "adjacentRoom": "North of Crater",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "North of Crater",
+      "name": "North of Crater",
+      "description": "You are standing in front of a large cave.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "The Lair",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "West of Crater",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of Crater",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "East of Crater",
+      "name": "East of Crater",
+      "description": "To your West is a large cave. To your East is forest.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "North of Crater",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "South of Crater",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Forest Tripoint",
+          "keyId": "1234"
+        }
+      ]
     }
   ]
 }
