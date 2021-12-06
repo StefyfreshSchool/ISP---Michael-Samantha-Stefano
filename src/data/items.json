@@ -4,8 +4,10 @@
       "id": "Geraldo",
       "name": "Geraldo",
       "description": "A series of small oval shaped rocks. They appear to be sleeping. You can throw them at enemies.",
-      "isOpenable": true,
-      "isWeapon": true
+      "isOpenable": false,
+      "isWeapon": true,
+      "weight": 5,
+      "startingRoom": "The Lair"
     }
 ]
 }
