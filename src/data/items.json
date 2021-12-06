@@ -3,7 +3,7 @@
     {
       "id": "Geraldo",
       "name": "Geraldo",
-      "description": "A series of small oval shaped rocks. They appear to be sleeping. You can throw them at enemies.",
+      "description": "A series of small oval-shaped rocks. They appear to be sleeping. You can throw them at enemies.",
       "isOpenable": false,
       "isWeapon": true,
       "weight": 5,
@@ -12,7 +12,7 @@
     {
         "id": "Scroll of News News",
         "name": "Scroll of News News",
-        "description": "A beat up scroll. It reads \"not yet news news: Connie and Balloony Tie Election!\"\nYou can read the rest, but it seems too stupid to read.",
+        "description": "A beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but it seems too stupid to read.",
         "isOpenable": true,
         "isWeapon": false,
         "weight": 2,
@@ -30,7 +30,7 @@
     {
         "id": "Balloony's Corpse",
         "name": "Balloony's Corpse",
-        "description": "A shirveled, deflated balloon. Can be inflated and used as a hot air balloon.",
+        "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
         "isOpenable": false,
         "isWeapon": false,
         "weight": 2,
@@ -39,11 +39,92 @@
     {
         "id": "Moral Support",
         "name": "Moral Support",
-        "description": "A small box, you can hear encouraging words coming from it.",
+        "description": "A small box. You can hear encouraging words coming from it.",
         "isOpenable": false,
         "isWeapon": false,
         "weight": 5,
         "startingRoom": "Dog Paradise"
+    },
+    {
+      "id": "Bottle of Water",
+      "name": "Bottle of Water",
+      "description": "A small flask, containing a sizeable amount of water. Your lips feel dry just looking at it.",
+      "isOpenable": true,
+      "isWeapon": true,
+      "weight": 2,
+      "startingRoom": "East Room"
+    },
+    {
+      "id": "Bandages",
+      "name": "Bandages",
+      "description": "Clean white patches of gauze. Can be used to improve health conditions in dire circumstances.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 1,
+      "startingRoom": "East Room"
+    },
+    {
+      "id": "1000 British Pounds",
+      "name": "1000 British Pounds",
+      "description": "A crisp thousand-pound bill, straight from England. You have no idea how it got here.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 1,
+      "startingRoom": "The Lair"
+    },
+    {
+      "id": "Coonskin Hat",
+      "name": "Coonskin Hat",
+      "description": "A designer cap made from the pelt and tail of a raccoon. Poor raccoon.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 4,
+      "startingRoom": "Fur Store"
+    },
+    {
+      "id": "The Tome of Tabeland",
+      "name": "The Tome of Tabeland",
+      "description": "An antique, leather-bound logbook. There seems to be something written inside.",
+      "isOpenable": true,
+      "isWeapon": false,
+      "weight": 7,
+      "startingRoom": "East Room"
+    },
+    {
+      "id": "Alaskan Cheese",
+      "name": "Alaskan Cheese",
+      "description": "A morsel of the famed cheese native to Alaska. You can smell its fragrance; somehow, it smells loud and confusing.",
+      "isOpenable": true,
+      "isWeapon": false,
+      "weight": 7,
+      "startingRoom": "Cheese Safe"
+    },
+    {
+      "id": "Key of Friendship",
+      "name": "Key of Friendship",
+      "description": "A powerful, brass key. It almost looks too pristine to use.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 1,
+      "startingRoom": "Temple of Enemies"
+    },
+    {
+      "id": "The Sword of Tabeland",
+      "name": "The Sword of Tabeland",
+      "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
+      "isOpenable": false,
+      "isWeapon": true,
+      "weight": 5,
+      "startingRoom": "Underground Tunnel"
+    },
+    {
+      "id": "The Shield of Tabeland",
+      "name": "The Shield of Tabeland",
+      "description": "An elegant shield, forged by the will of the gods. An ancient motif adorns the front. Your soul feels satisfied by its protection.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 5,
+      "startingRoom": "Underground Tunnel"
     }
-]
+    ]
 }
