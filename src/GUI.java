@@ -189,7 +189,6 @@ public class GUI {
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
-        scroll.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
     }
     
     /**
