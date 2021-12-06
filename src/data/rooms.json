@@ -348,6 +348,74 @@
           "keyId": "1234"
         }
       ]
+    },
+    {
+      "id": "South of Crater",
+      "name": "South of Crater",
+      "description": "You are south of a large crater.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Bridge of Lost Souls",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of Crater",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "West of Crater",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "West of Crater",
+      "name": "West of Crater",
+      "description": "You are west of a large crater. Even farther west you can see fog over a gloomy land.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Shrouded Grave",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Lair Entrance",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "South of Crater",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Shrouded Grave",
+      "name": "Shrouded Grave",
+      "description": "You are surrounded by gloom. In front of you is a gravestone that reads: \"Scell E. Ton\".",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Mysterious Entrance",
+          "keyId": "1234"
+        },{
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "East of Crater",
+          "keyId": "1234"
+        }
+      ]
     }
   ]
 }
