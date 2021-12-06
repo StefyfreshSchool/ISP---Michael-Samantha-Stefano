@@ -536,7 +536,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Base of Mnt. Tableland",
+          "adjacentRoom": "Base of Mt. Tableland",
           "keyId": "1234"
         },
         {
@@ -594,6 +594,69 @@
           "isLocked": false,
           "direction": "West",
           "adjacentRoom": "Small Clearing",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Base of Mt. Tableland",
+      "name": "Base of Mt. Tableland",
+      "description": "You are standing at the base of a large ominous mountain.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Forest Tripoint",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Parliament Steps",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Parliament Steps",
+      "name": "Parliament Steps",
+      "description": "You are standing on the steps of Tableland. A building similar to the Ottawa Parliament Buildings stand in front of you.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Parliament Entrance",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Base of Mt. Tableland",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Bridge of Found Souls",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Bridge of Found Souls",
+      "name": "Bridge of Found Souls",
+      "description": "You stand on a bridge over a clear blue river. You can see fish swimming through the river. In the distance you can see a beautiful castle.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Parliament Steps",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Castle Grounds",
           "keyId": "1234"
         }
       ]
