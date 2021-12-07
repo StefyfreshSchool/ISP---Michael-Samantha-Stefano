@@ -33,6 +33,7 @@
         "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
         "isOpenable": false,
         "isWeapon": false,
+        "keyId": "1234",
         "weight": 2,
         "startingRoom": "Department Of Customer Service"
     },
@@ -87,6 +88,7 @@
       "description": "An antique, leather-bound logbook. There seems to be something written inside.",
       "isOpenable": true,
       "isWeapon": false,
+      "keyId": "0000",
       "weight": 7,
       "startingRoom": "East Room"
     },
@@ -105,6 +107,7 @@
       "description": "A powerful, brass key. It almost looks too pristine to use.",
       "isOpenable": false,
       "isWeapon": false,
+      "keyId": "9999",
       "weight": 1,
       "startingRoom": "Upper Hall of Enemies"
     },

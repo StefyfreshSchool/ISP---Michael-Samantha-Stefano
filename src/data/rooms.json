@@ -35,7 +35,8 @@
         {
           "isLocked": true,
           "direction": "Northeast",
-          "adjacentRoom": "Shadowed Plains"
+          "adjacentRoom": "Shadowed Plains",
+          "keyId": "0000"
         }
       ]
     },
@@ -116,7 +117,8 @@
         {
           "isLocked": true,
           "direction": "West",
-          "adjacentRoom": "Town Plaza"
+          "adjacentRoom": "Town Plaza",
+          "keyId": "0000"
         }
       ]
     },
@@ -770,139 +772,6 @@
       ]
     },
     {
-      "id": "Mysterious Entrance",
-      "name": "Mysterious Entrance",
-      "description": "In front of you is a boarded up tunnel. Carved into a base of a mountain",
-      "exits": [
-        {
-          "isLocked": true,
-          "direction": "West",
-          "adjacentRoom": "Gates of Hell",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "East",
-          "adjacentRoom": "Shrouded Grave",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Forest Tripoint",
-      "name": "Forest Tripoint",
-      "description": "You are standing in a forest of tall trees. The forest canopy is so thick, almost all sunlight is blocked out. A thick fog blankets the forest floor. You hear a wolf howl in the distance.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "North",
-          "adjacentRoom": "Base of Mt. Tableland",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "South",
-          "adjacentRoom": "Small Clearing",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Small Clearing",
-      "name": "Small Clearing",
-      "description": "The forest opens up into a small clearing. Sunlight streams through the opening in the canopy onto the ground. Flowers bloom in the meadow and you catch a glimpse of a bunny hopping behind a rock.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "South",
-          "adjacentRoom": "Campsite Lookout",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "West",
-          "adjacentRoom": "Great Cliff Lookout",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "North",
-          "adjacentRoom": "Forest Tripoint",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Campsite Lookout",
-      "name": "Campsite Lookout",
-      "description": "The forest opens up into a small clearing. You see a sign that says \"Welcome to Tableland Campsite\"",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "North",
-          "adjacentRoom": "Small Clearing",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Great Cliff Lookout",
-      "name": "Great Cliff Lookout",
-      "description": "You are standing over a huge cliff. In the distance you can see a huge ornate castle and a large forest. You are awestruck by the natural beauty of Tableland. You take a deep breath and appreciate the beauty of what you are seeing. You stand for a moment. Then you remember that you have a mission and you have to continue.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "West",
-          "adjacentRoom": "Small Clearing",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Base of Mt. Tableland",
-      "name": "Base of Mt. Tableland",
-      "description": "You are standing at the base of a large ominous mountain.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "South",
-          "adjacentRoom": "Forest Tripoint",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "East",
-          "adjacentRoom": "Parliament Steps",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Parliament Steps",
-      "name": "Parliament Steps",
-      "description": "You are standing on the steps of Tableland. A building similar to the Ottawa Parliament Buildings stand in front of you.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "North",
-          "adjacentRoom": "Parliament Entrance Room",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "West",
-          "adjacentRoom": "Base of Mt. Tableland",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "East",
-          "adjacentRoom": "Bridge of Found Souls",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
       "id": "Parliament Entrance Room",
       "name": "Parliament Entrance Room",
       "description": "Description",
@@ -917,25 +786,6 @@
           "isLocked": false,
           "direction": "North",
           "adjacentRoom": "Dept. of Customer Service",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Bridge of Found Souls",
-      "name": "Bridge of Found Souls",
-      "description": "You stand on a bridge over a clear blue river. You can see fish swimming through the river. In the distance you can see a beautiful castle.",
-      "exits": [
-        {
-          "isLocked": false,
-          "direction": "West",
-          "adjacentRoom": "Parliament Steps",
-          "keyId": "1234"
-        },
-        {
-          "isLocked": false,
-          "direction": "East",
-          "adjacentRoom": "Castle Grounds",
           "keyId": "1234"
         }
       ]
