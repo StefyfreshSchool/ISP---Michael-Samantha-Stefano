@@ -69,7 +69,7 @@ public class GUI {
         output.setEditable(false);
         output.setWrapStyleWord(true);
         output.setBackground(Color.BLACK);
-        output.setSelectionColor(Color.LIGHT_GRAY);
+        output.setSelectionColor(Color.WHITE);
         output.setMargin(new Insets(5,5,5,5));
         output.setFont(new Font("Consolas", Font.PLAIN, 14));
         output.setForeground(Color.LIGHT_GRAY);
