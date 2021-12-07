@@ -387,8 +387,42 @@
       "exits": [
         {
           "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Lower Hall of Enemies"
+        },
+        {
+          "isLocked": false,
           "direction": "South",
           "adjacentRoom": "Door Sanctuary"
+        }
+      ]
+    },
+    {
+      "id": "Lower Hall of Enemies",
+      "name": "Lower Hall of Enemies",
+      "description": "You stand before a battered room; it is scattered with skulls of presumptuous warriors from days of yore.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Up",
+          "adjacentRoom": "Upper Hall of Enemies"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Mystery Door of Mystery"
+        }
+      ]
+    },
+    {
+      "id": "Upper Hall of Enemies",
+      "name": "Upper Hall of Enemies",
+      "description": "The upper hall seems vastly different. The floors and walls are a pristine, tiled white, with no corpses in sight.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Down",
+          "adjacentRoom": "Lower Hall of Enemies"
         }
       ]
     },
@@ -417,7 +451,7 @@
         {
           "isLocked": false,
           "direction": "Down",
-          "adjacentRoom": "Main Atrium"
+          "adjacentRoom": "Alaskan Castle Foyer"
         },
         {
           "isLocked": false,
@@ -428,6 +462,30 @@
           "isLocked": false,
           "direction": "West",
           "adjacentRoom": "Master Bedroom"
+        }
+      ]
+    },
+    {
+      "id": "Master Bedroom",
+      "name": "Master Bedroom",
+      "description": "You enter the master bedroom of the Princess of Alaskan Cheese. She's engrossed within a deep sleep in an expensive, marble four-poster bed. Her face reminds you of Ms. Dybala. A leather-bound notebook sits on her bedside table, with one page bookmarked.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Upper Atrium"
+        }
+      ]
+    },
+    {
+      "id": "Cheese Vault",
+      "name": "Cheese Vault",
+      "description": "You enter the prestigous cheese vault, containing many precious Alaskan Cheeses. Unfortunately, they have all been locked within a safe.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Upper Atrium"
         }
       ]
     },
