@@ -122,7 +122,7 @@ public class GUI {
         input.setCaretColor(Color.WHITE);
         input.setBackground(Color.BLACK);
         input.setForeground(Color.WHITE);
-        input.setSelectionColor(Color.LIGHT_GRAY);
+        input.setSelectionColor(Color.WHITE);
         input.setBorder(BorderFactory.createEmptyBorder());
         input.setFont(new Font("Consolas", Font.PLAIN, 14));
         input.setForeground(Color.LIGHT_GRAY);
@@ -140,7 +140,7 @@ public class GUI {
                     commandsEntered.add(command);
                     commandIndex++;
                     input.setText("");
-                    output.append("> " + command + "\n");
+                    output.append("\n> " + command + "\n");
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
@@ -173,7 +173,7 @@ public class GUI {
         cmd.setFont(new Font("Consolas", Font.PLAIN, 14));
         cmd.setForeground(Color.LIGHT_GRAY);
         cmd.setBackground(Color.BLACK);
-        cmd.setSelectionColor(Color.LIGHT_GRAY);
+        cmd.setSelectionColor(Color.WHITE);
         cmd.setBorder(BorderFactory.createEmptyBorder());
         
 
