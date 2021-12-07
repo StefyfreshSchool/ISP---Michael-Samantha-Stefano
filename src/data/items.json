@@ -97,7 +97,7 @@
       "isOpenable": true,
       "isWeapon": false,
       "weight": 7,
-      "startingRoom": "Cheese Safe"
+      "startingRoom": "Cheese Vault"
     },
     {
       "id": "Key of Friendship",
@@ -106,7 +106,7 @@
       "isOpenable": false,
       "isWeapon": false,
       "weight": 1,
-      "startingRoom": "Temple of Enemies"
+      "startingRoom": "Upper Hall of Enemies"
     },
     {
       "id": "The Sword of Tabeland",

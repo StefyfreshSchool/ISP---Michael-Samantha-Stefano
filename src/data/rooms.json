@@ -245,7 +245,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Main Atrium"
+          "adjacentRoom": "Alaskan Castle Foyer"
         },
         {
           "isLocked": false,
@@ -439,7 +439,7 @@
         {
           "isLocked": false,
           "direction": "Up",
-          "adjacentRoom": "Main Atrium"
+          "adjacentRoom": "Upper Atrium"
         }
       ]
     },
