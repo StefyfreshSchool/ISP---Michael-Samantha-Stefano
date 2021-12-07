@@ -31,6 +31,11 @@
           "isLocked": false,
           "direction": "South",
           "adjacentRoom": "South of the Cyan House"
+        },
+        {
+          "isLocked": true,
+          "direction": "Northeast",
+          "adjacentRoom": "Shadowed Plains"
         }
       ]
     },
@@ -53,6 +58,12 @@
           "isLocked": true,
           "direction": "South",
           "adjacentRoom": "West Room",
+          "keyId": "0000"
+        },
+        {
+          "isLocked": true,
+          "direction": "Northeast",
+          "adjacentRoom": "Tableland Plains",
           "keyId": "0000"
         }
       ]
@@ -625,7 +636,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Parliament Entrance",
+          "adjacentRoom": "Parliament Entrance Room",
           "keyId": "1234"
         },
         {
@@ -638,6 +649,25 @@
           "isLocked": false,
           "direction": "East",
           "adjacentRoom": "Bridge of Found Souls",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Parliament Entrance Room",
+      "name": "Parliament Entrance Room",
+      "description": "Description",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Parliament Steps",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Dept. of Customer Service",
           "keyId": "1234"
         }
       ]
@@ -658,6 +688,126 @@
           "direction": "East",
           "adjacentRoom": "Castle Grounds",
           "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Crossroads of Destiny",
+      "name": "Crossroads of Destiny",
+      "description": "You stand at crossroads. Far in the North, the Castle of Alaskan Cheese looms. To the West the Temple of News News.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Clock Lake Lookout",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Temple Pavillion",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southeast",
+          "adjacentRoom": "Door Sanctuary",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Temple Pavillion",
+      "name": "Temple Pavillion",
+      "description": "You stand a huge ornate temple. It looks like Hercule's house.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Crossroads of Destiny",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Tableland Plains",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "News News Temple Room",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "News News Temple Room",
+      "name": "News News Temple Room",
+      "description": "You stand in a huge entryway. Books are piled on the shelves and sunlight streams through the skylight. A door is directly across from you on the other side of the room.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "News News Vault",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Temple Pavillion",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "News News Vault",
+      "name": "News News Vault",
+      "description": "You stand in a huge beautiful vault. Gold coins litter the floor. On the other side of the room, in a glass case is a scroll.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "News News Temple Room",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Tableland Plains",
+      "name": "Tableland Plains",
+      "description": "You are in the plains of Tableland. The Cyan House is to the South, and the Temple of News News is to the Northeast.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Southwest",
+          "adjacentRoom": "North of Cyan House",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Temple Pavillion",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Shadowed Plains",
+      "name": "Shadowed Plains",
+      "description": "You stand in a gloomy field. You see a huge cloud above you. You feel compelled to go there.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Up",
+          "adjacentRoom": "Entrance to Temple of the Sky Gods",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southwest",
+          "adjacentRoom": "East of Cyan House",
+          "keyId": "0000"
         }
       ]
     }
