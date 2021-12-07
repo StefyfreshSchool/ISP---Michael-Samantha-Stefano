@@ -428,7 +428,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Lair Entrance",
+          "adjacentRoom": "North of Crater",
           "keyId": "1234"
         },
         {

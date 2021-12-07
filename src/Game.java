@@ -205,10 +205,13 @@ public class Game {
     Room nextRoom = currentRoom.nextRoom(direction);
     
     if (nextRoom == null)
-      gui.println("There is no door!");
+      gui.println("You cannot go that way!");
     else {
       currentRoom = nextRoom;
       gui.println(currentRoom.longDescription());
+      if(currentRoom.getRoomName().equals("The Lair")){
+        sasquatch();
+      }
     }
   }
 
