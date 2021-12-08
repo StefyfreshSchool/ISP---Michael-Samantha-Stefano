@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
 public class Parser {
-  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music" };
+  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart"};
 
 
-  public Command getCommand() throws java.io.IOException {
+  public Command getCommand() {
     GUI gui = GUI.getGUI();
     String inputLine = gui.readCommand();
     String[] words;
@@ -28,7 +28,7 @@ public class Parser {
       return new Command(null, word2);
   }
 
-  
+
   /**
    * Check whether a given String is a valid command word. Return true if it is,
    * false if it isn't.
