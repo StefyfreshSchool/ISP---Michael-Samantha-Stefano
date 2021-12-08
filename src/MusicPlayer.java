@@ -18,7 +18,7 @@ public class MusicPlayer {
      */
     public MusicPlayer(String filePath) {
         try {
-            audioInput = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+            audioInput = AudioSystem.getAudioInputStream(new File(filePath));
             clip = AudioSystem.getClip();
             clip.open(audioInput);
         } catch (IOException | LineUnavailableException e) {
@@ -29,8 +29,10 @@ public class MusicPlayer {
             e.printStackTrace();
         }
         clip.loop(Clip.LOOP_CONTINUOUSLY);
+        //TODO: keep thread alive to let music loop
     }
     
+
     /**Starts the music. */
     public void play() {
         clip.start();

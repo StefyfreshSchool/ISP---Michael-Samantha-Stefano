@@ -101,7 +101,7 @@
     {
       "id": "West of the Cyan House",
       "name": "West of the Cyan House",
-      "description": "You are west of the Cyan House. A cobbled trail leads the west, towards an abandoned city plaza.",
+      "description": "You are west of the Cyan House. A cobbled trail leads further to the west, towards an abandoned city plaza.",
       "exits": [
         {
           "isLocked": false,
@@ -140,7 +140,7 @@
     {
       "id": "Tarnished Fountain",
       "name": "Tarnished Fountain",
-      "description": "You marvel at a broken-down fountain, with scattered worthless coins inside of it. You see a shabby-looking bridge further north.",
+      "description": "You marvel at a broken-down fountain, with worthless, scattered coins upon it. You see a shabby-looking bridge further north.",
       "exits": [
         {
           "isLocked": false,
@@ -162,7 +162,7 @@
     {
       "id": "Plaza Outskirts",
       "name": "Plaza Outskirts",
-      "description": "You stand at the edges of the isloated town plaza. Before your feet, the rushing River of Souls ",
+      "description": "You stand at the edges of the isloated town plaza. Before your feet run the rushing River of Souls.",
       "exits": [
         {
           "isLocked": false,
@@ -223,7 +223,7 @@
     {
       "id": "Overgrown Path",
       "name": "Overgrown Path",
-      "description": "You follow the winding path along the boreal forests. The path continues from the south to the northeast, but you stop at a weathered sign. 'WELCOME to YUKON TERRITORY'",
+      "description": "You follow the winding path along the boreal forest. The path continues from the south to the northeast, but you stop at a weathered sign. 'WELCOME to YUKON TERRITORY'",
       "exits": [
         {
           "isLocked": false,
@@ -291,7 +291,7 @@
     {
       "id": "Fur Store",
       "name": "Fur Store",
-      "description": "You enter the cabin.",
+      "description": "You enter the cabin. Instantly, the warmth rejuvenates your soul.",
       "exits": [
         {
           "isLocked": false,
@@ -303,7 +303,7 @@
     {
       "id": "Border Gate",
       "name": "Border Gate",
-      "description": "You stand before the thick iron gates leading to the Castle. There is a small patrol booth, but it seems to be deserted. You can see a lake to the south.",
+      "description": "You stand between the thick pearled gates leading to the Castle. There is a small patrol booth, but it seems to be deserted. You can see a lake to the south.",
       "exits": [
         {
           "isLocked": false,
@@ -320,7 +320,7 @@
     {
       "id": "Clock Lake Lookout",
       "name": "Clock Lake Lookout",
-      "description": "You stand on the shoreline of an enormous lake.",
+      "description": "You stand on the shoreline of an enormous lake. An oaken dock, to the southeast, extends further upon the water.",
       "exits": [
         {
           "isLocked": false,
@@ -342,7 +342,7 @@
     {
       "id": "Clock Dock",
       "name": "Clock Dock",
-      "description": "You sit on the edge of the dock, dipping your shoes into the water. A harmonious feeling washes over you.",
+      "description": "You swing your sullied boots off the edge of the pier. A harmonious feeling washes over you.",
       "exits": [
         {
           "isLocked": false,
@@ -354,12 +354,80 @@
     {
       "id": "Gates of Hell",
       "name": "Gates of Hell",
-      "description": "You stand before the towering gates, with dread imbued with your soul. Inexplicably, the wooden door to the underground tunnel seems to be locked with an arcane incantation.",
+      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Inexplicably, the wooden door to the underground tunnel seems to be locked with an arcane incantation.",
       "exits": [
         {
           "isLocked": false,
           "direction": "South",
           "adjacentRoom": "Stefano's House"
+        }
+      ]
+    },
+    {
+      "id": "Door Sanctuary",
+      "name": "Door Sanctuary",
+      "description": "You stand upon a crossroads of doors, in every cardinal direction. One catches your eye, to the north.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Mystery Door of Mystery"
+        },
+        {
+          "isLocked": false,
+          "direction": "Northwest",
+          "adjacentRoom": "Crossroads of Destiny"
+        }
+      ]
+    },
+    {
+      "id": "Mystery Door of Mystery",
+      "name": "Mystery Door of Mystery",
+      "description": "You peer at the worn-down door with a sense of terror. Several unearthly-coloured jewels emblazon its edges. It is unlocked, but you feel you will perish from its hands.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Door Sanctuary"
+        }
+      ]
+    },
+    {
+      "id": "Alaskan Castle Foyer",
+      "name": "Alaskan Castle Foyer",
+      "description": "You stand in the centre of a large foyer, decorated in an ornate Victorian-Alaskan aesthetic. A large staircase leads to the ruling family's private quarters.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Castle of Alaskan Cheese"
+        },
+        {
+          "isLocked": false,
+          "direction": "Up",
+          "adjacentRoom": "Main Atrium"
+        }
+      ]
+    },
+    {
+      "id": "Upper Atrium",
+      "name": "Upper Atrium",
+      "description": "Standing far above the foyer, you feel lightheaded. You can hear faint snoring, but you can't tell if it comes from the east or the west.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Down",
+          "adjacentRoom": "Main Atrium"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Cheese Vault"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Master Bedroom"
         }
       ]
     },
@@ -392,38 +460,34 @@
     {
       "id": "South of Crater",
       "name": "South of Crater",
-      "description": "You are south of a large crater.",
+      "description": "You are south of a large, bottomless crater. Looking down into the black abyss fills you with terror.",
       "exits": [
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "Bridge of Lost Souls",
-          "keyId": "1234"
+          "adjacentRoom": "Bridge of Lost Souls"
         },
         {
           "isLocked": false,
           "direction": "East",
-          "adjacentRoom": "East of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "East of Crater"
         },
         {
           "isLocked": false,
           "direction": "West",
-          "adjacentRoom": "West of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "West of Crater"
         }
       ]
     },
     {
       "id": "West of Crater",
       "name": "West of Crater",
-      "description": "You are west of a large crater. Even farther west you can see fog over a gloomy land.",
+      "description": "You are west of a large crater. In the distance, a gloomy fog enshrouds the land further westward.",
       "exits": [
         {
           "isLocked": false,
           "direction": "West",
-          "adjacentRoom": "Shrouded Grave",
-          "keyId": "1234"
+          "adjacentRoom": "Shrouded Grave"
         },
         {
           "isLocked": false,
@@ -434,26 +498,24 @@
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "South of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "South of Crater"
         }
       ]
     },
     {
       "id": "Shrouded Grave",
       "name": "Shrouded Grave",
-      "description": "You are surrounded by gloom. In front of you is a gravestone that reads: \"Scell E. Ton\".",
+      "description": "You are surrounded by a dark, misty fog. In front of you is a gravestone that reads: 'Scell E. Ton'.",
       "exits": [
         {
           "isLocked": false,
           "direction": "West",
-          "adjacentRoom": "Mysterious Entrance",
-          "keyId": "1234"
-        },{
+          "adjacentRoom": "Mysterious Entrance"
+        },
+        {
           "isLocked": false,
           "direction": "East",
-          "adjacentRoom": "West of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "West of Crater"
         }
       ]
     },
@@ -465,58 +527,193 @@
         {
           "isLocked": true,
           "direction": "South",
-          "adjacentRoom": "North of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "North of Crater"
         }
       ]
     },
     {
       "id": "North of Crater",
       "name": "North of Crater",
-      "description": "You are standing in front of a large cave.",
+      "description": "You are standing north of the crater, in front of a large cavern. A terrifying, animalistic roar emanates from within.",
       "exits": [
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "The Lair",
-          "keyId": "1234"
+          "adjacentRoom": "The Lair"
         },
         {
           "isLocked": false,
           "direction": "West",
-          "adjacentRoom": "West of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "West of Crater"
         },
         {
           "isLocked": false,
           "direction": "East",
-          "adjacentRoom": "East of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "East of Crater"
         }
       ]
     },
     {
       "id": "East of Crater",
       "name": "East of Crater",
-      "description": "To your West is a large cave. To your East is forest.",
+      "description": "You stand within the boundaries of the caverous and forested lands. To your west is a large cavern. To your east is the endless forest.",
       "exits": [
         {
           "isLocked": false,
           "direction": "West",
-          "adjacentRoom": "North of Crater",
-          "keyId": "1234"
+          "adjacentRoom": "North of Crater"
         },
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "South of Crater",
+          "adjacentRoom": "South of Crater"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Forest Tripoint"
+        }
+      ]
+    },
+    {
+      "id": "Mysterious Entrance",
+      "name": "Mysterious Entrance",
+      "description": "A boarded-up tunnel blocks the way before you. It seems to lead further westward, towards the base of the Table Caldera.",
+      "exits": [
+        {
+          "isLocked": true,
+          "direction": "West",
+          "adjacentRoom": "Gates of Hell",
           "keyId": "1234"
         },
         {
           "isLocked": false,
           "direction": "East",
-          "adjacentRoom": "Forest Tripoint",
-          "keyId": "1234"
+          "adjacentRoom": "Shrouded Grave"
+        }
+      ]
+    },
+    {
+      "id": "Forest Tripoint",
+      "name": "Forest Tripoint",
+      "description": "You are standing in a forest filled with tall pines. The thick overhead canopy blocks almost all sunlight through. A thick mist blankets the forest floor. You hear a wolf howl in the distance.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Base of Mt. Tableland"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southwest",
+          "adjacentRoom": "East of Crater"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southeast",
+          "adjacentRoom": "Small Clearing"
+        }
+      ]
+    },
+    {
+      "id": "Small Clearing",
+      "name": "Small Clearing",
+      "description": "The forest opens up into a small clearing. Sunlight streams through the opening in the canopy onto the ground. Flowers bloom in the meadow and you catch a glimpse of a bunny hopping behind a rock.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Campsite Lookout"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Great Cliff Lookout"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Forest Tripoint"
+        }
+      ]
+    },
+    {
+      "id": "Campsite Lookout",
+      "name": "Campsite Lookout",
+      "description": "The forest opens up into a small clearing. You see a sign that says 'Welcome to Tableland'",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Small Clearing"
+        }
+      ]
+    },
+    {
+      "id": "Great Cliff Lookout",
+      "name": "Great Cliff Lookout",
+      "description": "You peer over the edges of an enormous cliff. You can almost see every nook and cranny of the land. Across the River of Souls, you see a huge ornate castle, a temple, and snow-covered lands. You are awestruck by the natural beauty of Tableland. You take a deep breath and bask in the beauty of what you are seeing. You stand there for a moment, and suddenly remember that you have a mission to fulfill.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Small Clearing"
+        }
+      ]
+    },
+    {
+      "id": "Base of Mt. Tableland",
+      "name": "Base of Mt. Tableland",
+      "description": "You standing at the base of the towering Mount Tabeland, the tallest mountain in the region. A historical building sits to its east, clearly inspired by Victorian architecture.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Forest Tripoint"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Parliament Steps"
+        }
+      ]
+    },
+    {
+      "id": "Parliament Steps",
+      "name": "Parliament Steps",
+      "description": "You are standing on the steps of the Parliament of Tableland. It reminds you of the Ottawa Parliament Buildings, but you cannot remember what Ottawa is.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Parliament Entrance"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Base of Mt. Tableland"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Bridge of Found Souls"
+        }
+      ]
+    },
+    {
+      "id": "Bridge of Found Souls",
+      "name": "Bridge of Found Souls",
+      "description": "You stand on a bridge over a rushing, powerful river. Glimpses of vibrant-coloured fish peek through the brooks. To the east, you can see a beautiful castle.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Parliament Steps"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Castle Grounds"
         }
       ]
     },

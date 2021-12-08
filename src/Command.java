@@ -1,15 +1,17 @@
+import java.util.ArrayList;
+
 public class Command {
   private String commandWord;
-  private String secondWord;
+  private ArrayList<String> args;
 
   /**
    * Create a command object. First and second word must be supplied, but either
    * one (or both) can be null. The command word should be null to indicate that
    * this was a command that is not recognized by this game.
    */
-  public Command(String firstWord, String secondWord) {
+  public Command(String firstWord, ArrayList<String> args) {
     commandWord = firstWord;
-    this.secondWord = secondWord;
+    this.args = args;
   }
 
   /**
@@ -21,11 +23,26 @@ public class Command {
   }
 
   /**
-   * Return the second word of this command. Returns null if there was no second
+   * Return the arguments of this command. Returns null if there were no args
    * word.
    */
-  public String getSecondWord() {
-    return secondWord;
+  public ArrayList<String> getArgs() {
+    return args;
+  }
+
+  /**
+   * Returns a stringified String of this command's arguments. If there were no args, it returns null.
+   */
+  public String getStringifiedArgs(){
+    String out = "";
+    for (String s : args) {
+      out += s + " ";
+    }
+    if (out.equals("")) return null;
+    else {
+      out = out.substring(0, out.length() - 1);
+    }
+    return out;
   }
 
   /**
@@ -39,6 +56,6 @@ public class Command {
    * Return true if the command has a second word.
    */
   public boolean hasSecondWord() {
-    return (secondWord != null);
+    return (args != null);
   }
 }

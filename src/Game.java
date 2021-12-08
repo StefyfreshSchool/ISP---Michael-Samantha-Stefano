@@ -9,7 +9,7 @@ import org.json.simple.parser.JSONParser;
 
 public class Game {
   private GUI gui;
-  private MusicPlayer music;
+  private static MusicPlayer music;
 
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
   
@@ -98,6 +98,10 @@ public class Game {
     music.play();
   }
 
+  public static MusicPlayer getMusicPlayer() {
+    return music;
+  }
+
   /**
    * Print out the opening message for the player.
    */
@@ -120,72 +124,28 @@ public class Game {
       return false;
     }
     String commandWord = command.getCommandWord();
-    if (commandWord.equals("help"))
+    if (commandWord.equals("help")){
       printHelp();
-    else if (commandWord.equals("go"))
+    }
+    else if (commandWord.equals("go")){
       goRoom(command);
+    }
     else if (commandWord.equals("quit")) {
       if (command.hasSecondWord())
         gui.println("Quit what?");
       else
         return true; // signal that we want to quit
-    } else if (commandWord.equals("eat")) {
-      gui.println("Do you really think you should be eating at a time like this?");
+
     } else if (commandWord.equals("yell")){
-      yell(command.getSecondWord());
+      yell(command.getStringifiedArgs());
     
     } else if (commandWord.equals("music")) {
-      if (!command.hasSecondWord()) gui.println("What do you want to do with the music?");
-      else if (command.getSecondWord().equals("stop")){
-        music.stop();
-        gui.println("Music stopped.");
-      } 
-      else if (command.getSecondWord().equals("play")){
-        music.play();
-        gui.println("Music started!");
-      } 
-      else if (music.getVolume() > -75.1f && command.getSecondWord().equals("volume-down")){
-        music.setVolume(music.getVolume() - 5);
-        gui.println("Music volume down.");
-      } 
-      else if (music.getVolume() < -5f && command.getSecondWord().equals("volume-up")){
-        music.setVolume(music.getVolume() + 5);
-        gui.println("Music volume up.");
-      } 
-      else {
-        gui.println("Invalid music operation!");
-      }
+      music(command);
 
+    }else if(commandWord.equals("hit")){
+      //if(getRoomName().equals("The Lair"))
     }
     return false;
-  }
-
-  
-  /** 
-   * @param secondWord
-   */
-  private void yell(String secondWord) {
-    if (secondWord != null){
-      gui.println(secondWord.toUpperCase() + "!!!!!!");
-      gui.println("Feel better?");
-    }else{
-      gui.println("ARGHHHHH!!!!!!");
-      gui.println("Feel better?");
-    }
-  }
-
-  // implementations of user commands:
-
-  /**
-   * Print out some help information. Here we print some stupid, cryptic message
-   * and a list of the command words.
-   */
-  private void printHelp() {
-    gui.println("You are lost. You are alone. You wander");
-    gui.println("around at Monash Uni, Peninsula Campus.");
-    gui.println();
-    gui.println("Your command words are:");
-    parser.showCommands();
   }
 
   /**
@@ -199,7 +159,7 @@ public class Game {
       return;
     }
 
-    String direction = command.getSecondWord();
+    String direction = command.getStringifiedArgs();
 
     // Try to leave current room.
     Room nextRoom = currentRoom.nextRoom(direction);
@@ -208,20 +168,90 @@ public class Game {
       gui.println("You cannot go that way!");
     else {
       currentRoom = nextRoom;
-      gui.println(currentRoom.longDescription());
       if(currentRoom.getRoomName().equals("The Lair")){
+        gui.println(currentRoom.shortDescription());
         sasquatch();
+      }else{
+        gui.println(currentRoom.longDescription());
       }
     }
   }
 
+  /**
+   * Does things when you encounter the Sasquatch.
+   */
   public void sasquatch(){
     gui.println("The Sasquatch steps out of the cave");
     gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
-    gui.println("What would you like to do:");
-    parser.showCommands();
+    gui.println("What would you like to do?");
+    Parser.showCommands();
 
   }
+
+  /** 
+   * @param secondWord
+   */
+  public void yell(String secondWord) {
+    if (secondWord != null){
+        gui.println(secondWord.toUpperCase() + "!!!!!!");
+        gui.println("Feel better?");
+      }else{
+        gui.println("ARGHHHHH!!!!!!");
+        gui.println("Feel better?");
+      }
+  }
+
+  /**
+   * Print out some help information. Here we print some stupid, cryptic message
+   * and a list of the command words.
+   */
+  public void printHelp() {
+    gui.println("You are lost. You are alone. You wander");
+    gui.println("around at Monash Uni, Peninsula Campus.");
+    gui.println();
+    gui.println("Your command words are:");
+    Parser.showCommands();
+  }
+
+  /**
+   * Plays music.
+   */
+  public void music(Command command){
+    if (!command.hasSecondWord()) gui.println("What do you want to do with the music?");
+    else if (command.getStringifiedArgs().equals("stop")){
+      Game.getMusicPlayer().stop();
+      gui.println("Music stopped.");
+    } 
+    else if (command.getStringifiedArgs().equals("start")){
+      Game.getMusicPlayer().play();
+      gui.println("Music started!");
+    } 
+    else if (command.getStringifiedArgs().equals("play")){
+      Game.getMusicPlayer().play();
+      gui.println("Music started!");
+    } 
+    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      gui.println("Music volume down.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      gui.println("Music volume up.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      gui.println("Music volume down.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      gui.println("Music volume up.");
+    } 
+    else {
+      gui.println("Invalid music operation!");
+    }
+  }
+
+  //Below are utility functions, serving a purpose only for internal game management.
 
   /**
    * Causes the currently executing thread to sleep (temporarily cease execution) 
