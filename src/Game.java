@@ -76,11 +76,28 @@ public class Game {
     boolean finished = false;
     while (!finished) {
       Command command;
-      try {
-        command = parser.getCommand();
-        finished = processCommand(command);
-      } catch (IOException e) {
-        e.printStackTrace();
+      command = parser.getCommand();
+      int status = processCommand(command);
+      if (status == 1) finished = true;
+      if (status == 2){
+        music.stop();
+        gui.print("Restarting");
+        sleep(300);
+        gui.print(".");
+        sleep(300);
+        gui.print(".");
+        sleep(300);
+        gui.print(".");
+        sleep(400);
+        gui.reset();
+        try {
+          initRooms("src\\data\\rooms.json");
+          currentRoom = roomMap.get("South of the Cyan House");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        printWelcome();
+        startMusic();
       }
       
     }
@@ -118,10 +135,10 @@ public class Game {
    * Given a command, process (that is: execute) the command. If this command ends
    * the game, true is returned, otherwise false is returned.
    */
-  private boolean processCommand(Command command) {
+  private int processCommand(Command command) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
-      return false;
+      return 0;
     }
     String commandWord = command.getCommandWord();
     if (commandWord.equals("help")){
@@ -134,7 +151,9 @@ public class Game {
       if (command.hasSecondWord())
         gui.println("Quit what?");
       else
-        return true; // signal that we want to quit
+        if (quitRestart("quit") == true){
+          return 1;
+        }
 
     } else if (commandWord.equals("yell")){
       yell(command.getStringifiedArgs());
@@ -144,6 +163,29 @@ public class Game {
 
     }else if(commandWord.equals("hit")){
       //if(getRoomName().equals("The Lair"))
+    } else if (commandWord.equals("restart")) {
+      if (quitRestart("restart") == true){
+        return 2;
+      }
+    }
+    return 0;
+  }
+
+
+
+  private boolean quitRestart(String string) {
+    gui.println("Are you sure you would like to " + string + " the game?");
+    gui.println("Type \"y\" to confirm or \"n\" to cancel.");
+    boolean validInput = false;
+    while(!validInput){
+      String in = gui.readCommand();
+      if (in.equalsIgnoreCase("y")) return true;
+      else if (in.equalsIgnoreCase("n")){
+        gui.println("Cancelled.");
+        validInput = true;
+      } else {
+        gui.println("\"" + in + "\" is not a valid choice!");
+      }
     }
     return false;
   }

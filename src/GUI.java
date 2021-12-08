@@ -322,5 +322,14 @@ public class GUI {
                 scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum() - scroll.getVerticalScrollBar().getHeight());
             }
         });
-    }    
+    } 
+    
+    /**
+     * Fully clears the output JTextArea.
+     * @param x - to be printed
+     */
+    public void reset() {
+        output.setText("");
+        flush();
+    }
 }
