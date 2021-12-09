@@ -1,50 +1,51 @@
 {
-"items": [
+  "items": [
     {
       "id": "Geraldo",
       "name": "Geraldo",
       "description": "A series of small oval-shaped rocks. They appear to be sleeping. You can throw them at enemies.",
       "isOpenable": false,
       "isWeapon": true,
+      "damage": 10,
       "weight": 5,
       "startingRoom": "The Lair"
     },
     {
-        "id": "Scroll of News News",
-        "name": "Scroll of News News",
-        "description": "A beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but it seems too stupid to read.",
-        "isOpenable": true,
-        "isWeapon": false,
-        "weight": 2,
-        "startingRoom": "Temple of News News"
+      "id": "Scroll of News News",
+      "name": "Scroll of News News",
+      "description": "A beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but it seems too stupid to read.",
+      "isOpenable": true,
+      "isWeapon": false,
+      "weight": 2,
+      "startingRoom": "Temple of News News"
     },
     {
-        "id": "Five Hundred Euros",
-        "name": "Five Hundred Euros",
-        "description": "500 Euros",
-        "isOpenable": false,
-        "isWeapon": false,
-        "weight": 2,
-        "startingRoom": "The Lair"
+      "id": "Five Hundred Euros",
+      "name": "Five Hundred Euros",
+      "description": "500 Euros",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 2,
+      "startingRoom": "The Lair"
     },
     {
-        "id": "Balloony's Corpse",
-        "name": "Balloony's Corpse",
-        "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
-        "isOpenable": false,
-        "isWeapon": false,
-        "keyId": "1234",
-        "weight": 2,
-        "startingRoom": "Department Of Customer Service"
+      "id": "Balloony's Corpse",
+      "name": "Balloony's Corpse",
+      "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "keyId": "1234",
+      "weight": 2,
+      "startingRoom": "Department Of Customer Service"
     },
     {
-        "id": "Moral Support",
-        "name": "Moral Support",
-        "description": "A small box. You can hear encouraging words coming from it.",
-        "isOpenable": false,
-        "isWeapon": false,
-        "weight": 5,
-        "startingRoom": "Dog Paradise"
+      "id": "Moral Support",
+      "name": "Moral Support",
+      "description": "A small box. You can hear encouraging words coming from it.",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 5,
+      "startingRoom": "Dog Paradise"
     },
     {
       "id": "Bottle of Water",
@@ -52,6 +53,7 @@
       "description": "A small flask, containing a sizeable amount of water. Your lips feel dry just looking at it.",
       "isOpenable": true,
       "isWeapon": true,
+      "damage": 2,
       "weight": 2,
       "startingRoom": "East Room"
     },
@@ -117,6 +119,7 @@
       "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
       "isOpenable": false,
       "isWeapon": true,
+      "damage": 50,
       "weight": 5,
       "startingRoom": "Underground Tunnel"
     },
@@ -129,5 +132,5 @@
       "weight": 5,
       "startingRoom": "Underground Tunnel"
     }
-    ]
+  ]
 }

@@ -154,8 +154,9 @@ public class Game {
   }
 
   /**
-   * Given a command, process (that is: execute) the command. If this command ends
-   * the game, true is returned, otherwise false is returned.
+   * Given a command, process (that is: execute) the command.
+   * @param command
+   * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
    */
   private int processCommand(Command command) {
     if (command.isUnknown()) {
@@ -193,6 +194,23 @@ public class Game {
       if (save(command)) return 1;
     }
     return 0;
+  }
+
+  /**
+   * Given a command, process (that is: execute) the command.
+   * <p>
+   * TODO: figure out if this can be merged with above method.
+   * @param command
+   * @param weapon
+   */
+  private void processCommand(Command command, Weapon weapon) {
+    if (command.isUnknown()) {
+      gui.println("I don't know what you mean...");
+    }
+    String commandWord = command.getCommandWord();
+    if(commandWord.equals("hit")){
+      //if(getRoomName().equals("The Lair"))
+    }
   }
 
   /**
@@ -289,7 +307,10 @@ public class Game {
       if(currentRoom.getRoomName().equals("The Lair")){
         gui.println(currentRoom.shortDescription());
         sasquatch();
-      }else{
+      } else if(currentRoom.getRoomName().equals("Fur Store")){
+        gui.println(currentRoom.shortDescription());
+        salesman();
+      } else {
         gui.println(currentRoom.longDescription());
       }
     }
@@ -305,6 +326,16 @@ public class Game {
     gui.println("What would you like to do?");
     Parser.showCommands();
 
+  }
+
+    /**
+   * Does things when you enter the fur store.
+   */
+  public void salesman(){
+    gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
+    gui.println("\"Would you like to buy my furs? Only for a small fee of £1000!\" He says.");
+    //if (Inventory.getItems().contains("1000 British Pounds")){
+    gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
   }
 
   /** 

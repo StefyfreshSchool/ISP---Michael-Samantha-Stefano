@@ -2,12 +2,14 @@ public class Item extends OpenableObject {
     private int weight;
     private String name;
     private boolean isOpenable;
+    private String description;
     private GUI gui = GUI.getGUI();
   
-    public Item(int weight, String name, boolean isOpenable) {
+    public Item(int weight, String name, boolean isOpenable, String description) {
       this.weight = weight;
       this.name = name;
       this.isOpenable = isOpenable;
+      this.description = description;
     }
   
     public void open() {
@@ -30,6 +32,14 @@ public class Item extends OpenableObject {
   
     public void setName(String name) {
       this.name = name;
+    }
+
+    public String getDescription() {
+      return description;
+    }
+  
+    public void setDescription(String description) {
+      this.description = description;
     }
   
     public boolean isOpenable() {
