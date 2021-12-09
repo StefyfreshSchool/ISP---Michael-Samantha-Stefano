@@ -6,6 +6,7 @@
       "description": "A series of small oval-shaped rocks. They appear to be sleeping. You can throw them at enemies.",
       "isOpenable": false,
       "isWeapon": true,
+      "isWeaponDamage": 10,
       "weight": 5,
       "startingRoom": "The Lair"
     },
@@ -117,6 +118,7 @@
       "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
       "isOpenable": false,
       "isWeapon": true,
+      "isWeaponDamage": 50,
       "weight": 5,
       "startingRoom": "Underground Tunnel"
     },

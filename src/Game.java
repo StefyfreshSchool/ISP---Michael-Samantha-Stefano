@@ -171,6 +171,16 @@ public class Game {
     return 0;
   }
 
+  private void processCommand(Command command, Weapon weapon) {
+    if (command.isUnknown()) {
+      gui.println("I don't know what you mean...");
+    }
+    String commandWord = command.getCommandWord();
+    if(commandWord.equals("hit")){
+      //if(getRoomName().equals("The Lair"))
+    }
+  }
+
 
 
   private boolean quitRestart(String string) {
