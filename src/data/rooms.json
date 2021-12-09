@@ -56,7 +56,7 @@
           "adjacentRoom": "West of the Cyan House"
         },
         {
-          "isLocked": true,
+          "isLocked": false,
           "direction": "South",
           "adjacentRoom": "West Room",
           "keyId": "0000"
@@ -75,7 +75,7 @@
       "description": "You climb through the open window, entering the west room of the Cyan House. It seems to have been looted long ago. A doorframe, but no door, is to the east.",
       "exits": [
         {
-          "isLocked": true,
+          "isLocked": false,
           "direction": "North",
           "adjacentRoom": "North of the Cyan House",
           "keyId": "0000"

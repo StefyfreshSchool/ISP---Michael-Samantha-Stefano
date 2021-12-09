@@ -24,6 +24,8 @@ public class GUI {
     private JTextField input;
     private JScrollPane scroll;
     private JPanel inputContainer;
+    private JPanel gameInfoContainer;
+    private JTextPane roomInfo;
 
     //class variable
     private static GUI gui;
@@ -48,9 +50,9 @@ public class GUI {
         //Set up window
         System.setProperty("awt.useSystemAAFontSettings","on");
         System.setProperty("swing.aatext", "true");
-        frame = new JFrame("ZORK - An Epic Text Adventure Game!");
+        frame = new JFrame("ZORK - Adventure Into Tableland");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 400);
+        frame.setSize(800, 500);
         frame.setIconImage(new ImageIcon(getClass().getResource("images/icon.png")).getImage());
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
@@ -112,8 +114,27 @@ public class GUI {
         JLabel img = new JLabel();
 
 
-        //add a spacer
-        gameContainer.add(spacer(10));
+        //add game info
+        //NOTE: this is not optimal. 
+        gameInfoContainer = new JPanel();
+        roomInfo = new JTextPane();
+        // roomInfo.setLineWrap(true);
+        // roomInfo.setWrapStyleWord(true);
+        roomInfo.setEditable(false);
+        roomInfo.setCaretColor(Color.WHITE);
+        roomInfo.setBackground(Color.BLACK);
+        roomInfo.setHighlighter(null);
+        // roomInfo.setText("Inventory: Cheese, Pebble, Sword, Scroll | Exits: North, South, Southwest, East");
+        roomInfo.setMaximumSize(new Dimension(1000, 20));
+        roomInfo.setPreferredSize(new Dimension(1000, 20));
+        roomInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
+        roomInfo.setForeground(Color.LIGHT_GRAY);
+        // roomInfo.sethori
+        // gameInfoContainer.add(roomInfo);
+        // gameContainer.add(gameInfoContainer);
+        gameContainer.add(roomInfo);
+
+        
 
 
         //add the input text box
@@ -121,7 +142,6 @@ public class GUI {
         input.setEditable(true);
         input.setCaretColor(Color.WHITE);
         input.setBackground(Color.BLACK);
-        input.setForeground(Color.WHITE);
         input.setSelectionColor(Color.WHITE);
         input.setBorder(BorderFactory.createEmptyBorder());
         input.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -201,6 +221,26 @@ public class GUI {
         command = inputCommand;
         inputCommand = null;
         return command;
+    }
+    
+    /**
+     * Sets the game info - the info box above the command field.
+     * <p>
+     * <b>IMPORTANT NOTE: This is done very poorly at the current time.</b>
+     * <p>
+     * TODO: When Inventory is done, fix the printing.
+     * @param inventory - Player's inventory.
+     * @param roomExits - Player's room exits.
+     */
+    public void setGameInfo(String inventory, ArrayList<Exit> roomExits) {
+        if (roomExits == null || inventory == null) throw new IllegalArgumentException("Parameters must be non-null.");
+        String roomExString = "";
+        ArrayList<String> exits = new ArrayList<String>();
+        for (Exit exit : roomExits) {
+            exits.add(exit.getDirection());
+        }
+        roomExString = String.join(", ", exits);
+        roomInfo.setText("Inventory: " + inventory + " | Exits: " + roomExString);
     }
 
     /**
