@@ -909,9 +909,9 @@
           "keyId": "1234"
         },
         {
-          "isLocked": true,
+          "isLocked": false,
           "direction": "Southwest",
-          "adjacentRoom": "East of Cyan House",
+          "adjacentRoom": "East of the Cyan House",
           "keyId": "0000"
         }
       ]
