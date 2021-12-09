@@ -228,7 +228,10 @@ public class Game {
       if(currentRoom.getRoomName().equals("The Lair")){
         gui.println(currentRoom.shortDescription());
         sasquatch();
-      }else{
+      } else if(currentRoom.getRoomName().equals("Fur Store")){
+        gui.println(currentRoom.shortDescription());
+        salesman();
+      } else {
         gui.println(currentRoom.longDescription());
       }
     }
@@ -243,6 +246,16 @@ public class Game {
     gui.println("What would you like to do?");
     Parser.showCommands();
 
+  }
+
+    /**
+   * Does things when you enter the fur store.
+   */
+  public void salesman(){
+    gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
+    gui.println("\"Would you like to buy my furs? Only for a small fee of £1000!\" He says.");
+    //if (Inventory.getItems().contains("1000 British Pounds")){
+    gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
   }
 
   /** 
