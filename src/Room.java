@@ -65,6 +65,20 @@ public class Room {
   }
 
   /**
+   * Returns whether or not you can go in the direction specified.
+   * @param direction - The direction to go.
+   * @throws IllegalArgumentException if the direction is not valid.
+   */
+  public boolean canGoDirection(String direction) {
+    for (Exit exit : exits) {
+      if (exit.getDirection().equalsIgnoreCase(direction)) {
+        return !exit.isLocked();
+      }
+    }
+    throw new IllegalArgumentException(direction + " is not a valid direction.");
+  }
+
+  /**
    * Return the room that is reached if we go from this room in direction
    * "direction". If there is no room in that direction, return null.
    */

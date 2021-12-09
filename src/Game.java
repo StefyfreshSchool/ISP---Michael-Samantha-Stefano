@@ -1,8 +1,10 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,10 +25,28 @@ public class Game {
     try {
       initRooms("src\\data\\rooms.json");
       currentRoom = roomMap.get("South of the Cyan House");
+      
+      //Initialize the game if a previous state was recorded
+      JSONObject gameState = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/gameState.json")));
+      if (gameState.get("inProgress").equals(true)){
+        for (Map.Entry<String,Room> roomObj : roomMap.entrySet()) {
+          String roomName = roomObj.getKey();
+          if (roomName.equals(gameState.get("room"))){
+            currentRoom = roomObj.getValue();
+            break;
+          }
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
     parser = new Parser();
+
+    //reset game state to blank
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("inProgress", false);
+    data.put("room", null);
+    JSONWriter("src/data/gameState.json", data);
   }
 
   private void initRooms(String fileName) throws Exception {
@@ -69,6 +89,7 @@ public class Game {
     gui.createWindow();
     printWelcome();
     startMusic();
+    gui.setGameInfo("Empty", currentRoom.getExits());
     
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
@@ -82,11 +103,11 @@ public class Game {
       if (status == 2){
         music.stop();
         gui.print("Restarting");
-        sleep(300);
+        sleep(200);
         gui.print(".");
-        sleep(300);
+        sleep(200);
         gui.print(".");
-        sleep(300);
+        sleep(200);
         gui.print(".");
         sleep(400);
         gui.reset();
@@ -98,6 +119,7 @@ public class Game {
         }
         printWelcome();
         startMusic();
+        gui.setGameInfo("Empty", currentRoom.getExits());
       }
       
     }
@@ -132,8 +154,9 @@ public class Game {
   }
 
   /**
-   * Given a command, process (that is: execute) the command. If this command ends
-   * the game, true is returned, otherwise false is returned.
+   * Given a command, process (that is: execute) the command.
+   * @param command
+   * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
    */
   private int processCommand(Command command) {
     if (command.isUnknown()) {
@@ -151,7 +174,7 @@ public class Game {
       if (command.hasSecondWord())
         gui.println("Quit what?");
       else
-        if (quitRestart("quit") == true){
+        if (quitRestart("quit")){
           return 1;
         }
 
@@ -161,16 +184,25 @@ public class Game {
     } else if (commandWord.equals("music")) {
       music(command);
 
-    }else if(commandWord.equals("hit")){
+    } else if(commandWord.equals("hit")){
       //TODO: hit() when inventory is ready
     } else if (commandWord.equals("restart")) {
-      if (quitRestart("restart") == true){
+      if (quitRestart("restart")){
         return 2;
       }
+    } else if (commandWord.equals("save")){
+      if (save(command)) return 1;
     }
     return 0;
   }
 
+  /**
+   * Given a command, process (that is: execute) the command.
+   * <p>
+   * TODO: figure out if this can be merged with above method.
+   * @param command
+   * @param weapon
+   */
   private void processCommand(Command command, Weapon weapon) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
@@ -181,6 +213,52 @@ public class Game {
     }
   }
 
+  /**
+   * Saves the game and optionally quits.
+   * @param command
+   */
+  private boolean save(Command command) {
+    boolean quit = false;
+    gui.println("Would you like to save and quit the game, or just save?");
+    gui.println("Type \"q\" to save and quit, \"s\" to just save, and \"c\" to cancel.");
+    boolean validInput = false;
+    while(!validInput){
+      String in = gui.readCommand();
+      if (in.equalsIgnoreCase("q")){
+        gui.println("Game saved! Quitting.");
+        quit = true;
+        validInput = true;
+      }
+      else if (in.equalsIgnoreCase("c")){
+        gui.println("Cancelled.");
+        validInput = true;
+      } else if (in.equalsIgnoreCase("s")){
+        gui.println("Game saved!");
+        validInput = true;
+      } else {
+        gui.println("\"" + in + "\" is not a valid choice!");
+      }
+      
+    }
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("inProgress", true);
+    data.put("room", currentRoom.getRoomName());
+    JSONWriter("src/data/gameState.json", data);
+
+    return quit;
+  }
+
+  private void JSONWriter(String filePath, HashMap<String, Object> data) {
+    try {
+      FileWriter file = new FileWriter(filePath);
+      file.write(JSONObject.toJSONString(data));
+      file.flush();
+      file.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    } 
+  }
 
   /**
    * Prompts the user if they want to quit or restart the game. 
@@ -220,10 +298,11 @@ public class Game {
 
     // Try to leave current room.
     Room nextRoom = currentRoom.nextRoom(direction);
-    
     if (nextRoom == null)
-      gui.println("You cannot go that way!");
-    else {
+      gui.println("CODE ERROR: Room going " + direction + " does not exist!");
+    else if (!currentRoom.canGoDirection(direction)){
+      gui.println("That exit is locked! Come back later.");
+    } else {
       currentRoom = nextRoom;
       if(currentRoom.getRoomName().equals("The Lair")){
         gui.println(currentRoom.shortDescription());
@@ -235,6 +314,7 @@ public class Game {
         gui.println(currentRoom.longDescription());
       }
     }
+    gui.setGameInfo("Empty", currentRoom.getExits());
   }
 
   /**
