@@ -162,7 +162,7 @@ public class Game {
       music(command);
 
     }else if(commandWord.equals("hit")){
-      //if(getRoomName().equals("The Lair"))
+      //TODO: hit() when inventory is ready
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart") == true){
         return 2;
@@ -182,7 +182,12 @@ public class Game {
   }
 
 
-
+  /**
+   * Prompts the user if they want to quit or restart the game. 
+   * After user input, it returns true or false.
+   * @param string - Prints whether the operation is a quit or restart.
+   * @return True or false based on if the user cancelled the operation or not.
+   */
   private boolean quitRestart(String string) {
     gui.println("Are you sure you would like to " + string + " the game?");
     gui.println("Type \"y\" to confirm or \"n\" to cancel.");
