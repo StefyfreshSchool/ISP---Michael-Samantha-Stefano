@@ -39,17 +39,26 @@ public class Game {
             break;
           }
         }
+        inventory = new Inventory(MAX_WEIGHT);
+        JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
+        if (inventoryArray != null)
+          for (Object itemName : inventoryArray) {
+            //TODO: replace this when Item and Inventory are finished
+            inventory.addItem(new Item(5, (String) itemName, true, "A something."));
+          }
+      } else {
+        inventory  = new Inventory(MAX_WEIGHT);
       }
+      
     } catch (Exception e) {
       e.printStackTrace();
+      inventory  = new Inventory(MAX_WEIGHT);
     }
     parser = new Parser();
-    inventory = new Inventory(MAX_WEIGHT);
 
     //reset game state to blank
     HashMap<String, Object> data = new HashMap<String, Object>();
     data.put("inProgress", false);
-    data.put("room", null);
     JSONWriter("src/data/gameState.json", data);
   }
 
@@ -107,17 +116,19 @@ public class Game {
       if (status == 2){
         music.stop();
         gui.print("Restarting");
-        sleep(200);
+        sleep(150);
         gui.print(".");
-        sleep(200);
+        sleep(150);
         gui.print(".");
-        sleep(200);
+        sleep(150);
         gui.print(".");
-        sleep(400);
+        sleep(150);
         gui.reset();
+        gui.println("Game restarted.");
         try {
           initRooms("src\\data\\rooms.json");
           currentRoom = roomMap.get("South of the Cyan House");
+          inventory = new Inventory(MAX_WEIGHT);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -127,7 +138,8 @@ public class Game {
       }
       
     }
-    gui.println("Thank you for playing.  Good bye.");
+
+    gui.println("Thank you for playing. Good bye.");
 
     //Nice transition to exit the game
     sleep(1000);
@@ -179,6 +191,7 @@ public class Game {
         gui.println("Quit what?");
       else
         if (quitRestart("quit")){
+          resetSaveState();
           return 1;
         }
 
@@ -192,6 +205,7 @@ public class Game {
       //TODO: hit() when inventory is ready
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart")){
+        resetSaveState();
         return 2;
       }
     } else if (commandWord.equals("save")){
@@ -223,33 +237,74 @@ public class Game {
    */
   private boolean save(Command command) {
     boolean quit = false;
-    gui.println("Would you like to save and quit the game, or just save?");
-    gui.println("Type \"q\" to save and quit, \"s\" to just save, and \"c\" to cancel.");
-    boolean validInput = false;
-    while(!validInput){
-      String in = gui.readCommand();
-      if (in.equalsIgnoreCase("q")){
-        gui.println("Game saved! Quitting.");
-        quit = true;
-        validInput = true;
-      }
-      else if (in.equalsIgnoreCase("c")){
-        gui.println("Cancelled.");
-        validInput = true;
-      } else if (in.equalsIgnoreCase("s")){
-        gui.println("Game saved!");
-        validInput = true;
-      } else {
-        gui.println("\"" + in + "\" is not a valid choice!");
-      }
-      
+    if (command.getLastArg().equalsIgnoreCase("quit")){
+      quit = true;
+      gui.println("Game saved! Quitting.");
+    } else if (command.getLastArg().equalsIgnoreCase("game")){ 
+      gui.println("Game saved!");
+    } else if (command.getLastArg().equalsIgnoreCase("load")){
+      loadSave();
+      gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+      return false;
+    } else if (command.getLastArg().equals("")){
+      gui.println("How would you like to save?");
+    } else if (command.getLastArg().equalsIgnoreCase("clear") || command.getLastArg().equalsIgnoreCase("reset")){
+      resetSaveState();
+      gui.println("Cleared game save.");
+      return false;
+    } else {
+      gui.println("save " + command.getStringifiedArgs() + " is not a valid save command!");
+      return false;
     }
+
     HashMap<String, Object> data = new HashMap<String, Object>();
     data.put("inProgress", true);
     data.put("room", currentRoom.getRoomName());
+    ArrayList<String> items = new ArrayList<String>();
+    for (Item item : inventory.getItems()) {
+      items.add(item.getName());
+    }
+    data.put("inventory", items);
     JSONWriter("src/data/gameState.json", data);
 
     return quit;
+  }
+
+  /**
+   * Allows the game to load a previously saved state of the game.
+   */
+  private void loadSave() {
+    music.stop();
+    startMusic();
+    try {
+      JSONObject gameState = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/gameState.json")));
+      if (gameState.get("inProgress").equals(false)){
+        gui.println("You cannot load a save if you have no save!");
+        return;
+      }
+      currentRoom = roomMap.get(gameState.get("room"));
+      inventory = new Inventory(MAX_WEIGHT);
+      JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
+      if (inventoryArray != null)
+        for (Object itemName : inventoryArray) {
+          //TODO: replace this when Item and Inventory are finished
+          inventory.addItem(new Item(5, (String) itemName, true, "A something."));
+        }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    gui.print("Loading save");
+    sleep(150);
+    gui.print(".");
+    sleep(150);
+    gui.print(".");
+    sleep(150);
+    gui.print(".");
+    sleep(150);
+    gui.reset();
+    gui.println("Game reloaded from saved data.");
+    printWelcome();
+    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
   }
 
   /**
@@ -264,8 +319,8 @@ public class Game {
     boolean validInput = false;
     while(!validInput){
       String in = gui.readCommand();
-      if (in.equalsIgnoreCase("y")) return true;
-      else if (in.equalsIgnoreCase("n")){
+      if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
+      else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
         gui.println("Cancelled.");
         validInput = true;
       } else {
@@ -423,6 +478,12 @@ public class Game {
     else {
       gui.println("Invalid music operation!");
     }
+  }
+
+  private void resetSaveState() {
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("inProgress", false);
+    JSONWriter("src/data/gameState.json", data);
   }
 
   //Below are utility functions, serving a purpose only for internal game management.

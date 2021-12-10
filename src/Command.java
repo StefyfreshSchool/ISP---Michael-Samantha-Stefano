@@ -46,6 +46,14 @@ public class Command {
   }
 
   /**
+   * Returns the last argument of the command. If there were no args, it returns {@code ""}.
+   */
+  public String getLastArg(){
+    if (args == null) return "";
+    return args.get(args.size() - 1);
+  }
+
+  /**
    * Return true if this command was not understood.
    */
   public boolean isUnknown() {
