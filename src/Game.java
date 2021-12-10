@@ -329,13 +329,44 @@ public class Game {
   }
 
     /**
-   * Does things when you enter the fur store.
+   * Does things when you enter the fur store. kinda buggy approach with care
    */
   public void salesman(){
-    gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
-    gui.println("\"Would you like to buy my furs? Only for a small fee of £1000!\" He says.");
-    //if (Inventory.getItems().contains("1000 British Pounds")){
-    gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
+    boolean boughtFurs = false;
+    if (boughtFurs == false){ // && Inventory.getItems().contains("Coonskin Hat")
+      gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
+      gui.println("\"Would you like to buy my furs? Only for a small fee of £1000!\" He says.");
+      gui.println("Input \"yes\" to purchase or \"no\" to decline.");
+      if (buyFurs()){ // && Inventory.getItems().contains("1000 British Pounds")
+        gui.println("\"Pleasure doing business with you, good sir.\"");
+        // TODO implement inventory so you can get fur hat!
+        // Inventory.removeItem("1000 British Pounds");
+        // Inventory.addItem("Coonskin Hat"); 
+        // Inventory.addItem("500 Euros");
+        boughtFurs = true;
+      } else if (buyFurs()){
+        gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
+      }
+    }
+  }
+
+  /**
+   * Asks user if they want to buy furs.
+   * @return true or false
+   */
+  public boolean buyFurs(){
+    boolean validInput = false;
+    while(!validInput){
+      String in = gui.readCommand();
+      if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
+      else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no")){
+        gui.println("Then what are you doing in a fur shop? Buy something or get out!");
+        validInput = true;
+      } else {
+        gui.println("\"" + in + "\" is not a valid choice!");
+      }
+    }
+    return false;
   }
 
   /** 
