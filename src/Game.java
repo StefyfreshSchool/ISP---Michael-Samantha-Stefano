@@ -14,7 +14,10 @@ public class Game {
   private static MusicPlayer music;
 
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
-  
+
+  private Inventory inventory;
+  private static final int MAX_WEIGHT = 10;
+
   private Parser parser;
   private Room currentRoom;
 
@@ -41,6 +44,7 @@ public class Game {
       e.printStackTrace();
     }
     parser = new Parser();
+    inventory = new Inventory(MAX_WEIGHT);
 
     //reset game state to blank
     HashMap<String, Object> data = new HashMap<String, Object>();
@@ -89,7 +93,7 @@ public class Game {
     gui.createWindow();
     printWelcome();
     startMusic();
-    gui.setGameInfo("Empty", currentRoom.getExits());
+    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
     
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
@@ -119,7 +123,7 @@ public class Game {
         }
         printWelcome();
         startMusic();
-        gui.setGameInfo("Empty", currentRoom.getExits());
+        gui.setGameInfo(inventory.getString(), currentRoom.getExits());
       }
       
     }
@@ -286,8 +290,9 @@ public class Game {
 
     // Try to leave current room.
     Room nextRoom = currentRoom.nextRoom(direction);
+    
     if (nextRoom == null)
-      gui.println("CODE ERROR: Room going " + direction + " does not exist!");
+      gui.println(direction + " is not a valid direction.");
     else if (!currentRoom.canGoDirection(direction)){
       gui.println("That exit is locked! Come back later.");
     } else {
@@ -302,7 +307,7 @@ public class Game {
         gui.println(currentRoom.longDescription());
       }
     }
-    gui.setGameInfo("Empty", currentRoom.getExits());
+    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
   }
 
   /**

@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Room {
-
   private String roomName;
   private String description;
   private ArrayList<Exit> exits;
@@ -47,21 +46,19 @@ public class Room {
    * Exits: north west
    */
   public String longDescription() {
-
     return "Room: " + roomName + "\n\n" + description + "\n" + exitString();
   }
 
   /**
-   * Return a string describing the room's exits, for example "Exits: north west
+   * Return a string describing the room's exits.
    * ".
    */
-  private String exitString() {
-    String returnString = "Exits: ";
+  public String exitString() {
+    ArrayList<String> exitStrings = new ArrayList<String>();
     for (Exit exit : exits) {
-      returnString += exit.getDirection() + " ";
+        exitStrings.add(exit.getDirection());
     }
-
-    return returnString;
+    return String.join(", ", exitStrings);
   }
 
   /**
@@ -82,23 +79,14 @@ public class Room {
    * Return the room that is reached if we go from this room in direction
    * "direction". If there is no room in that direction, return null.
    */
-  public Room nextRoom(String direction) {
-    try {
-      for (Exit exit : exits) {
+  public Room nextRoom(String direction){
+    for (Exit exit : exits) {
+      if (exit.getDirection().equalsIgnoreCase(direction)) {
+        String adjacentRoom = exit.getAdjacentRoom();
 
-        if (exit.getDirection().equalsIgnoreCase(direction)) {
-          String adjacentRoom = exit.getAdjacentRoom();
-
-          return Game.roomMap.get(adjacentRoom);
-        }
-
+        return Game.roomMap.get(adjacentRoom);
       }
-    } catch (IllegalArgumentException ex) {
-      gui.println(direction + " is not a valid direction.");
-      return null;
     }
-
-    gui.println(direction + " is not a valid direction.");
     return null;
   }
 
