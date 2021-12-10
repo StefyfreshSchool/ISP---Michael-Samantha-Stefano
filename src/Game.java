@@ -322,24 +322,26 @@ public class Game {
   }
 
     /**
-   * Does things when you enter the fur store. kinda buggy approach with care
+   * Does things when you enter the fur store. WORKS if you say yes the first time, kinda if you say no
    */
   public void salesman(){
-    boolean boughtFurs = false;
-    if (boughtFurs == false){ // && Inventory.getItems().contains("Coonskin Hat")
+    if (!inventory.getString().contains("Coonskin Hat")){
       gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
-      gui.println("\"Would you like to buy my furs? Only for a small fee of £1000!\" He says.");
-      gui.println("Input \"yes\" to purchase or \"no\" to decline.");
-      if (buyFurs()){ // && Inventory.getItems().contains("1000 British Pounds")
+      gui.println("\"Would you like to buy my furs? Only for a small fee of £500!\" He says.");
+      gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
+      if (buyFurs()){
+        if (inventory.getString().contains("1000 British Pounds")){
         gui.println("\"Pleasure doing business with you, good sir.\"");
         // TODO implement inventory so you can get fur hat!
-        // Inventory.removeItem("1000 British Pounds");
-        // Inventory.addItem("Coonskin Hat"); 
-        // Inventory.addItem("500 Euros");
-        boughtFurs = true;
-      } else if (buyFurs()){
+        // inventory.removeItem(pounds);
+        // inventory.addItem(hat); 
+        // inventory.addItem(euros);
+        } else { //&& !inventory.getString().contains("1000 British Pounds")
         gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
+        }
       }
+    } else {
+      gui.println("A pelt-clothed man sits in the corner of the lodge, slowly counting his money...");
     }
   }
 
@@ -353,7 +355,7 @@ public class Game {
       String in = gui.readCommand();
       if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
       else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no")){
-        gui.println("Then what are you doing in a fur shop? Buy something or get out!");
+        gui.println("\"Then what are you doing in a fur shop? Buy something or get out!\"");
         validInput = true;
       } else {
         gui.println("\"" + in + "\" is not a valid choice!");
