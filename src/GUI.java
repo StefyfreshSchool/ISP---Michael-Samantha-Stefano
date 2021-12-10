@@ -52,7 +52,7 @@ public class GUI {
         System.setProperty("swing.aatext", "true");
         frame = new JFrame("ZORK - Adventure Into Tableland");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
+        frame.setSize(800, 450);
         frame.setIconImage(new ImageIcon(getClass().getResource("images/icon.png")).getImage());
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
