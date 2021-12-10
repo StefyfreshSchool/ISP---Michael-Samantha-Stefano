@@ -248,18 +248,6 @@ public class Game {
     return quit;
   }
 
-  private void JSONWriter(String filePath, HashMap<String, Object> data) {
-    try {
-      FileWriter file = new FileWriter(filePath);
-      file.write(JSONObject.toJSONString(data));
-      file.flush();
-      file.close();
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    } 
-  }
-
   /**
    * Prompts the user if they want to quit or restart the game. 
    * After user input, it returns true or false.
@@ -446,5 +434,25 @@ public class Game {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Writes a JSON string to a file.
+   * <p>
+   * Takes in a HashMap with key-value pairs, converts it to a JSON string,
+   * and writes it to the specified file.
+   * @param filePath - the file to write to.
+   * @param data - the HashMap of data.
+   */
+  private void JSONWriter(String filePath, HashMap<String, Object> data) {
+    try {
+      FileWriter file = new FileWriter(filePath);
+      file.write(JSONObject.toJSONString(data));
+      file.flush();
+      file.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    } 
   }
 }
