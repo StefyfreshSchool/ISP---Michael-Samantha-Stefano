@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Game {
-  private GUI gui;
+  private static GUI gui;
   private static MusicPlayer music;
 
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
@@ -178,22 +178,25 @@ public class Game {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
       return 0;
-    }
+    } 
     String commandWord = command.getCommandWord();
+    if (!command.isUnknown() && command.getFirstArg().equals("/?")){
+      ArrayList<String> args = new ArrayList<String>();
+      args.add(commandWord);
+      Parser.printCommandHelp(new Command("help", args));
+      return 0;
+    }
     if (commandWord.equals("help")){
-      printHelp();
+      printHelp(command);
     }
     else if (commandWord.equals("go")){
       goRoom(command);
     }
     else if (commandWord.equals("quit")) {
-      if (command.hasSecondWord())
-        gui.println("Quit what?");
-      else
-        if (quitRestart("quit")){
-          resetSaveState();
-          return 1;
-        }
+      if (quitRestart("quit", command)){
+        resetSaveState();
+        return 1;
+      }
 
     } else if (commandWord.equals("yell")){
       yell(command.getStringifiedArgs());
@@ -204,7 +207,7 @@ public class Game {
     } else if(commandWord.equals("hit")){
       //TODO: hit() when inventory is ready
     } else if (commandWord.equals("restart")) {
-      if (quitRestart("restart")){
+      if (quitRestart("restart", command)){
         resetSaveState();
         return 2;
       }
@@ -247,7 +250,7 @@ public class Game {
       gui.setGameInfo(inventory.getString(), currentRoom.getExits());
       return false;
     } else if (command.getLastArg().equals("")){
-      gui.println("How would you like to save?");
+      gui.println("What would you like to do?");
     } else if (command.getLastArg().equalsIgnoreCase("clear") || command.getLastArg().equalsIgnoreCase("reset")){
       resetSaveState();
       gui.println("Cleared game save.");
@@ -313,7 +316,8 @@ public class Game {
    * @param string - Prints whether the operation is a quit or restart.
    * @return True or false based on if the user cancelled the operation or not.
    */
-  private boolean quitRestart(String string) {
+  private boolean quitRestart(String string, Command command) {
+    if (command.getLastArg().equalsIgnoreCase("confirm")) return true;
     gui.println("Are you sure you would like to " + string + " the game?");
     gui.println("Type \"y\" to confirm or \"n\" to cancel.");
     boolean validInput = false;
@@ -335,7 +339,7 @@ public class Game {
    * otherwise print an error message.
    */
   private void goRoom(Command command) {
-    if (!command.hasSecondWord()) {
+    if (!command.hasArgs()) {
       // if there is no second word, we don't know where to go...
       gui.println("Go where?");
       return;
@@ -436,19 +440,23 @@ public class Game {
    * Print out some help information. Here we print some stupid, cryptic message
    * and a list of the command words.
    */
-  public void printHelp() {
-    gui.println("You are lost. You are alone. You wander");
-    gui.println("around at Monash Uni, Peninsula Campus.");
-    gui.println();
-    gui.println("Your command words are:");
-    Parser.showCommands();
+  public void printHelp(Command command) {
+    if (command.hasArgs()) Parser.printCommandHelp(command);
+    else{
+      //TODO: Fix help messages
+      gui.println("You are lost. You are alone. You wander");
+      gui.println("around at Monash Uni, Peninsula Campus.");
+      gui.println();
+      gui.println("Your command words are:");
+      Parser.showCommands();
+    }    
   }
 
   /**
    * Plays music.
    */
   public void music(Command command){
-    if (!command.hasSecondWord()) gui.println("What do you want to do with the music?");
+    if (!command.hasArgs()) gui.println("What do you want to do with the music?");
     else if (command.getStringifiedArgs().equals("stop")){
       Game.getMusicPlayer().stop();
       gui.println("Music stopped.");
