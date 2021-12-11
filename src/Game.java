@@ -43,8 +43,17 @@ public class Game {
         JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
         if (inventoryArray != null)
           for (Object itemName : inventoryArray) {
-            //TODO: replace this when Item and Inventory are finished
-            inventory.addItem(new Item(5, (String) itemName, true, "A something."));
+            JSONObject itemsJson = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
+            JSONArray itemsArray = (JSONArray) itemsJson.get("items");
+            for (Object itemObj : itemsArray) {
+              if (((JSONObject) itemObj).get("name").equals(itemName)){
+                Object weight = ((JSONObject) itemObj).get("weight");
+                boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+                String description = (String) ((JSONObject) itemObj).get("description");
+                Item item = new Item(Integer.parseInt(weight + ""), (String) itemName, isOpenable, description);
+                inventory.addItem(item);
+              }
+            }
           }
       } else {
         inventory  = new Inventory(MAX_WEIGHT);
@@ -90,6 +99,7 @@ public class Game {
         exits.add(exit);
       }
       room.setExits(exits);
+      room.initItems();
       roomMap.put(roomId, room);
     }
   }
@@ -112,6 +122,7 @@ public class Game {
       Command command;
       command = parser.getCommand();
       int status = processCommand(command);
+      gui.setGameInfo(inventory.getString(), currentRoom.getExits());
       if (status == 1) finished = true;
       if (status == 2){
         music.stop();
@@ -213,11 +224,13 @@ public class Game {
       }
     } else if (commandWord.equals("save")){
       if (save(command)) return 1;
+    } else if (commandWord.equals("take")){
+      take(command);
     }
     return 0;
   }
 
-  /**
+    /**
    * Given a command, process (that is: execute) the command.
    * <p>
    * TODO: figure out if this can be merged with above method.
@@ -231,6 +244,33 @@ public class Game {
     String commandWord = command.getCommandWord();
     if(commandWord.equals("hit")){
       //if(getRoomName().equals("The Lair"))
+    }
+  }
+
+  /**
+   * Allows the player to take items from the current room.
+   * @param command
+   */
+  private void take(Command command) {
+    if (!command.hasArgs()){
+      gui.println("Take what?");
+      return;
+    }
+    String itemName = command.getStringifiedArgs();
+    if (!command.hasArgs()){
+      gui.println("Take what?");
+      return;
+    } else {
+      if (!Item.isValidItem(itemName)){
+        gui.print("Not a valid item!");
+      } else if (!currentRoom.isItem(itemName)){
+        gui.print("That item is not in this room!");
+      } else {
+        if (inventory.addItem(currentRoom.getItem(itemName))){
+          currentRoom.removeItem(itemName);
+          gui.println(itemName + " taken!");
+        }
+      }
     }
   }
 
@@ -305,8 +345,8 @@ public class Game {
     gui.print(".");
     sleep(150);
     gui.reset();
-    gui.println("Game reloaded from saved data.");
-    printWelcome();
+    gui.println("Game reloaded from saved data.\n");
+    gui.println(currentRoom.longDescription());
     gui.setGameInfo(inventory.getString(), currentRoom.getExits());
   }
 

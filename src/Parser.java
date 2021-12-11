@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Parser {
-  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save" };
+  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take" };
   private static GUI gui = GUI.getGUI();
 
   public Command getCommand() {
@@ -67,34 +67,34 @@ public class Parser {
       gui.println();
       gui.println("GO direction");
       gui.println();
-      gui.println("  direction   Specifies the direction to go.");
+      gui.println("  direction     Specifies the direction to go.");
     } else if (commandWord.equalsIgnoreCase("yell")){
       gui.println("Yells.");
       gui.println();
       gui.println("YELL [text]");
       gui.println();
-      gui.println("  text   Specifies the text to yell.");
+      gui.println("  text     Specifies the text to yell.");
     } else if (commandWord.equalsIgnoreCase("music")){
       gui.println("Controls the background music of the game.");
       gui.println();
       gui.println("MUSIC [stop | start | volume-down | volume-up]");
       gui.println();
-      gui.println("  stop         Stops the music.");
-      gui.println("  start        Starts the music.");
-      gui.println("  volume-up    Increases the volume of the music.");
-      gui.println("  volume-down  Increases the volume of the music.");
+      gui.println("  stop          Stops the music.");
+      gui.println("  start         Starts the music.");
+      gui.println("  volume-up     Increases the volume of the music.");
+      gui.println("  volume-down   Increases the volume of the music.");
     } else if (commandWord.equalsIgnoreCase("restart")){
       gui.println("Restarts the game.");
       gui.println();
       gui.println("RESTART [confirm]");
       gui.println();
-      gui.println("  confirm   Forces an immediate restart, suppressing the confirmation prompt.");
+      gui.println("  confirm     Forces an immediate restart, suppressing the confirmation prompt.");
     } else if (commandWord.equalsIgnoreCase("quit")){
       gui.println("Quits the game.");
       gui.println();
       gui.println("QUIT [confirm]");
       gui.println();
-      gui.println("  confirm   Forces an immediate exit, suppressing the confirmation prompt.");
+      gui.println("  confirm     Forces an immediate exit, suppressing the confirmation prompt.");
     } else if (commandWord.equalsIgnoreCase("hit")){
       gui.println("Hits an enemy.");
       gui.println();
@@ -104,16 +104,16 @@ public class Parser {
       gui.println();
       gui.println("SAVE [quit | game | load | clear]");
       gui.println();
-      gui.println("  quit   Saves the game and quits.");
-      gui.println("  game   Saves the game without quitting.");
-      gui.println("  load   Loads the game from a previously saved state.");
-      gui.println("  clear  Clears the saved state of the game.");
+      gui.println("  quit      Saves the game and quits.");
+      gui.println("  game      Saves the game without quitting.");
+      gui.println("  load      Loads the game from a previously saved state.");
+      gui.println("  clear     Clears the saved state of the game.");
     } else if (commandWord.equalsIgnoreCase("help")){
       gui.println("Prints help about the commands that can be used in the game.");
       gui.println();
       gui.println("HELP [command]");
       gui.println();
-      gui.println("  command   A command to learn more about.");
+      gui.println("  command     A command to learn more about.");
       gui.println();
       gui.println("Alternatively, you can type \"/?\" after any command to print");
       gui.println("the same information as \"help [command]\".");
@@ -121,6 +121,12 @@ public class Parser {
       gui.println("Allows the player to eat.");
       gui.println();
       gui.println("EAT");
+    } else if (commandWord.equalsIgnoreCase("take")){
+      gui.println("Picks up an item from the current room.");
+      gui.println();
+      gui.println("TAKE item");
+      gui.println();
+      gui.println("  item     The item to take.");
     }
     else {
       gui.println("CODE ERROR: Please write a condition for the " + commandWord + " command in Parser.java.");

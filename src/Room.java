@@ -1,10 +1,17 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class Room {
   private String roomName;
   private String description;
   private ArrayList<Exit> exits;
-  private GUI gui = GUI.getGUI();
+  private ArrayList<Item> items;
 
   public ArrayList<Exit> getExits() {
     return exits;
@@ -27,6 +34,36 @@ public class Room {
     roomName = "DEFAULT ROOM";
     description = "DEFAULT DESCRIPTION";
     exits = new ArrayList<Exit>();
+  }
+  
+  /**
+   * Initializes the items for the current room.
+   */
+  public void initItems() {
+    try {
+      items = new ArrayList<Item>();
+      JSONObject itemsJson = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
+      JSONArray itemsArray = (JSONArray) itemsJson.get("items");
+      for (Object itemObj : itemsArray) {
+        if (((JSONObject) itemObj).get("startingRoom").equals(roomName)){
+          Object weight = ((JSONObject) itemObj).get("weight");
+          String name = (String) ((JSONObject) itemObj).get("name");
+          boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+          String description = (String) ((JSONObject) itemObj).get("description");
+          Item item = new Item(Integer.parseInt(weight + ""), name, isOpenable, description);
+          items.add(item);
+        }
+      }
+    } catch (ParseException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public boolean isItem(String item) {
+    for (Item itemObj : items) {
+      if (itemObj.getName().equals(item)) return true;
+    }
+    return false;
   }
 
   public void addExit(Exit exit) throws Exception {
@@ -90,6 +127,21 @@ public class Room {
     return null;
   }
 
+  /**
+   * CHecks if the item specified exists in this room.
+   * If it does not exist, it throws an {@code IllegalArgumentException}.
+   * @param itemName - the String of the item name to compare to.
+   * @return If found, the Item.
+   * @throws IllegalArgumentException If the item does not exist.
+   */
+  public Item getItem(String itemName){
+    for (Item item : items){
+      if (item.getName().equals(itemName)) return item;
+    }
+    throw new IllegalArgumentException("Item not found in this room.");
+  }
+
+
   /*
    * private int getDirectionIndex(String direction) { int dirIndex = 0; for
    * (String dir : directions) { if (dir.equals(direction)) return dirIndex; else
@@ -111,5 +163,20 @@ public class Room {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Removes an item from the items list for a room.
+   * @param itemName - The item name to remove.
+   * @throws IllegalArgumentException if the item is not found in the room.
+   */
+  public void removeItem(String itemName) {
+    for (int i = 0; i < items.size(); i++) {
+      if (items.get(i).getName().equals(itemName)){
+        items.remove(i);
+        return;
+      }
+    }
+    throw new IllegalArgumentException("Item not found in this room.");
   }
 }
