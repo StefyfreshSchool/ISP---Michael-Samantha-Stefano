@@ -1,8 +1,16 @@
+//Wildcard import because there are too many imported classes...
 import javax.swing.*;
+
 import javax.swing.plaf.basic.BasicScrollBarUI;
-import static org.awaitility.Awaitility.*;
-import java.awt.*;
-import java.awt.event.*;
+import static org.awaitility.Awaitility.await;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 
