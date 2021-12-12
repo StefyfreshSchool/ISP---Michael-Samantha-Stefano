@@ -95,7 +95,7 @@ public class Room {
     for (Exit exit : exits) {
         exitStrings.add(exit.getDirection());
     }
-    return String.join(", ", exitStrings);
+    return "Exits: " + String.join(", ", exitStrings);
   }
 
   /**

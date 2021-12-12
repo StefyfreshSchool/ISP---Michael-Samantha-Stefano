@@ -33,7 +33,7 @@ public class GUI {
     private JScrollPane scroll;
     private JPanel inputContainer;
     private JPanel gameInfoContainer;
-    private JTextPane roomInfo;
+    private JTextArea roomInfo;
 
     //class variable
     private static GUI gui;
@@ -62,6 +62,7 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 450);
         frame.setIconImage(new ImageIcon(getClass().getResource("images/icon.png")).getImage());
+        frame.setLocationRelativeTo(null);
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
 
@@ -123,23 +124,17 @@ public class GUI {
 
 
         //add game info
-        //NOTE: this is not optimal. 
-        gameInfoContainer = new JPanel();
-        roomInfo = new JTextPane();
-        // roomInfo.setLineWrap(true);
-        // roomInfo.setWrapStyleWord(true);
+        // gameInfoContainer = new JPanel();
+        roomInfo = new JTextArea();
+        roomInfo.setLineWrap(true);
+        roomInfo.setWrapStyleWord(true);
         roomInfo.setEditable(false);
         roomInfo.setCaretColor(Color.WHITE);
         roomInfo.setBackground(Color.BLACK);
         roomInfo.setHighlighter(null);
-        // roomInfo.setText("Inventory: Cheese, Pebble, Sword, Scroll | Exits: North, South, Southwest, East");
-        roomInfo.setMaximumSize(new Dimension(1000, 20));
-        roomInfo.setPreferredSize(new Dimension(1000, 20));
+        roomInfo.setMaximumSize(new Dimension(1000, 100));
         roomInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
         roomInfo.setForeground(Color.LIGHT_GRAY);
-        // roomInfo.sethori
-        // gameInfoContainer.add(roomInfo);
-        // gameContainer.add(gameInfoContainer);
         gameContainer.add(roomInfo);
 
         
