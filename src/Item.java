@@ -12,14 +12,25 @@ public class Item extends OpenableObject {
     private String name;
     private String description;
     private boolean isOpenable;
+    private int quantity;
     private GUI gui = GUI.getGUI();
     public static ArrayList<String> validItems;
   
+    public Item(int weight, String name, boolean isOpenable, String description, int quantity) {
+      this.weight = weight;
+      this.name = name;
+      this.isOpenable = isOpenable;
+      this.description = description;
+      this.quantity = quantity;
+    }
+
     public Item(int weight, String name, boolean isOpenable, String description) {
       this.weight = weight;
       this.name = name;
       this.isOpenable = isOpenable;
       this.description = description;
+      this.quantity = 1;
+      setValidItems();
     }
 
     public Item(int weight, String name, boolean isOpenable) {
@@ -27,6 +38,7 @@ public class Item extends OpenableObject {
       this.name = name;
       this.isOpenable = isOpenable;
       this.description = "DEFAULT DESCRIPTION";
+      this.quantity = 1;
       setValidItems();
     }
     
@@ -62,6 +74,18 @@ public class Item extends OpenableObject {
   
     public void setWeight(int weight) {
       this.weight = weight;
+    }
+
+    public int getQuantity() {
+      return quantity;
+    }
+  
+    public void setQuantity(int quantity) {
+      this.quantity = quantity;
+    }
+
+    public void setQuantity() {
+      this.quantity--;
     }
   
     public String getName() {
