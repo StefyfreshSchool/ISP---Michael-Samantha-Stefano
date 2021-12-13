@@ -29,4 +29,26 @@ public class Inventory {
     }
   }
 
+  public Item getItem(int index){
+    return items.get(index);
+  }
+
+  public int find(String name){
+    for(int i=0; i<items.size(); i++){
+      if(items.get(i).getName().equals(name)){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  public String printInventory(){
+    String in = "";
+    for(int i=0; i<items.size(); i++){
+      in += items.get(i).getName()+", ";
+    }
+    return in;
+    
+  }
+
 }
