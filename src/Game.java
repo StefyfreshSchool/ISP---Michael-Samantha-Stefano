@@ -1,18 +1,23 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Game {
-  private GUI gui;
+  private static GUI gui;
   private static MusicPlayer music;
 
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
-  
+
+  private Inventory inventory;
+  private static final int MAX_WEIGHT = 10;
+
   private Parser parser;
   private Room currentRoom;
   Enemy sasquatch = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
@@ -24,10 +29,47 @@ public class Game {
     try {
       initRooms("src\\data\\rooms.json");
       currentRoom = roomMap.get("South of the Cyan House");
+      
+      //Initialize the game if a previous state was recorded
+      JSONObject gameState = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/gameState.json")));
+      if (gameState.get("inProgress").equals(true)){
+        for (Map.Entry<String,Room> roomObj : roomMap.entrySet()) {
+          String roomName = roomObj.getKey();
+          if (roomName.equals(gameState.get("room"))){
+            currentRoom = roomObj.getValue();
+            break;
+          }
+        }
+        inventory = new Inventory(MAX_WEIGHT);
+        JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
+        if (inventoryArray != null)
+          for (Object itemName : inventoryArray) {
+            JSONObject itemsJson = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
+            JSONArray itemsArray = (JSONArray) itemsJson.get("items");
+            for (Object itemObj : itemsArray) {
+              if (((JSONObject) itemObj).get("name").equals(itemName)){
+                Object weight = ((JSONObject) itemObj).get("weight");
+                boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+                String description = (String) ((JSONObject) itemObj).get("description");
+                Item item = new Item(Integer.parseInt(weight + ""), (String) itemName, isOpenable, description);
+                inventory.addItem(item);
+              }
+            }
+          }
+      } else {
+        inventory  = new Inventory(MAX_WEIGHT);
+      }
+      
     } catch (Exception e) {
       e.printStackTrace();
+      inventory  = new Inventory(MAX_WEIGHT);
     }
     parser = new Parser();
+
+    //reset game state to blank
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("inProgress", false);
+    JSONWriter("src/data/gameState.json", data);
   }
 
   private void initRooms(String fileName) throws Exception {
@@ -58,6 +100,7 @@ public class Game {
         exits.add(exit);
       }
       room.setExits(exits);
+      room.initItems();
       roomMap.put(roomId, room);
     }
   }
@@ -70,6 +113,7 @@ public class Game {
     gui.createWindow();
     printWelcome();
     startMusic();
+    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
     
     
     // Enter the main command loop. Here we repeatedly read commands and
@@ -80,30 +124,35 @@ public class Game {
       Command command;
       command = parser.getCommand();
       int status = processCommand(command);
+      gui.setGameInfo(inventory.getString(), currentRoom.getExits());
       if (status == 1) finished = true;
       if (status == 2){
         music.stop();
         gui.print("Restarting");
-        sleep(300);
+        sleep(150);
         gui.print(".");
-        sleep(300);
+        sleep(150);
         gui.print(".");
-        sleep(300);
+        sleep(150);
         gui.print(".");
-        sleep(400);
+        sleep(150);
         gui.reset();
+        gui.println("Game restarted.");
         try {
           initRooms("src\\data\\rooms.json");
           currentRoom = roomMap.get("South of the Cyan House");
+          inventory = new Inventory(MAX_WEIGHT);
         } catch (Exception e) {
           e.printStackTrace();
         }
         printWelcome();
         startMusic();
+        gui.setGameInfo(inventory.getString(), currentRoom.getExits());
       }
       
     }
-    gui.println("Thank you for playing.  Good bye.");
+
+    gui.println("Thank you for playing. Good bye.");
 
     //Nice transition to exit the game
     sleep(1000);
@@ -134,28 +183,33 @@ public class Game {
   }
 
   /**
-   * Given a command, process (that is: execute) the command. If this command ends
-   * the game, true is returned, otherwise false is returned.
+   * Given a command, process (that is: execute) the command.
+   * @param command
+   * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
    */
   private int processCommand(Command command) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
       return 0;
-    }
+    } 
     String commandWord = command.getCommandWord();
+    if (!command.isUnknown() && command.getFirstArg().equals("/?")){
+      ArrayList<String> args = new ArrayList<String>();
+      args.add(commandWord);
+      Parser.printCommandHelp(new Command("help", args));
+      return 0;
+    }
     if (commandWord.equals("help")){
-      printHelp();
+      printHelp(command);
     }
     else if (commandWord.equals("go")){
       goRoom(command);
     }
     else if (commandWord.equals("quit")) {
-      if (command.hasSecondWord())
-        gui.println("Quit what?");
-      else
-        if (quitRestart("quit") == true){
-          return 1;
-        }
+      if (quitRestart("quit", command)){
+        resetSaveState();
+        return 1;
+      }
 
     } else if (commandWord.equals("yell")){
       yell(command.getStringifiedArgs());
@@ -163,18 +217,30 @@ public class Game {
     } else if (commandWord.equals("music")) {
       music(command);
 
-    } else if (commandWord.equals("hit")) {
-      hit(command);
-
-    }else if (commandWord.equals("restart")) {
-      if (quitRestart("restart") == true){
+    } else if(commandWord.equals("hit")){
+      //TODO: hit() when inventory is ready
+    } else if (commandWord.equals("restart")) {
+      if (quitRestart("restart", command)){
+        resetSaveState();
         return 2;
       }
+    } else if (commandWord.equals("save")){
+      if (save(command)) return 1;
+    } else if (commandWord.equals("take")){
+      take(command);
     }
     return 0;
   }
 
   private void hit(Command command) {
+    /**
+   * Given a command, process (that is: execute) the command.
+   * <p>
+   * TODO: figure out if this can be merged with above method.
+   * @param command
+   * @param weapon
+   */
+  //private void processCommand(Command command, Weapon weapon) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
     }
@@ -182,10 +248,10 @@ public class Game {
     if(commandWord.equals("hit")){
       int healthstandin;
       Enemy enemy;
-      Weapon weapon;
+      //Weapon weapon;
       if(currentRoom.getRoomName().equals("The Lair")){
         enemy = new Enemy(sasquatch);
-        weapon = new Weapon();
+        //weapon = new Weapon();
       }
       /*enemy.setHealth(weapon.getDamage());
       if(enemy.getHealth()<=0){
@@ -200,7 +266,7 @@ public class Game {
     }
     Enemy enemy;
     
-    if (!command.hasSecondWord()) gui.println("What do you want to hit?");
+    /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
     else if (command.getStringifiedArgs().equals("stop")){
       Game.getMusicPlayer().stop();
       gui.println("Music stopped.");
@@ -231,9 +297,111 @@ public class Game {
     } 
     else {
       gui.println("Invalid music operation!");
+    }*/
+  }
+
+  /**
+   * Allows the player to take items from the current room.
+   * @param command
+   */
+  private void take(Command command) {
+    if (!command.hasArgs()){
+      gui.println("Take what?");
+      return;
+    }
+    String itemName = command.getStringifiedArgs();
+    if (!command.hasArgs()){
+      gui.println("Take what?");
+      return;
+    } else {
+      if (!Item.isValidItem(itemName)){
+        gui.print("Not a valid item!");
+      } else if (!currentRoom.isItem(itemName)){
+        gui.print("That item is not in this room!");
+      } else {
+        if (inventory.addItem(currentRoom.getItem(itemName))){
+          currentRoom.removeItem(itemName);
+          gui.println(itemName + " taken!");
+        }
+      }
     }
   }
 
+  /**
+   * Saves the game and optionally quits.
+   * @param command
+   */
+  private boolean save(Command command) {
+    boolean quit = false;
+    if (command.getLastArg().equalsIgnoreCase("quit")){
+      quit = true;
+      gui.println("Game saved! Quitting.");
+    } else if (command.getLastArg().equalsIgnoreCase("game")){ 
+      gui.println("Game saved!");
+    } else if (command.getLastArg().equalsIgnoreCase("load")){
+      loadSave();
+      gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+      return false;
+    } else if (command.getLastArg().equals("")){
+      gui.println("What would you like to do?");
+    } else if (command.getLastArg().equalsIgnoreCase("clear") || command.getLastArg().equalsIgnoreCase("reset")){
+      resetSaveState();
+      gui.println("Cleared game save.");
+      return false;
+    } else {
+      gui.println("save " + command.getStringifiedArgs() + " is not a valid save command!");
+      return false;
+    }
+
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("inProgress", true);
+    data.put("room", currentRoom.getRoomName());
+    ArrayList<String> items = new ArrayList<String>();
+    for (Item item : inventory.getItems()) {
+      items.add(item.getName());
+    }
+    data.put("inventory", items);
+    JSONWriter("src/data/gameState.json", data);
+
+    return quit;
+  }
+
+  /**
+   * Allows the game to load a previously saved state of the game.
+   */
+  private void loadSave() {
+    music.stop();
+    startMusic();
+    try {
+      JSONObject gameState = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/gameState.json")));
+      if (gameState.get("inProgress").equals(false)){
+        gui.println("You cannot load a save if you have no save!");
+        return;
+      }
+      currentRoom = roomMap.get(gameState.get("room"));
+      inventory = new Inventory(MAX_WEIGHT);
+      JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
+      if (inventoryArray != null)
+        for (Object itemName : inventoryArray) {
+          //TODO: replace this when Item and Inventory are finished
+          inventory.addItem(new Item(5, (String) itemName, true, "A something."));
+        }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    gui.print("Loading save");
+    sleep(150);
+    gui.print(".");
+    sleep(150);
+    gui.print(".");
+    sleep(150);
+    gui.print(".");
+    sleep(150);
+    gui.reset();
+    gui.println("Game reloaded from saved data.\n");
+    gui.println(currentRoom.longDescription());
+    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+  }
 
   /**
    * Prompts the user if they want to quit or restart the game. 
@@ -241,14 +409,15 @@ public class Game {
    * @param string - Prints whether the operation is a quit or restart.
    * @return True or false based on if the user cancelled the operation or not.
    */
-  private boolean quitRestart(String string) {
+  private boolean quitRestart(String string, Command command) {
+    if (command.getLastArg().equalsIgnoreCase("confirm")) return true;
     gui.println("Are you sure you would like to " + string + " the game?");
     gui.println("Type \"y\" to confirm or \"n\" to cancel.");
     boolean validInput = false;
     while(!validInput){
       String in = gui.readCommand();
-      if (in.equalsIgnoreCase("y")) return true;
-      else if (in.equalsIgnoreCase("n")){
+      if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
+      else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
         gui.println("Cancelled.");
         validInput = true;
       } else {
@@ -263,7 +432,7 @@ public class Game {
    * otherwise print an error message.
    */
   private void goRoom(Command command) {
-    if (!command.hasSecondWord()) {
+    if (!command.hasArgs()) {
       // if there is no second word, we don't know where to go...
       gui.println("Go where?");
       return;
@@ -275,16 +444,22 @@ public class Game {
     Room nextRoom = currentRoom.nextRoom(direction);
     
     if (nextRoom == null)
-      gui.println("You cannot go that way!");
-    else {
+      gui.println(direction + " is not a valid direction.");
+    else if (!currentRoom.canGoDirection(direction)){
+      gui.println("That exit is locked! Come back later.");
+    } else {
       currentRoom = nextRoom;
       if(currentRoom.getRoomName().equals("The Lair")){
         gui.println(currentRoom.shortDescription());
         sasquatch();
-      }else{
+      } else if(currentRoom.getRoomName().equals("Fur Store")){
+        gui.println(currentRoom.shortDescription());
+        salesman();
+      } else {
         gui.println(currentRoom.longDescription());
       }
     }
+    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
   }
 
   /**
@@ -296,6 +471,49 @@ public class Game {
     gui.println("What would you like to do?");
     Parser.showCommands();
 
+  }
+
+    /**
+   * Does things when you enter the fur store. WORKS if you say yes the first time, kinda if you say no
+   */
+  public void salesman(){
+    if (!inventory.getString().contains("Coonskin Hat")){
+      gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
+      gui.println("\"Would you like to buy my furs? Only for a small fee of £500!\" He says.");
+      gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
+      if (buyFurs()){
+        if (inventory.getString().contains("1000 British Pounds")){
+        gui.println("\"Pleasure doing business with you, good sir.\"");
+        // TODO implement inventory so you can get fur hat!
+        // inventory.removeItem(pounds);
+        // inventory.addItem(hat); 
+        // inventory.addItem(euros);
+        } else { //&& !inventory.getString().contains("1000 British Pounds")
+        gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
+        }
+      }
+    } else {
+      gui.println("A pelt-clothed man sits in the corner of the lodge, slowly counting his money...");
+    }
+  }
+
+  /**
+   * Asks user if they want to buy furs.
+   * @return true or false
+   */
+  public boolean buyFurs(){
+    boolean validInput = false;
+    while(!validInput){
+      String in = gui.readCommand();
+      if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
+      else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no")){
+        gui.println("\"Then what are you doing in a fur shop? Buy something or get out!\"");
+        validInput = true;
+      } else {
+        gui.println("\"" + in + "\" is not a valid choice!");
+      }
+    }
+    return false;
   }
 
   /** 
@@ -315,19 +533,23 @@ public class Game {
    * Print out some help information. Here we print some stupid, cryptic message
    * and a list of the command words.
    */
-  public void printHelp() {
-    gui.println("You are lost. You are alone. You wander");
-    gui.println("around at Monash Uni, Peninsula Campus.");
-    gui.println();
-    gui.println("Your command words are:");
-    Parser.showCommands();
+  public void printHelp(Command command) {
+    if (command.hasArgs()) Parser.printCommandHelp(command);
+    else{
+      //TODO: Fix help messages
+      gui.println("You are lost. You are alone. You wander");
+      gui.println("around at Monash Uni, Peninsula Campus.");
+      gui.println();
+      gui.println("Your command words are:");
+      Parser.showCommands();
+    }    
   }
 
   /**
    * Plays music.
    */
   public void music(Command command){
-    if (!command.hasSecondWord()) gui.println("What do you want to do with the music?");
+    if (!command.hasArgs()) gui.println("What do you want to do with the music?");
     else if (command.getStringifiedArgs().equals("stop")){
       Game.getMusicPlayer().stop();
       gui.println("Music stopped.");
@@ -361,6 +583,12 @@ public class Game {
     }
   }
 
+  private void resetSaveState() {
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("inProgress", false);
+    JSONWriter("src/data/gameState.json", data);
+  }
+
   //Below are utility functions, serving a purpose only for internal game management.
 
   /**
@@ -375,5 +603,25 @@ public class Game {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Writes a JSON string to a file.
+   * <p>
+   * Takes in a HashMap with key-value pairs, converts it to a JSON string,
+   * and writes it to the specified file.
+   * @param filePath - the file to write to.
+   * @param data - the HashMap of data.
+   */
+  private void JSONWriter(String filePath, HashMap<String, Object> data) {
+    try {
+      FileWriter file = new FileWriter(filePath);
+      file.write(JSONObject.toJSONString(data));
+      file.flush();
+      file.close();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    } 
   }
 }

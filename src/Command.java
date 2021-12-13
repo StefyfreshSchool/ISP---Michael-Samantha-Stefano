@@ -23,6 +23,15 @@ public class Command {
   }
 
   /**
+   * Return the first command argument of this command. Returns an empty string if there 
+   * were no arguments.
+   */
+  public String getFirstArg() {
+    if (!hasArgs()) return "";
+    return args.get(0);
+  }
+
+  /**
    * Return the arguments of this command. Returns null if there were no args
    * word.
    */
@@ -46,6 +55,14 @@ public class Command {
   }
 
   /**
+   * Returns the last argument of the command. If there were no args, it returns an empty string.
+   */
+  public String getLastArg(){
+    if (args == null) return "";
+    return args.get(args.size() - 1);
+  }
+
+  /**
    * Return true if this command was not understood.
    */
   public boolean isUnknown() {
@@ -55,7 +72,7 @@ public class Command {
   /**
    * Return true if the command has a second word.
    */
-  public boolean hasSecondWord() {
+  public boolean hasArgs() {
     return (args != null);
   }
 }

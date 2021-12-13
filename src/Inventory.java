@@ -12,6 +12,19 @@ public class Inventory {
     this.currentWeight = 0;
   }
 
+  /**
+   * Gets a string of all the elements in the player's inventory. If there are none, it returns "Empty".
+   * @return The {@code String} of the player's inventory.
+   */
+  public String getString() {
+    ArrayList<String> itemStrings = new ArrayList<String>();
+    for (Item item : items) {
+        itemStrings.add(item.getName());
+    }
+    if (itemStrings.size() == 0) return "Empty";
+    return String.join(", ", itemStrings);
+  }
+
   public int getMaxWeight() {
     return maxWeight;
   }
@@ -51,4 +64,11 @@ public class Inventory {
     
   }
 
+  public boolean removeItem(Item item) {
+    return items.remove(item);
+  }
+
+  public ArrayList<Item> getItems() {
+    return items;
+  }
 }

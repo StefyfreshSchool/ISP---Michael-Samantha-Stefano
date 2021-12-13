@@ -1,8 +1,17 @@
+//Wildcard imports because there are too many imported classes...
+import javax.swing.text.*;
 import javax.swing.*;
+
 import javax.swing.plaf.basic.BasicScrollBarUI;
-import static org.awaitility.Awaitility.*;
-import java.awt.*;
-import java.awt.event.*;
+import static org.awaitility.Awaitility.await;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 
@@ -20,13 +29,18 @@ public class GUI {
     private JFrame frame;
     private JPanel gameContainer;
     private String inputCommand;
-    private JTextArea output;
+    StyleContext styleContext;
+    private StyledDocument outputDoc;
     private JTextField input;
     private JScrollPane scroll;
     private JPanel inputContainer;
+    private JTextArea roomInfo;
 
     //class variable
     private static GUI gui;
+    private final String STYLE_ITALICS = "italics";
+    private final String STYLE_BOLD = "bold";
+    private final String STYLE_YELLOW = "yellow";
 
     /** The private constructor for the singleton GUI class.*/
     private GUI(){}
@@ -48,12 +62,14 @@ public class GUI {
         //Set up window
         System.setProperty("awt.useSystemAAFontSettings","on");
         System.setProperty("swing.aatext", "true");
-        frame = new JFrame("ZORK - An Epic Text Adventure Game!");
+        frame = new JFrame("ZORK - Adventure Into Tableland");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 400);
+        frame.setSize(800, 450);
         frame.setIconImage(new ImageIcon(getClass().getResource("images/icon.png")).getImage());
+        frame.setLocationRelativeTo(null);
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
+        initStyles();
 
 
         //add the main "container" that holds all the elements
@@ -64,10 +80,9 @@ public class GUI {
 
 
         //create the output text area
-        output = new JTextArea();
-        output.setLineWrap(true);
+        JTextPane output = new JTextPane();
+        outputDoc = output.getStyledDocument();
         output.setEditable(false);
-        output.setWrapStyleWord(true);
         output.setBackground(Color.BLACK);
         output.setSelectionColor(Color.WHITE);
         output.setMargin(new Insets(5,5,5,5));
@@ -112,8 +127,21 @@ public class GUI {
         JLabel img = new JLabel();
 
 
-        //add a spacer
-        gameContainer.add(spacer(10));
+        //add game info
+        // gameInfoContainer = new JPanel();
+        roomInfo = new JTextArea();
+        roomInfo.setLineWrap(true);
+        roomInfo.setWrapStyleWord(true);
+        roomInfo.setEditable(false);
+        roomInfo.setCaretColor(Color.WHITE);
+        roomInfo.setBackground(Color.BLACK);
+        roomInfo.setHighlighter(null);
+        roomInfo.setMaximumSize(new Dimension(1000, 100));
+        roomInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
+        roomInfo.setForeground(Color.LIGHT_GRAY);
+        gameContainer.add(roomInfo);
+
+        
 
 
         //add the input text box
@@ -121,7 +149,6 @@ public class GUI {
         input.setEditable(true);
         input.setCaretColor(Color.WHITE);
         input.setBackground(Color.BLACK);
-        input.setForeground(Color.WHITE);
         input.setSelectionColor(Color.WHITE);
         input.setBorder(BorderFactory.createEmptyBorder());
         input.setFont(new Font("Consolas", Font.PLAIN, 14));
@@ -139,12 +166,14 @@ public class GUI {
                     commandIndex = commandsEntered.size();
                     commandsEntered.add(command);
                     commandIndex++;
+
                     input.setText("");
-                    output.append("\n> " + command + "\n");
+                    append("\n> ", null);
+                    append(command + "\n", styleContext.getStyle(STYLE_YELLOW));
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
-                    commandIndex--;
+                    commandIndex--; 
                     input.setText(commandsEntered.get(commandIndex));
                 } 
                 else if (e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex < commandsEntered.size() - 1){
@@ -192,6 +221,19 @@ public class GUI {
     }
     
     /**
+     * Initializes the styles for {@code styleContext}.
+     */
+    private void initStyles() {
+        styleContext = new StyleContext();
+        Style style = styleContext.addStyle("yellow", null);
+        StyleConstants.setForeground(style, Color.YELLOW);
+        style = styleContext.addStyle("bold", null);
+        StyleConstants.setBold(style, true);
+        style = styleContext.addStyle("italics", null);
+        StyleConstants.setItalic(style, true);
+    }
+
+    /**
      * Reads the command input from the GUI.
      * @return The command String.
      */
@@ -201,6 +243,25 @@ public class GUI {
         command = inputCommand;
         inputCommand = null;
         return command;
+    }
+    
+    /**
+     * Sets the game info - the info box above the command field.
+     * <p>
+     * <b>IMPORTANT NOTE: This is done very poorly at the current time.</b>
+     * <p>
+     * @param inventory - Player's inventory.
+     * @param roomExits - Player's room exits.
+     */
+    public void setGameInfo(String inventory, ArrayList<Exit> roomExits) {
+        if (roomExits == null || inventory == null) throw new IllegalArgumentException("Parameters must be non-null.");
+        String roomExString = "";
+        ArrayList<String> exits = new ArrayList<String>();
+        for (Exit exit : roomExits) {
+            exits.add(exit.getDirection());
+        }
+        roomExString = String.join(", ", exits);
+        roomInfo.setText("Inventory: " + inventory + " | Exits: " + roomExString);
     }
 
     /**
@@ -221,7 +282,7 @@ public class GUI {
 
     /** Prints a stream to the output JTextArea and adds a new line.*/
     public void println() {
-        output.append("\n");
+        append("\n", null);
         flush();
     }
 
@@ -230,7 +291,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(int x) {
-        output.append(x +"\n");
+        append(x + "\n",  null);
         flush();
     }
 
@@ -239,7 +300,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(boolean x) {
-        output.append(x +"\n");
+        append(x + "\n", null);
         flush();
     }
 
@@ -248,7 +309,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(String x) {
-        output.append(x +"\n");
+        append(x + "\n", null);
         flush();
     }
 
@@ -257,7 +318,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(Object x) {
-        output.append(x +"\n");
+        append(x + "\n", null);
         flush();
     }
 
@@ -266,7 +327,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void println(double x) {
-        output.append(x +"\n");
+        append(x + "\n", null);
         flush();
     }
 
@@ -275,7 +336,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(int x) {
-        output.append(x + "");
+        append(x + "", null);
         flush();
     }
 
@@ -284,7 +345,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(boolean x) {
-        output.append(x + "");
+        append(x + "", null);
         flush();
     }
 
@@ -293,7 +354,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(String x) {
-        output.append(x + "");
+        append(x + "", null);
         flush();
     }
 
@@ -302,7 +363,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(double x) {
-        output.append(x + "");
+        append(x + "", null);
         flush();
     }
 
@@ -311,7 +372,7 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(Object x) {
-        output.append(x + "");
+        append(x + "", null);
         flush();
     }
 
@@ -329,7 +390,24 @@ public class GUI {
      * @param x - to be printed
      */
     public void reset() {
-        output.setText("");
+        try {
+            outputDoc.remove(0, outputDoc.getLength());
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
         flush();
+    }
+
+    /**
+     * Appends text to a JTextPane.
+     * @param str - The string to add.
+     * @param attr - The attributes for the text added.
+     */
+    private void append(String str, AttributeSet attr) {
+        try {
+            outputDoc.insertString(outputDoc.getLength(), str, attr);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 }
