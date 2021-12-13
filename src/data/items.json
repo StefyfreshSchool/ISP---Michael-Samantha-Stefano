@@ -9,6 +9,7 @@
       "isWeapon": true,
       "damage": 10,
       "weight": 5,
+      "quantity": 5,
       "startingRoom": "The Lair"
     },
     {
@@ -71,6 +72,7 @@
       "isOpenable": false,
       "isWeapon": false,
       "weight": 1,
+      "quantity": 3,
       "startingRoom": "East Room"
     },
     {

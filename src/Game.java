@@ -18,18 +18,29 @@ public class Game implements java.io.Serializable {
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
 
   private Inventory inventory;
+  private Player player;
   private static final int MAX_WEIGHT = 10;
 
   private Parser parser;
   private Room currentRoom;
-
+  Enemy sasquatch;
+  Weapon geraldo;
   /**
    * Create the game and initialize its internal map.
    */
   public Game() {
+    //Init GUI and player stuff
     gui = GUI.getGUI();
     gui.createWindow();
     inventory = new Inventory(MAX_WEIGHT);
+    player = new Player(90);
+
+    //Init enemies and items
+    //TODO: PUT THESE IN A MAP!! IT IS NOT GOOD TO HAVE VARS FOR EVERYTHING!!
+    sasquatch = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
+    geraldo = new Weapon();
+
+    //Init rooms and game state
     try {
       initRooms("src\\data\\rooms.json");
       currentRoom = roomMap.get("South of the Cyan House");
@@ -110,17 +121,15 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  /**
-   * Main play routine. Loops until end of play.
-   */
+  /** Main play routine. Loops until end of play. */
   public void play() {
     printWelcome();
     startMusic();
     gui.setGameInfo(inventory.getString(), currentRoom.getExits());
     
+    
     // Enter the main command loop. Here we repeatedly read commands and
-    // execute them until the game is over.
-
+    // execute them until the game is over.\
     boolean finished = false;
     while (!finished) {
       Command command;
@@ -166,9 +175,7 @@ public class Game implements java.io.Serializable {
     return music;
   }
 
-  /**
-   * Print out the opening message for the player.
-   */
+  /** Print out the opening message for the player. */
   private void printWelcome() {
     gui.println("Welcome to Zork!");
     gui.println("Zork is an amazing text adventure game!");
@@ -213,7 +220,7 @@ public class Game implements java.io.Serializable {
       music(command);
 
     } else if(commandWord.equals("hit")){
-      //TODO: hit() when inventory is ready
+      hit(command);
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart", command)){
         resetSaveState();
@@ -223,25 +230,41 @@ public class Game implements java.io.Serializable {
       if (save(command)) return 1;
     } else if (commandWord.equals("take")){
       take(command);
+    } else if (commandWord.equals("heal")){
+      heal(command);
     }
     return 0;
   }
 
-    /**
-   * Given a command, process (that is: execute) the command.
-   * <p>
-   * TODO: figure out if this can be merged with above method.
-   * @param command
-   * @param weapon
+  /**
+   * Allows the player to hit an enemy.
+   * @param command - 
    */
-  private void processCommand(Command command, Weapon weapon) {
+  private void hit(Command command) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
     }
     String commandWord = command.getCommandWord();
     if(commandWord.equals("hit")){
-      //if(getRoomName().equals("The Lair"))
+      int healthstandin;
+      Enemy enemy;
+      //Weapon weapon;
+      if(currentRoom.getRoomName().equals("The Lair")){
+        enemy = new Enemy(sasquatch);
+        //weapon = new Weapon();
+      }
+      /*enemy.setHealth(weapon.getDamage());
+      if(enemy.getHealth()<=0){
+        healthstandin=0;
+      }else{
+        healthstandin = enemy.getHealth();
+      }
+        gui.println("The "+enemy.getName()+" lost 10 Health points. It has "+healthstandin+" left.");
+      if(healthstandin==0){
+        gui.println("The "+enemy.getName()+" has died.");
+      }*/
     }
+    Enemy enemy;
   }
 
   /**
@@ -473,6 +496,22 @@ public class Game implements java.io.Serializable {
         gui.println("ARGHHHHH!!!!!!");
         gui.println("Feel better?");
       }
+  }
+
+  /**
+   * when player types "heal" (no args).
+   */
+  private void heal(Command command) {
+    if (inventory.getString().contains("Bandages") && player.getHealth() != 100){
+      player.maxHeal();
+      inventory.getItem(inventory.find("Bandages")).setQuantity();
+      gui.println("Your wounds have healed. You have been restored to full health.");
+    } else if (inventory.getString().contains("Bandages") && player.getHealth() == 100){
+      gui.println("You are already of maximum health!");
+    } else {
+      gui.println("You have no healing items!");
+    }
+    gui.println("Your current health is " + player.getHealth() + ".");
   }
 
   /**

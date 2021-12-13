@@ -1,5 +1,5 @@
 public class Player {
-    private int health;
+    public int health;
 
     public Player(int health){
         this.health = health;
@@ -7,5 +7,13 @@ public class Player {
 
     public void setHealth(int damage){
         health -= damage;
+    }
+
+    public void maxHeal(){
+        health = 100;
+    }
+
+    public int getHealth(){
+        return health;
     }
 }
