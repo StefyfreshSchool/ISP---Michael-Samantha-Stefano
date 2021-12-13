@@ -21,7 +21,8 @@ public class Game {
 
   private Parser parser;
   private Room currentRoom;
-
+  Enemy sasquatch = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
+  Weapon geraldo = new Weapon();
   /**
    * Create the game and initialize its internal map.
    */
@@ -114,6 +115,7 @@ public class Game {
     printWelcome();
     startMusic();
     gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+    
     
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
@@ -233,6 +235,7 @@ public class Game {
     return 0;
   }
 
+  private void hit(Command command) {
     /**
    * Given a command, process (that is: execute) the command.
    * <p>
@@ -240,14 +243,64 @@ public class Game {
    * @param command
    * @param weapon
    */
-  private void processCommand(Command command, Weapon weapon) {
+  //private void processCommand(Command command, Weapon weapon) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
     }
     String commandWord = command.getCommandWord();
     if(commandWord.equals("hit")){
-      //if(getRoomName().equals("The Lair"))
+      int healthstandin;
+      Enemy enemy;
+      //Weapon weapon;
+      if(currentRoom.getRoomName().equals("The Lair")){
+        enemy = new Enemy(sasquatch);
+        //weapon = new Weapon();
+      }
+      /*enemy.setHealth(weapon.getDamage());
+      if(enemy.getHealth()<=0){
+        healthstandin=0;
+      }else{
+        healthstandin = enemy.getHealth();
+      }
+        gui.println("The "+enemy.getName()+" lost 10 Health points. It has "+healthstandin+" left.");
+      if(healthstandin==0){
+        gui.println("The "+enemy.getName()+" has died.");
+      }*/
     }
+    Enemy enemy;
+    
+    /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
+    else if (command.getStringifiedArgs().equals("stop")){
+      Game.getMusicPlayer().stop();
+      gui.println("Music stopped.");
+    } 
+    else if (command.getStringifiedArgs().equals("start")){
+      Game.getMusicPlayer().play();
+      gui.println("Music started!");
+    } 
+    else if (command.getStringifiedArgs().equals("play")){
+      Game.getMusicPlayer().play();
+      gui.println("Music started!");
+    } 
+    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      gui.println("Music volume down.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      gui.println("Music volume up.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      gui.println("Music volume down.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      gui.println("Music volume up.");
+    } 
+    else {
+      gui.println("Invalid music operation!");
+    }*/
   }
 
   /**

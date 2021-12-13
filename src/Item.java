@@ -10,8 +10,8 @@ import org.json.simple.parser.ParseException;
 public class Item extends OpenableObject {
     private int weight;
     private String name;
-    private boolean isOpenable;
     private String description;
+    private boolean isOpenable;
     private GUI gui = GUI.getGUI();
     public static ArrayList<String> validItems;
   
@@ -20,6 +20,13 @@ public class Item extends OpenableObject {
       this.name = name;
       this.isOpenable = isOpenable;
       this.description = description;
+    }
+
+    public Item(int weight, String name, boolean isOpenable) {
+      this.weight = weight;
+      this.name = name;
+      this.isOpenable = isOpenable;
+      this.description = "DEFAULT DESCRIPTION";
       setValidItems();
     }
     
@@ -60,13 +67,13 @@ public class Item extends OpenableObject {
     public String getName() {
       return name;
     }
-  
-    public void setName(String name) {
-      this.name = name;
-    }
 
     public String getDescription() {
       return description;
+    }
+  
+    public void setName(String name) {
+      this.name = name;
     }
   
     public void setDescription(String description) {

@@ -7,4 +7,14 @@ public class Character {
         this.catchphrase = catchphrase;
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public String getCatchphrase(){
+        return catchphrase;
+    }
+
+
+
 }
