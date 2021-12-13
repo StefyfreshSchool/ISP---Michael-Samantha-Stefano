@@ -38,9 +38,6 @@ public class GUI {
 
     //class variable
     private static GUI gui;
-    private final String STYLE_ITALICS = "italics";
-    private final String STYLE_BOLD = "bold";
-    private final String STYLE_YELLOW = "yellow";
 
     /** The private constructor for the singleton GUI class.*/
     private GUI(){}
@@ -69,7 +66,8 @@ public class GUI {
         frame.setLocationRelativeTo(null);
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
-        initStyles();
+        styleContext = new StyleContext();
+        styleContext.addStyle("", null);
 
 
         //add the main "container" that holds all the elements
@@ -128,7 +126,6 @@ public class GUI {
 
 
         //add game info
-        // gameInfoContainer = new JPanel();
         roomInfo = new JTextArea();
         roomInfo.setLineWrap(true);
         roomInfo.setWrapStyleWord(true);
@@ -169,7 +166,7 @@ public class GUI {
 
                     input.setText("");
                     append("\n> ", null);
-                    append(command + "\n", styleContext.getStyle(STYLE_YELLOW));
+                    append(command + "\n", stylize(Color.YELLOW));
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
@@ -218,19 +215,6 @@ public class GUI {
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
-    }
-    
-    /**
-     * Initializes the styles for {@code styleContext}.
-     */
-    private void initStyles() {
-        styleContext = new StyleContext();
-        Style style = styleContext.addStyle("yellow", null);
-        StyleConstants.setForeground(style, Color.YELLOW);
-        style = styleContext.addStyle("bold", null);
-        StyleConstants.setBold(style, true);
-        style = styleContext.addStyle("italics", null);
-        StyleConstants.setItalic(style, true);
     }
 
     /**
@@ -409,5 +393,44 @@ public class GUI {
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Stylizes text for printing to the output JTextPane.
+     * @param italics - Specifies whether the text is italic or not.
+     * @param bold - Specifies whether the text is bold or not.
+     * @param textColour - Specifies the colour of the text.
+     * @return A {@code Style} with the specified properties.
+     */
+    private Style stylize(boolean italics, boolean bold, Color textColour) {
+        Style style = styleContext.getStyle("");
+        StyleConstants.setForeground(style, textColour);
+        StyleConstants.setBold(style, bold);
+        StyleConstants.setItalic(style, italics);
+        return style;
+    }
+
+     /**
+     * Stylizes text for printing to the output JTextPane.
+     * @param italics - Specifies whether the text is italic or not.
+     * @param bold - Specifies whether the text is bold or not.
+     * @return A {@code Style} with the specified properties.
+     */
+    private Style stylize(boolean italics, boolean bold) {
+        Style style = styleContext.getStyle("");
+        StyleConstants.setBold(style, bold);
+        StyleConstants.setItalic(style, italics);
+        return style;
+    }
+
+     /**
+     * Stylizes text for printing to the output JTextPane.
+     * @param textColour - Specifies the colour of the text.
+     * @return A {@code Style} with the specified properties.
+     */
+    private Style stylize(Color textColour) {
+        Style style = styleContext.getStyle("");
+        StyleConstants.setForeground(style, textColour);
+        return style;
     }
 }
