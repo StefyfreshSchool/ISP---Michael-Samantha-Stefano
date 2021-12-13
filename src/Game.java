@@ -1,16 +1,18 @@
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-public class Game {
-  private static GUI gui;
+public class Game implements java.io.Serializable {
+  private transient static GUI gui;
   private static MusicPlayer music;
 
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
@@ -25,50 +27,54 @@ public class Game {
    * Create the game and initialize its internal map.
    */
   public Game() {
+    gui = GUI.getGUI();
+    gui.createWindow();
+    inventory = new Inventory(MAX_WEIGHT);
     try {
       initRooms("src\\data\\rooms.json");
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
-      JSONObject gameState = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/gameState.json")));
-      if (gameState.get("inProgress").equals(true)){
-        for (Map.Entry<String,Room> roomObj : roomMap.entrySet()) {
-          String roomName = roomObj.getKey();
-          if (roomName.equals(gameState.get("room"))){
-            currentRoom = roomObj.getValue();
-            break;
-          }
-        }
-        inventory = new Inventory(MAX_WEIGHT);
-        JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
-        if (inventoryArray != null)
-          for (Object itemName : inventoryArray) {
-            JSONObject itemsJson = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
-            JSONArray itemsArray = (JSONArray) itemsJson.get("items");
-            for (Object itemObj : itemsArray) {
-              if (((JSONObject) itemObj).get("name").equals(itemName)){
-                Object weight = ((JSONObject) itemObj).get("weight");
-                boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
-                String description = (String) ((JSONObject) itemObj).get("description");
-                Item item = new Item(Integer.parseInt(weight + ""), (String) itemName, isOpenable, description);
-                inventory.addItem(item);
-              }
-            }
-          }
-      } else {
-        inventory  = new Inventory(MAX_WEIGHT);
+      Save game = null;
+      try (FileInputStream fileIn = new FileInputStream("src/data/game.ser")) {
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        game = (Save) in.readObject();
+        in.close();
+        fileIn.close();
+      } catch (ClassNotFoundException | IOException e) {
+        e.printStackTrace();
       }
-      
+      if (game != null && game.getInProgress()){
+        gui.println("A previously saved game state was recorded.");
+        gui.println("Would you like to restore from that save?");
+        gui.println();
+        gui.println("Type \"y\" to restore or \"n\" to ignore.");
+
+        boolean validInput = false;
+        while(!validInput){
+          String in = gui.readCommand();
+          if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")){
+            gui.reset();
+
+            roomMap = game.getRoomMap();
+            inventory = game.getInventory();
+            currentRoom = game.getCurrentRoom();
+            gui.println("Restored from saved game.\n");
+            validInput = true;
+          } else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
+            gui.reset();
+            gui.println("Ignoring old game state.\n");
+            resetSaveState();
+            validInput = true;
+          } else {
+            gui.println("\"" + in + "\" is not a valid choice!");
+          }
+        } 
+      }  
     } catch (Exception e) {
       e.printStackTrace();
-      inventory  = new Inventory(MAX_WEIGHT);
     }
     parser = new Parser();
-
-    //reset game state to blank
-    HashMap<String, Object> data = new HashMap<String, Object>();
-    data.put("inProgress", false);
-    JSONWriter("src/data/gameState.json", data);
   }
 
   private void initRooms(String fileName) throws Exception {
@@ -108,8 +114,6 @@ public class Game {
    * Main play routine. Loops until end of play.
    */
   public void play() {
-    gui = GUI.getGUI();
-    gui.createWindow();
     printWelcome();
     startMusic();
     gui.setGameInfo(inventory.getString(), currentRoom.getExits());
@@ -123,19 +127,13 @@ public class Game {
       command = parser.getCommand();
       int status = processCommand(command);
       gui.setGameInfo(inventory.getString(), currentRoom.getExits());
-      if (status == 1) finished = true;
+      if (status == 1){
+        finished = true;
+      } 
       if (status == 2){
         music.stop();
-        gui.print("Restarting");
-        sleep(150);
-        gui.print(".");
-        sleep(150);
-        gui.print(".");
-        sleep(150);
-        gui.print(".");
-        sleep(150);
         gui.reset();
-        gui.println("Game restarted.");
+        gui.println("Game restarted.\n");
         try {
           initRooms("src\\data\\rooms.json");
           currentRoom = roomMap.get("South of the Cyan House");
@@ -172,7 +170,6 @@ public class Game {
    * Print out the opening message for the player.
    */
   private void printWelcome() {
-    gui.println();
     gui.println("Welcome to Zork!");
     gui.println("Zork is an amazing text adventure game!");
     gui.println("Type 'help' if you need help.");
@@ -263,12 +260,12 @@ public class Game {
     } else {
       if (!Item.isValidItem(itemName)){
         gui.print("Not a valid item!");
-      } else if (!currentRoom.isItem(itemName)){
+      } else if (!currentRoom.containsItem(itemName)){
         gui.print("That item is not in this room!");
       } else {
         if (inventory.addItem(currentRoom.getItem(itemName))){
+          gui.println(currentRoom.getItem(itemName).getName() + " taken!");
           currentRoom.removeItem(itemName);
-          gui.println(itemName + " taken!");
         }
       }
     }
@@ -303,13 +300,17 @@ public class Game {
     HashMap<String, Object> data = new HashMap<String, Object>();
     data.put("inProgress", true);
     data.put("room", currentRoom.getRoomName());
-    ArrayList<String> items = new ArrayList<String>();
-    for (Item item : inventory.getItems()) {
-      items.add(item.getName());
-    }
-    data.put("inventory", items);
-    JSONWriter("src/data/gameState.json", data);
 
+    Save game = new Save(roomMap, inventory, currentRoom);
+    try {
+      FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
+      out.writeObject(game);
+      out.close();
+      fileOut.close();
+   } catch (IOException i) {
+      i.printStackTrace();
+   }
     return quit;
   }
 
@@ -317,25 +318,6 @@ public class Game {
    * Allows the game to load a previously saved state of the game.
    */
   private void loadSave() {
-    music.stop();
-    startMusic();
-    try {
-      JSONObject gameState = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/gameState.json")));
-      if (gameState.get("inProgress").equals(false)){
-        gui.println("You cannot load a save if you have no save!");
-        return;
-      }
-      currentRoom = roomMap.get(gameState.get("room"));
-      inventory = new Inventory(MAX_WEIGHT);
-      JSONArray inventoryArray = (JSONArray) gameState.get("inventory");
-      if (inventoryArray != null)
-        for (Object itemName : inventoryArray) {
-          //TODO: replace this when Item and Inventory are finished
-          inventory.addItem(new Item(5, (String) itemName, true, "A something."));
-        }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
     gui.print("Loading save");
     sleep(150);
     gui.print(".");
@@ -344,6 +326,23 @@ public class Game {
     sleep(150);
     gui.print(".");
     sleep(150);
+
+    Save game = null;
+    try (FileInputStream fileIn = new FileInputStream("src/data/game.ser")) {
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+      game = (Save) in.readObject();
+      in.close();
+      fileIn.close();
+
+      roomMap = game.getRoomMap();
+      inventory = game.getInventory();
+      currentRoom = game.getCurrentRoom();
+    } catch (ClassNotFoundException | IOException e) {
+      e.printStackTrace();
+    }
+
+    music.stop();
+    startMusic();
     gui.reset();
     gui.println("Game reloaded from saved data.\n");
     gui.println(currentRoom.longDescription());
@@ -529,11 +528,21 @@ public class Game {
       gui.println("Invalid music operation!");
     }
   }
-
+  
+  /**
+   * Resets the game save state.
+   */
   private void resetSaveState() {
-    HashMap<String, Object> data = new HashMap<String, Object>();
-    data.put("inProgress", false);
-    JSONWriter("src/data/gameState.json", data);
+    Save game = new Save();
+    try {
+      FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
+      out.writeObject(game);
+      out.close();
+      fileOut.close();
+    } catch (IOException i) {
+      i.printStackTrace();
+    }
   }
 
   //Below are utility functions, serving a purpose only for internal game management.
@@ -550,25 +559,5 @@ public class Game {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * Writes a JSON string to a file.
-   * <p>
-   * Takes in a HashMap with key-value pairs, converts it to a JSON string,
-   * and writes it to the specified file.
-   * @param filePath - the file to write to.
-   * @param data - the HashMap of data.
-   */
-  private void JSONWriter(String filePath, HashMap<String, Object> data) {
-    try {
-      FileWriter file = new FileWriter(filePath);
-      file.write(JSONObject.toJSONString(data));
-      file.flush();
-      file.close();
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    } 
   }
 }

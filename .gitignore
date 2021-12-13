@@ -3,3 +3,4 @@ src/zork
 *.dat
 src/CommandWords.java
 src/data/gameState.json
+src/data/game.ser

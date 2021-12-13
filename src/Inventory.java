@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-public class Inventory {
+public class Inventory implements java.io.Serializable {
   private ArrayList<Item> items;
   private int maxWeight;
   private int currentWeight;
-  private GUI gui = GUI.getGUI();
+  private transient GUI gui = GUI.getGUI();
 
   public Inventory(int maxWeight) {
     this.items = new ArrayList<Item>();

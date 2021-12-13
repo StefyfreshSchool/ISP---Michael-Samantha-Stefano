@@ -1,13 +1,8 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-public class Room {
+public class Room implements java.io.Serializable {
   private String roomName;
   private String description;
   private ArrayList<Exit> exits;
@@ -40,29 +35,31 @@ public class Room {
    * Initializes the items for the current room.
    */
   public void initItems() {
-    try {
-      items = new ArrayList<Item>();
-      JSONObject itemsJson = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
-      JSONArray itemsArray = (JSONArray) itemsJson.get("items");
-      for (Object itemObj : itemsArray) {
-        if (((JSONObject) itemObj).get("startingRoom").equals(roomName)){
-          Object weight = ((JSONObject) itemObj).get("weight");
-          String name = (String) ((JSONObject) itemObj).get("name");
-          boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
-          String description = (String) ((JSONObject) itemObj).get("description");
-          Item item = new Item(Integer.parseInt(weight + ""), name, isOpenable, description);
-          items.add(item);
+    items = new ArrayList<Item>();
+    for (Object itemObj : Item.getItems()) {
+      if (((JSONObject) itemObj).get("startingRoom").equals(roomName)){
+        Object weight = ((JSONObject) itemObj).get("weight");
+        String name = (String) ((JSONObject) itemObj).get("name");
+        boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+        String description = (String) ((JSONObject) itemObj).get("description");
+        ArrayList<String> aliases = new ArrayList<String>();
+        for (Object alias : (JSONArray) ((JSONObject) itemObj).get("aliases")) {
+          aliases.add((String) alias);
         }
+        Item item = new Item(Integer.parseInt(weight + ""), name, isOpenable, description, aliases);
+        items.add(item);
       }
-    } catch (ParseException | IOException e) {
-      e.printStackTrace();
-    }
+      }
   }
 
-  public boolean isItem(String item) {
+  public boolean containsItem(String item) {
     for (Item itemObj : items) {
-      if (itemObj.getName().equals(item)) return true;
+      if (itemObj.getName().equalsIgnoreCase(item)) return true;
+      for (String alias : itemObj.getAliases()) {
+        if (alias.equalsIgnoreCase(item)) return true;
+      }
     }
+
     return false;
   }
 
@@ -136,9 +133,20 @@ public class Room {
    */
   public Item getItem(String itemName){
     for (Item item : items){
-      if (item.getName().equals(itemName)) return item;
+      if (item.getName().equalsIgnoreCase(itemName)) return item;
+      for (String alias : item.getAliases()) {
+        if (alias.equalsIgnoreCase(itemName)) return item;
+      }
     }
     throw new IllegalArgumentException("Item not found in this room.");
+  }
+
+  public ArrayList<Item> getItems(){
+    return items;
+  }
+
+  public void setItems(ArrayList<Item> items){
+    this.items = items;
   }
 
 
@@ -172,9 +180,15 @@ public class Room {
    */
   public void removeItem(String itemName) {
     for (int i = 0; i < items.size(); i++) {
-      if (items.get(i).getName().equals(itemName)){
+      if (items.get(i).getName().equalsIgnoreCase(itemName)){
         items.remove(i);
         return;
+      }
+      for (String alias : items.get(i).getAliases()) {
+        if (alias.equalsIgnoreCase(itemName)){
+          items.remove(i);
+          return;
+        }
       }
     }
     throw new IllegalArgumentException("Item not found in this room.");

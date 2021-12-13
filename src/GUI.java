@@ -29,7 +29,7 @@ public class GUI {
     private JFrame frame;
     private JPanel gameContainer;
     private String inputCommand;
-    StyleContext styleContext;
+    private static StyleContext styleContext;
     private StyledDocument outputDoc;
     private JTextField input;
     private JScrollPane scroll;
@@ -133,7 +133,7 @@ public class GUI {
         roomInfo.setCaretColor(Color.WHITE);
         roomInfo.setBackground(Color.BLACK);
         roomInfo.setHighlighter(null);
-        roomInfo.setMaximumSize(new Dimension(1000, 100));
+        roomInfo.setMaximumSize(new Dimension(800, 100));
         roomInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
         roomInfo.setForeground(Color.LIGHT_GRAY);
         gameContainer.add(roomInfo);
@@ -208,7 +208,7 @@ public class GUI {
         inputContainer.setLayout(new BorderLayout());
         inputContainer.add(input, BorderLayout.CENTER);
         inputContainer.add(cmd, BorderLayout.LINE_START);
-        inputContainer.setMaximumSize(new Dimension(1000,40));
+        inputContainer.setMaximumSize(new Dimension(800, 40));
         gameContainer.add(inputContainer);
 
 
@@ -360,6 +360,18 @@ public class GUI {
         flush();
     }
 
+    /**
+     * Prints a stream to the output JTextArea.
+     * <p>
+     * To get a Style for stylizing the text, call {@code GUI.stylize()}.
+     * @param x - to be printed
+     * @param style - the Style for the text
+     */
+    public void printStyled(Object x, Style style) {
+        append(x + "", style);
+        flush();
+    }
+
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
         SwingUtilities.invokeLater(new Runnable() {
@@ -402,7 +414,8 @@ public class GUI {
      * @param textColour - Specifies the colour of the text.
      * @return A {@code Style} with the specified properties.
      */
-    private Style stylize(boolean italics, boolean bold, Color textColour) {
+    public static Style stylize(boolean italics, boolean bold, Color textColour) {
+        if (styleContext == null) styleContext = new StyleContext();
         Style style = styleContext.getStyle("");
         StyleConstants.setForeground(style, textColour);
         StyleConstants.setBold(style, bold);
@@ -416,7 +429,8 @@ public class GUI {
      * @param bold - Specifies whether the text is bold or not.
      * @return A {@code Style} with the specified properties.
      */
-    private Style stylize(boolean italics, boolean bold) {
+    public static Style stylize(boolean italics, boolean bold) {
+        if (styleContext == null) styleContext = new StyleContext();
         Style style = styleContext.getStyle("");
         StyleConstants.setBold(style, bold);
         StyleConstants.setItalic(style, italics);
@@ -428,7 +442,8 @@ public class GUI {
      * @param textColour - Specifies the colour of the text.
      * @return A {@code Style} with the specified properties.
      */
-    private Style stylize(Color textColour) {
+    public static Style stylize(Color textColour) {
+        if (styleContext == null) styleContext = new StyleContext();
         Style style = styleContext.getStyle("");
         StyleConstants.setForeground(style, textColour);
         return style;
