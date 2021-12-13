@@ -16,6 +16,7 @@ public class Game {
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
 
   private Inventory inventory;
+  private Player player;
   private static final int MAX_WEIGHT = 10;
 
   private Parser parser;
@@ -226,6 +227,8 @@ public class Game {
       if (save(command)) return 1;
     } else if (commandWord.equals("take")){
       take(command);
+    } else if (commandWord.equals("heal")){
+      heal(command);
     }
     return 0;
   }
@@ -474,6 +477,18 @@ public class Game {
         gui.println("ARGHHHHH!!!!!!");
         gui.println("Feel better?");
       }
+  }
+
+  private void heal(Command command) {
+    if (inventory.getString().contains("Bandages") && player.getHealth() != 100){
+      // player.maxHeal();
+      // TODO implement the actual healing :/
+      gui.println("Your wounds have been healed. You are now back to full health.");
+    } else if (inventory.getString().contains("Bandages") && player.getHealth() == 100){
+      gui.println("You are already of maximum health!");
+    } else {
+      gui.println("You have no healing items!");
+    }
   }
 
   /**
