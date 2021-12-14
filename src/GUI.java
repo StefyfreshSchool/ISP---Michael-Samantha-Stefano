@@ -29,7 +29,7 @@ public class GUI {
     private JFrame frame;
     private JPanel gameContainer;
     private String inputCommand;
-    StyleContext styleContext;
+    private static StyleContext styleContext;
     private StyledDocument outputDoc;
     private JTextField input;
     private JScrollPane scroll;
@@ -38,9 +38,6 @@ public class GUI {
 
     //class variable
     private static GUI gui;
-    private final String STYLE_ITALICS = "italics";
-    private final String STYLE_BOLD = "bold";
-    private final String STYLE_YELLOW = "yellow";
 
     /** The private constructor for the singleton GUI class.*/
     private GUI(){}
@@ -69,7 +66,8 @@ public class GUI {
         frame.setLocationRelativeTo(null);
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
-        initStyles();
+        styleContext = new StyleContext();
+        styleContext.addStyle("", null);
 
 
         //add the main "container" that holds all the elements
@@ -128,7 +126,6 @@ public class GUI {
 
 
         //add game info
-        // gameInfoContainer = new JPanel();
         roomInfo = new JTextArea();
         roomInfo.setLineWrap(true);
         roomInfo.setWrapStyleWord(true);
@@ -136,7 +133,7 @@ public class GUI {
         roomInfo.setCaretColor(Color.WHITE);
         roomInfo.setBackground(Color.BLACK);
         roomInfo.setHighlighter(null);
-        roomInfo.setMaximumSize(new Dimension(1000, 100));
+        roomInfo.setMaximumSize(new Dimension(800, 100));
         roomInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
         roomInfo.setForeground(Color.LIGHT_GRAY);
         gameContainer.add(roomInfo);
@@ -169,7 +166,7 @@ public class GUI {
 
                     input.setText("");
                     append("\n> ", null);
-                    append(command + "\n", styleContext.getStyle(STYLE_YELLOW));
+                    append(command + "\n", stylize(false, false, Color.YELLOW));
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
@@ -211,26 +208,13 @@ public class GUI {
         inputContainer.setLayout(new BorderLayout());
         inputContainer.add(input, BorderLayout.CENTER);
         inputContainer.add(cmd, BorderLayout.LINE_START);
-        inputContainer.setMaximumSize(new Dimension(1000,40));
+        inputContainer.setMaximumSize(new Dimension(800, 40));
         gameContainer.add(inputContainer);
 
 
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
-    }
-    
-    /**
-     * Initializes the styles for {@code styleContext}.
-     */
-    private void initStyles() {
-        styleContext = new StyleContext();
-        Style style = styleContext.addStyle("yellow", null);
-        StyleConstants.setForeground(style, Color.YELLOW);
-        style = styleContext.addStyle("bold", null);
-        StyleConstants.setBold(style, true);
-        style = styleContext.addStyle("italics", null);
-        StyleConstants.setItalic(style, true);
     }
 
     /**
@@ -253,7 +237,7 @@ public class GUI {
      * @param inventory - Player's inventory.
      * @param roomExits - Player's room exits.
      */
-    public void setGameInfo(String inventory, ArrayList<Exit> roomExits) {
+    public void setGameInfo(String inventory, int health, ArrayList<Exit> roomExits) {
         if (roomExits == null || inventory == null) throw new IllegalArgumentException("Parameters must be non-null.");
         String roomExString = "";
         ArrayList<String> exits = new ArrayList<String>();
@@ -261,7 +245,7 @@ public class GUI {
             exits.add(exit.getDirection());
         }
         roomExString = String.join(", ", exits);
-        roomInfo.setText("Inventory: " + inventory + " | Exits: " + roomExString);
+        roomInfo.setText("Inventory: " + inventory + " | Health: " + health + " | Exits: " + roomExString);
     }
 
     /**
@@ -376,6 +360,34 @@ public class GUI {
         flush();
     }
 
+    /**
+     * Prints a stream to the output JTextArea.
+     * <p>
+     * To get a Style for stylizing the text, call {@code GUI.stylize()}.
+     * @param x - to be printed
+     * @param style - the Style for the text
+     */
+    public void printStyled(Object x, Style style) {
+        append(x + "", style);
+        flush();
+    }
+
+    /**
+     * Prints a stream to the output JTextArea in an error format.
+     * @param x - to be printed
+     */
+    public void printerr(Object x) {
+        append(x + "\n", stylize(false, true, new Color(200, 50, 20)));
+    }
+
+    /**
+     * Prints a stream to the output JTextArea in an error format.
+     * @param x - to be printed
+     */
+    public void printInfo(Object x) {
+        append(x + "\n", stylize(true, false, Color.LIGHT_GRAY));
+    }
+
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
         SwingUtilities.invokeLater(new Runnable() {
@@ -409,5 +421,21 @@ public class GUI {
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Stylizes text for printing to the output JTextPane.
+     * @param italics - Specifies whether the text is italic or not.
+     * @param bold - Specifies whether the text is bold or not.
+     * @param textColour - Specifies the colour of the text.
+     * @return A {@code Style} with the specified properties.
+     */
+    public static Style stylize(boolean italics, boolean bold, Color textColour) {
+        if (styleContext == null) styleContext = new StyleContext();
+        Style style = styleContext.getStyle("");
+        StyleConstants.setForeground(style, textColour);
+        StyleConstants.setBold(style, bold);
+        StyleConstants.setItalic(style, italics);
+        return style;
     }
 }

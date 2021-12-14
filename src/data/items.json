@@ -3,16 +3,19 @@
     {
       "id": "Geraldo",
       "name": "Geraldo",
+      "aliases": [],
       "description": "A series of small oval-shaped rocks. They appear to be sleeping. You can throw them at enemies.",
       "isOpenable": false,
       "isWeapon": true,
       "damage": 10,
       "weight": 5,
+      "quantity": 5,
       "startingRoom": "The Lair"
     },
     {
       "id": "Scroll of News News",
       "name": "Scroll of News News",
+      "aliases": ["scroll"],
       "description": "A beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but it seems too stupid to read.",
       "isOpenable": true,
       "isWeapon": false,
@@ -22,6 +25,7 @@
     {
       "id": "Five Hundred Euros",
       "name": "Five Hundred Euros",
+      "aliases": ["money"],
       "description": "500 Euros",
       "isOpenable": false,
       "isWeapon": false,
@@ -31,6 +35,7 @@
     {
       "id": "Balloony's Corpse",
       "name": "Balloony's Corpse",
+      "aliases": [],
       "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
       "isOpenable": false,
       "isWeapon": false,
@@ -41,6 +46,7 @@
     {
       "id": "Moral Support",
       "name": "Moral Support",
+      "aliases": [],
       "description": "A small box. You can hear encouraging words coming from it.",
       "isOpenable": false,
       "isWeapon": false,
@@ -50,6 +56,7 @@
     {
       "id": "Bottle of Water",
       "name": "Bottle of Water",
+      "aliases": ["water", "bottle"],
       "description": "A small flask, containing a sizeable amount of water. Your lips feel dry just looking at it.",
       "isOpenable": true,
       "isWeapon": true,
@@ -60,15 +67,18 @@
     {
       "id": "Bandages",
       "name": "Bandages",
+      "aliases": [],
       "description": "Clean white patches of gauze. Can be used to improve health conditions in dire circumstances.",
       "isOpenable": false,
       "isWeapon": false,
       "weight": 1,
+      "quantity": 3,
       "startingRoom": "East Room"
     },
     {
       "id": "1000 British Pounds",
       "name": "1000 British Pounds",
+      "aliases": ["money"],
       "description": "A crisp thousand-pound bill, straight from England. You have no idea how it got here.",
       "isOpenable": false,
       "isWeapon": false,
@@ -78,6 +88,7 @@
     {
       "id": "Coonskin Hat",
       "name": "Coonskin Hat",
+      "aliases": ["hat"],
       "description": "A designer cap made from the pelt and tail of a raccoon. Poor raccoon.",
       "isOpenable": false,
       "isWeapon": false,
@@ -87,6 +98,7 @@
     {
       "id": "The Tome of Tabeland",
       "name": "The Tome of Tabeland",
+      "aliases": ["tome", "ancient tome"],
       "description": "An antique, leather-bound logbook. There seems to be something written inside.",
       "isOpenable": true,
       "isWeapon": false,
@@ -97,6 +109,7 @@
     {
       "id": "Alaskan Cheese",
       "name": "Alaskan Cheese",
+      "aliases": [],
       "description": "A morsel of the famed cheese native to Alaska. You can smell its fragrance; somehow, it smells loud and confusing.",
       "isOpenable": true,
       "isWeapon": false,
@@ -106,6 +119,7 @@
     {
       "id": "Key of Friendship",
       "name": "Key of Friendship",
+      "aliases": [],
       "description": "A powerful, brass key. It almost looks too pristine to use.",
       "isOpenable": false,
       "isWeapon": false,
@@ -116,6 +130,7 @@
     {
       "id": "The Sword of Tabeland",
       "name": "The Sword of Tabeland",
+      "aliases": ["sword"],
       "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
       "isOpenable": false,
       "isWeapon": true,
@@ -126,6 +141,7 @@
     {
       "id": "The Shield of Tabeland",
       "name": "The Shield of Tabeland",
+      "aliases": ["shield"],
       "description": "An elegant shield, forged by the will of the gods. An ancient motif adorns the front. Your soul feels satisfied by its protection.",
       "isOpenable": false,
       "isWeapon": false,

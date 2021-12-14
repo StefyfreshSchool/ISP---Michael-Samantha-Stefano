@@ -7,19 +7,52 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Item extends OpenableObject {
+public class Item extends OpenableObject implements java.io.Serializable {
     private int weight;
     private String name;
     private String description;
     private boolean isOpenable;
-    private GUI gui = GUI.getGUI();
+    private int quantity;
+    private ArrayList<String> aliases;
+
+    private transient GUI gui = GUI.getGUI();
     public static ArrayList<String> validItems;
   
+    public Item(int weight, String name, boolean isOpenable, String description, ArrayList<String> aliases, int quantity) {
+      this.weight = weight;
+      this.name = name;
+      this.isOpenable = isOpenable;
+      this.description = description;
+      this.aliases = aliases;
+      this.quantity = quantity;
+      setValidItems();
+    }
+
+    public Item(int weight, String name, boolean isOpenable, String description, ArrayList<String> aliases) {
+      this.weight = weight;
+      this.name = name;
+      this.isOpenable = isOpenable;
+      this.description = description;
+      this.aliases = aliases;
+      this.quantity = 1;
+      setValidItems();
+    }
+
+    public Item(int weight, String name, boolean isOpenable, String description, int quantity) {
+      this.weight = weight;
+      this.name = name;
+      this.isOpenable = isOpenable;
+      this.description = description;
+      this.quantity = quantity;
+    }
+
     public Item(int weight, String name, boolean isOpenable, String description) {
       this.weight = weight;
       this.name = name;
       this.isOpenable = isOpenable;
       this.description = description;
+      this.quantity = 1;
+      setValidItems();
     }
 
     public Item(int weight, String name, boolean isOpenable) {
@@ -27,26 +60,24 @@ public class Item extends OpenableObject {
       this.name = name;
       this.isOpenable = isOpenable;
       this.description = "DEFAULT DESCRIPTION";
+      this.quantity = 1;
       setValidItems();
     }
     
     /** Set the list of valid items globally for the Item class. */
     private static void setValidItems() {
-      try {
         validItems = new ArrayList<String>();
-        JSONObject json = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
-        JSONArray items = (JSONArray) json.get("items");
-        for (Object item : items) {
-          validItems.add((String) ((JSONObject) item).get("name"));
+        for (Object item : Item.getItems()) {
+          validItems.add(((String) ((JSONObject) item).get("name")).toLowerCase());
+          for (Object alias : (JSONArray) ((JSONObject) item).get("aliases")) {
+            validItems.add((String) alias);
+          }
         }
-      } catch (ParseException | IOException e) {
-        e.printStackTrace();
-      }
     }
     
     public static boolean isValidItem(String item) {
       if (validItems == null) setValidItems();
-      if (validItems.contains(item)) return true;
+      if (validItems.contains(item.toLowerCase())) return true;
       return false;
     }
 
@@ -56,12 +87,37 @@ public class Item extends OpenableObject {
   
     }
   
+    public ArrayList<String> getAliases(){
+      return aliases;
+    }
+
+    public static JSONArray getItems() {
+      try {
+        JSONObject json = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
+        return (JSONArray) json.get("items");
+      } catch (ParseException | IOException e) {
+        return null;
+      }
+    }
+
     public int getWeight() {
       return weight;
     }
   
     public void setWeight(int weight) {
       this.weight = weight;
+    }
+
+    public int getQuantity() {
+      return quantity;
+    }
+  
+    public void setQuantity(int quantity) {
+      this.quantity = quantity;
+    }
+
+    public void setQuantity() {
+      this.quantity--;
     }
   
     public String getName() {
