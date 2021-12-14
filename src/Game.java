@@ -18,15 +18,16 @@ public class Game implements java.io.Serializable {
   private static MusicPlayer music;
 
   public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
-
+  public static HashMap<String, Item> itemMap = new HashMap<String, Item>();
   private Inventory inventory;
   private Player player;
-  private static final int MAX_WEIGHT = 10;
-
   private Parser parser;
   private Room currentRoom;
   Enemy sasquatch;
   Weapon geraldo;
+
+  private static final int MAX_WEIGHT = 10;
+  
   /**
    * Create the game and initialize its internal map.
    */
@@ -35,7 +36,7 @@ public class Game implements java.io.Serializable {
     gui = GUI.getGUI();
     gui.createWindow();
     inventory = new Inventory(MAX_WEIGHT);
-    player = new Player(90);
+    player = new Player(100);
     startMusic();
 
     //Init enemies and items
@@ -46,6 +47,7 @@ public class Game implements java.io.Serializable {
     //Init rooms and game state
     try {
       initRooms("src\\data\\rooms.json");
+      initItems("src/data/items.json");
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
@@ -97,6 +99,36 @@ public class Game implements java.io.Serializable {
     parser = new Parser();
   }
 
+  private void initItems(String fileName) {
+    for (Object itemObj : Item.getItems()){
+      String itemId = (String) ((JSONObject) itemObj).get("id");
+      String name = (String) ((JSONObject) itemObj).get("name");
+
+      Object quantity = ((JSONObject) itemObj).get("quantity");
+      Object weight = ((JSONObject) itemObj).get("weight");
+      boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+      String description = (String) ((JSONObject) itemObj).get("description");
+      String startingRoom = (String) ((JSONObject) itemObj).get("startingRoom");
+      ArrayList<String> aliases = new ArrayList<String>();
+      for (Object alias : (JSONArray) ((JSONObject) itemObj).get("aliases")) {
+        aliases.add((String) alias);
+      }
+
+      Item item;
+      if (quantity == null){
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases);
+      } else {
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, ((Long) quantity).intValue());
+      }
+
+      itemMap.put(itemId, item);
+
+      for (String alias : aliases) {
+        itemMap.put(alias, item);
+      }
+    }
+  }
+
   private void initRooms(String fileName) throws Exception {
     Path path = Path.of(fileName);
     String jsonString = Files.readString(path);
@@ -137,7 +169,7 @@ public class Game implements java.io.Serializable {
     
     
     // Enter the main command loop. Here we repeatedly read commands and
-    // execute them until the game is over.\
+    // execute them until the game is over.
     boolean finished = false;
     while (!finished) {
       Command command;
@@ -203,6 +235,7 @@ public class Game implements java.io.Serializable {
       return 0;
     } 
     String commandWord = command.getCommandWord();
+    if (commandWord.equals("test")) testing(command);
     if (!command.isUnknown() && command.getFirstArg().equals("/?")){
       ArrayList<String> args = new ArrayList<String>();
       args.add(commandWord);
@@ -242,6 +275,20 @@ public class Game implements java.io.Serializable {
       heal(command);
     }
     return 0;
+  }
+
+  /**
+   * This method is for testing the game.
+   * FEEL FREE to add stuff for testing things!!
+   */
+  private void testing(Command command) {
+    //In the game, type "test #" to activate one of the following tests.
+    if (command.getStringifiedArgs().equals("1")){
+      inventory.addItem(itemMap.get("pounds"));
+      salesman();
+    } else if (command.getStringifiedArgs().equals("2")){
+
+    } 
   }
 
   /**
@@ -389,6 +436,10 @@ public class Game implements java.io.Serializable {
    */
   private boolean quitRestart(String string, Command command) {
     if (command.getLastArg().equalsIgnoreCase("confirm")) return true;
+    else if (command.getArgs() != null){
+      gui.println("Not a valid restart command!");
+      return false;
+    }
     gui.println("Are you sure you would like to " + string + " the game?");
     gui.println("Type \"y\" to confirm or \"n\" to cancel.");
     boolean validInput = false;
@@ -455,19 +506,19 @@ public class Game implements java.io.Serializable {
    * Does things when you enter the fur store. WORKS if you say yes the first time, kinda if you say no
    */
   public void salesman(){
-    if (!inventory.getString().contains("Coonskin Hat")){
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+    if (!inventory.hasItem(itemMap.get("Coonskin Hat"))){
       gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
       gui.println("\"Would you like to buy my furs? Only for a small fee of £500!\" He says.");
       gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
       if (buyFurs()){
-        if (inventory.getString().contains("1000 British Pounds")){
-        gui.println("\"Pleasure doing business with you, good sir.\"");
-        // TODO implement inventory so you can get fur hat!
-        // inventory.removeItem(pounds);
-        // inventory.addItem(hat); 
-        // inventory.addItem(euros);
-        } else { //&& !inventory.getString().contains("1000 British Pounds")
-        gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
+        if (inventory.hasItem(itemMap.get("1000 British Pounds"))){
+          gui.println("\"Pleasure doing business with you, good sir.\"");
+          inventory.removeItem(itemMap.get("pounds"));
+          inventory.addItem(itemMap.get("hat")); 
+          inventory.addItem(itemMap.get("euros"));
+        } else {
+          gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
         }
       }
     } else {

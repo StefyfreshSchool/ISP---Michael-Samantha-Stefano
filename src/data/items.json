@@ -25,7 +25,7 @@
     {
       "id": "Five Hundred Euros",
       "name": "Five Hundred Euros",
-      "aliases": ["money"],
+      "aliases": ["euros"],
       "description": "500 Euros",
       "isOpenable": false,
       "isWeapon": false,
@@ -35,7 +35,7 @@
     {
       "id": "Balloony's Corpse",
       "name": "Balloony's Corpse",
-      "aliases": [],
+      "aliases": ["balloon"],
       "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
       "isOpenable": false,
       "isWeapon": false,
@@ -78,7 +78,7 @@
     {
       "id": "1000 British Pounds",
       "name": "1000 British Pounds",
-      "aliases": ["money"],
+      "aliases": ["pounds"],
       "description": "A crisp thousand-pound bill, straight from England. You have no idea how it got here.",
       "isOpenable": false,
       "isWeapon": false,
@@ -96,8 +96,8 @@
       "startingRoom": "Fur Store"
     },
     {
-      "id": "The Tome of Tabeland",
-      "name": "The Tome of Tabeland",
+      "id": "The Tome of Tableland",
+      "name": "The Tome of Tableland",
       "aliases": ["tome", "ancient tome"],
       "description": "An antique, leather-bound logbook. There seems to be something written inside.",
       "isOpenable": true,
@@ -109,7 +109,7 @@
     {
       "id": "Alaskan Cheese",
       "name": "Alaskan Cheese",
-      "aliases": [],
+      "aliases": ["cheese"],
       "description": "A morsel of the famed cheese native to Alaska. You can smell its fragrance; somehow, it smells loud and confusing.",
       "isOpenable": true,
       "isWeapon": false,
@@ -119,7 +119,7 @@
     {
       "id": "Key of Friendship",
       "name": "Key of Friendship",
-      "aliases": [],
+      "aliases": ["key"],
       "description": "A powerful, brass key. It almost looks too pristine to use.",
       "isOpenable": false,
       "isWeapon": false,
@@ -128,8 +128,8 @@
       "startingRoom": "Upper Hall of Enemies"
     },
     {
-      "id": "The Sword of Tabeland",
-      "name": "The Sword of Tabeland",
+      "id": "The Sword of Tableland",
+      "name": "The Sword of Tableland",
       "aliases": ["sword"],
       "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
       "isOpenable": false,
@@ -139,8 +139,8 @@
       "startingRoom": "Underground Tunnel"
     },
     {
-      "id": "The Shield of Tabeland",
-      "name": "The Shield of Tabeland",
+      "id": "The Shield of Tableland",
+      "name": "The Shield of Tableland",
       "aliases": ["shield"],
       "description": "An elegant shield, forged by the will of the gods. An ancient motif adorns the front. Your soul feels satisfied by its protection.",
       "isOpenable": false,

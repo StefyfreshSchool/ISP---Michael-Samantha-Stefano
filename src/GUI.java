@@ -292,15 +292,6 @@ public class GUI {
      * Prints a stream to the output JTextArea and adds a new line.
      * @param x - to be printed
      */
-    public void println(String x) {
-        append(x + "\n", null);
-        flush();
-    }
-
-    /**
-     * Prints a stream to the output JTextArea and adds a new line.
-     * @param x - to be printed
-     */
     public void println(Object x) {
         append(x + "\n", null);
         flush();
@@ -329,15 +320,6 @@ public class GUI {
      * @param x - to be printed
      */
     public void print(boolean x) {
-        append(x + "", null);
-        flush();
-    }
-
-    /**
-     * Prints a stream to the output JTextArea.
-     * @param x - to be printed
-     */
-    public void print(String x) {
         append(x + "", null);
         flush();
     }
