@@ -35,7 +35,7 @@ public class Game implements java.io.Serializable {
     gui = GUI.getGUI();
     gui.createWindow();
     inventory = new Inventory(MAX_WEIGHT);
-    player = new Player(90);
+    player = new Player(100);
     startMusic();
 
     //Init enemies and items
@@ -46,7 +46,7 @@ public class Game implements java.io.Serializable {
     //Init rooms and game state
     try {
       initRooms("src\\data\\rooms.json");
-      currentRoom = roomMap.get("South of the Cyan House");
+      currentRoom = roomMap.get("Tableland Plains");
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -240,8 +240,23 @@ public class Game implements java.io.Serializable {
       take(command);
     } else if (commandWord.equals("heal")){
       heal(command);
+    } else if (commandWord.equals("wear")){
+      wear(command);
     }
     return 0;
+  }
+
+  /**
+   * VERY IMPORTANT. lets player wear hat
+   * @param command what the player is wearing
+   */
+  private void wear(Command command) {
+    String commandWord = command.getCommandWord();
+    if ((commandWord.equals("hat") || commandWord.equals("cap")) && inventory.getString().contains("Coonskin Hat")){
+      gui.println("You are now wearing the fur cap. How stylish");
+    } else {
+      gui.println("You cannot wear that!");
+    }
   }
 
   /**

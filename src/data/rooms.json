@@ -43,7 +43,7 @@
     {
       "id": "North of the Cyan House",
       "name": "North of the Cyan House",
-      "description": "You are north of the Cyan House. A loose window sits on the wall. To the north, vast plains spread to the horizon.",
+      "description": "You are north of the Cyan House, where an open window sits on the wall.",
       "exits": [
         {
           "isLocked": false,
@@ -582,7 +582,7 @@
     {
       "id": "The Lair",
       "name": "The Lair",
-      "description": "You are in a huge cave.",
+      "description": "You are in a huge cave. A pile of rocks sit at your feet.",
       "exits": [
         {
           "isLocked": true,
