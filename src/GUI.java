@@ -166,7 +166,7 @@ public class GUI {
 
                     input.setText("");
                     append("\n> ", null);
-                    append(command + "\n", stylize(Color.YELLOW));
+                    append(command + "\n", stylize(false, false, Color.YELLOW));
                     flush();
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
@@ -237,7 +237,7 @@ public class GUI {
      * @param inventory - Player's inventory.
      * @param roomExits - Player's room exits.
      */
-    public void setGameInfo(String inventory, ArrayList<Exit> roomExits) {
+    public void setGameInfo(String inventory, int health, ArrayList<Exit> roomExits) {
         if (roomExits == null || inventory == null) throw new IllegalArgumentException("Parameters must be non-null.");
         String roomExString = "";
         ArrayList<String> exits = new ArrayList<String>();
@@ -245,7 +245,7 @@ public class GUI {
             exits.add(exit.getDirection());
         }
         roomExString = String.join(", ", exits);
-        roomInfo.setText("Inventory: " + inventory + " | Exits: " + roomExString);
+        roomInfo.setText("Inventory: " + inventory + " | Health: " + health + " | Exits: " + roomExString);
     }
 
     /**
@@ -372,6 +372,22 @@ public class GUI {
         flush();
     }
 
+    /**
+     * Prints a stream to the output JTextArea in an error format.
+     * @param x - to be printed
+     */
+    public void printerr(Object x) {
+        append(x + "\n", stylize(false, true, new Color(200, 50, 20)));
+    }
+
+    /**
+     * Prints a stream to the output JTextArea in an error format.
+     * @param x - to be printed
+     */
+    public void printInfo(Object x) {
+        append(x + "\n", stylize(true, false, Color.LIGHT_GRAY));
+    }
+
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
         SwingUtilities.invokeLater(new Runnable() {
@@ -420,32 +436,6 @@ public class GUI {
         StyleConstants.setForeground(style, textColour);
         StyleConstants.setBold(style, bold);
         StyleConstants.setItalic(style, italics);
-        return style;
-    }
-
-     /**
-     * Stylizes text for printing to the output JTextPane.
-     * @param italics - Specifies whether the text is italic or not.
-     * @param bold - Specifies whether the text is bold or not.
-     * @return A {@code Style} with the specified properties.
-     */
-    public static Style stylize(boolean italics, boolean bold) {
-        if (styleContext == null) styleContext = new StyleContext();
-        Style style = styleContext.getStyle("");
-        StyleConstants.setBold(style, bold);
-        StyleConstants.setItalic(style, italics);
-        return style;
-    }
-
-     /**
-     * Stylizes text for printing to the output JTextPane.
-     * @param textColour - Specifies the colour of the text.
-     * @return A {@code Style} with the specified properties.
-     */
-    public static Style stylize(Color textColour) {
-        if (styleContext == null) styleContext = new StyleContext();
-        Style style = styleContext.getStyle("");
-        StyleConstants.setForeground(style, textColour);
         return style;
     }
 }

@@ -1,6 +1,8 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
@@ -34,9 +36,10 @@ public class Game implements java.io.Serializable {
     gui.createWindow();
     inventory = new Inventory(MAX_WEIGHT);
     player = new Player(90);
+    startMusic();
 
     //Init enemies and items
-    //TODO: PUT THESE IN A MAP!! IT IS NOT GOOD TO HAVE VARS FOR EVERYTHING!!
+    //TODO: PUT THESE IN MAPS!! IMPORTANT!
     sasquatch = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
     geraldo = new Weapon();
 
@@ -46,16 +49,21 @@ public class Game implements java.io.Serializable {
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
-      Save game = null;
+      Save save = null;
       try (FileInputStream fileIn = new FileInputStream("src/data/game.ser")) {
         ObjectInputStream in = new ObjectInputStream(fileIn);
-        game = (Save) in.readObject();
+        save = (Save) in.readObject();
         in.close();
         fileIn.close();
-      } catch (ClassNotFoundException | IOException e) {
-        e.printStackTrace();
+      } catch (InvalidClassException e) {
+        gui.printerr("InvalidClassException - a local class has been altered! Resetting game save.");
+        resetSaveState();
+      } catch (IOException e){
+        System.err.println("Error while loading game state. Resetting.");
+        resetSaveState();
       }
-      if (game != null && game.getInProgress()){
+
+      if (save != null){
         gui.println("A previously saved game state was recorded.");
         gui.println("Would you like to restore from that save?");
         gui.println();
@@ -67,10 +75,11 @@ public class Game implements java.io.Serializable {
           if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")){
             gui.reset();
 
-            roomMap = game.getRoomMap();
-            inventory = game.getInventory();
-            currentRoom = game.getCurrentRoom();
-            gui.println("Restored from saved game.\n");
+            roomMap = save.getRoomMap();
+            inventory = save.getInventory();
+            currentRoom = save.getCurrentRoom();
+            player = save.getPlayer();
+            gui.printInfo("Restored from saved game.\n");
             validInput = true;
           } else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
             gui.reset();
@@ -124,8 +133,7 @@ public class Game implements java.io.Serializable {
   /** Main play routine. Loops until end of play. */
   public void play() {
     printWelcome();
-    startMusic();
-    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     
     
     // Enter the main command loop. Here we repeatedly read commands and
@@ -135,14 +143,14 @@ public class Game implements java.io.Serializable {
       Command command;
       command = parser.getCommand();
       int status = processCommand(command);
-      gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       if (status == 1){
         finished = true;
       } 
       if (status == 2){
         music.stop();
         gui.reset();
-        gui.println("Game restarted.\n");
+        gui.printInfo("Game restarted.\n");
         try {
           initRooms("src\\data\\rooms.json");
           currentRoom = roomMap.get("South of the Cyan House");
@@ -152,12 +160,12 @@ public class Game implements java.io.Serializable {
         }
         printWelcome();
         startMusic();
-        gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       }
       
     }
 
-    gui.println("Thank you for playing. Good bye.");
+    gui.println("\nThank you for playing. Good bye.");
 
     //Nice transition to exit the game
     sleep(1000);
@@ -302,12 +310,10 @@ public class Game implements java.io.Serializable {
     boolean quit = false;
     if (command.getLastArg().equalsIgnoreCase("quit")){
       quit = true;
-      gui.println("Game saved! Quitting.");
     } else if (command.getLastArg().equalsIgnoreCase("game")){ 
-      gui.println("Game saved!");
     } else if (command.getLastArg().equalsIgnoreCase("load")){
       loadSave();
-      gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       return false;
     } else if (command.getLastArg().equals("")){
       gui.println("What would you like to do?");
@@ -324,16 +330,21 @@ public class Game implements java.io.Serializable {
     data.put("inProgress", true);
     data.put("room", currentRoom.getRoomName());
 
-    Save game = new Save(roomMap, inventory, currentRoom);
+    Save game = new Save(roomMap, inventory, currentRoom, player);
     try {
       FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
       out.writeObject(game);
       out.close();
       fileOut.close();
-   } catch (IOException i) {
-      i.printStackTrace();
-   }
+
+      gui.println(quit ? "Game saved! Quitting." : "Game saved!");
+    } catch (NotSerializableException e){
+      gui.printerr("NotSerializableException - A class that needs to be saved does not implement Serializable!");
+    } catch (IOException e){
+      e.printStackTrace();
+    }
+
     return quit;
   }
 
@@ -341,35 +352,33 @@ public class Game implements java.io.Serializable {
    * Allows the game to load a previously saved state of the game.
    */
   private void loadSave() {
-    gui.print("Loading save");
-    sleep(150);
-    gui.print(".");
-    sleep(150);
-    gui.print(".");
-    sleep(150);
-    gui.print(".");
-    sleep(150);
-
-    Save game = null;
-    try (FileInputStream fileIn = new FileInputStream("src/data/game.ser")) {
+    Save save = null;
+    try {
+      FileInputStream fileIn = new FileInputStream("src/data/game.ser");
       ObjectInputStream in = new ObjectInputStream(fileIn);
-      game = (Save) in.readObject();
+      save = (Save) in.readObject();
       in.close();
       fileIn.close();
 
-      roomMap = game.getRoomMap();
-      inventory = game.getInventory();
-      currentRoom = game.getCurrentRoom();
+      if (save != null){
+        roomMap = save.getRoomMap();
+        inventory = save.getInventory();
+        currentRoom = save.getCurrentRoom();
+        player = save.getPlayer();
+        
+        music.stop();
+        startMusic();
+        gui.reset();
+        gui.printInfo("Game reloaded from saved data.\n");
+        gui.println(currentRoom.longDescription());
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+      } else {
+        gui.println("There is no valid state to load!");
+      }
     } catch (ClassNotFoundException | IOException e) {
+      gui.printerr("Error while loading! Could not load.");
       e.printStackTrace();
-    }
-
-    music.stop();
-    startMusic();
-    gui.reset();
-    gui.println("Game reloaded from saved data.\n");
-    gui.println(currentRoom.longDescription());
-    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+    }   
   }
 
   /**
@@ -428,7 +437,7 @@ public class Game implements java.io.Serializable {
         gui.println(currentRoom.longDescription());
       }
     }
-    gui.setGameInfo(inventory.getString(), currentRoom.getExits());
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   /**
@@ -507,7 +516,7 @@ public class Game implements java.io.Serializable {
       inventory.getItem(inventory.find("Bandages")).setQuantity();
       gui.println("Your wounds have healed. You have been restored to full health.");
     } else if (inventory.getString().contains("Bandages") && player.getHealth() == 100){
-      gui.println("You are already of maximum health!");
+      gui.println("You are already at maximum health!");
     } else {
       gui.println("You have no healing items!");
     }
@@ -572,11 +581,10 @@ public class Game implements java.io.Serializable {
    * Resets the game save state.
    */
   private void resetSaveState() {
-    Save game = new Save();
     try {
       FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
-      out.writeObject(game);
+      out.writeObject(null);
       out.close();
       fileOut.close();
     } catch (IOException i) {

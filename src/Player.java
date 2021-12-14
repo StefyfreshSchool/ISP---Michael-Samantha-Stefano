@@ -1,4 +1,4 @@
-public class Player {
+public class Player implements java.io.Serializable{
     public int health;
 
     public Player(int health){
