@@ -128,8 +128,8 @@
       "startingRoom": "Upper Hall of Enemies"
     },
     {
-      "id": "The Sword of Tabeland",
-      "name": "The Sword of Tabeland",
+      "id": "The Sword of Tableland",
+      "name": "The Sword of Tableland",
       "aliases": ["sword"],
       "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
       "isOpenable": false,
@@ -139,8 +139,8 @@
       "startingRoom": "Underground Tunnel"
     },
     {
-      "id": "The Shield of Tabeland",
-      "name": "The Shield of Tabeland",
+      "id": "The Shield of Tableland",
+      "name": "The Shield of Tableland",
       "aliases": ["shield"],
       "description": "An elegant shield, forged by the will of the gods. An ancient motif adorns the front. Your soul feels satisfied by its protection.",
       "isOpenable": false,

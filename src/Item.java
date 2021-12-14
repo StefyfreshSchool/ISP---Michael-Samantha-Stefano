@@ -17,33 +17,26 @@ public class Item extends OpenableObject implements java.io.Serializable {
 
     private transient GUI gui = GUI.getGUI();
     public static ArrayList<String> validItems;
+    private String startingRoom;
   
-    public Item(int weight, String name, boolean isOpenable, String description, ArrayList<String> aliases, int quantity) {
+    public Item(int weight, String name, String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases, int quantity) {
       this.weight = weight;
       this.name = name;
+      this.startingRoom = startingRoom;
       this.isOpenable = isOpenable;
       this.description = description;
       this.aliases = aliases;
       this.quantity = quantity;
-      setValidItems();
     }
 
-    public Item(int weight, String name, boolean isOpenable, String description, ArrayList<String> aliases) {
+    public Item(int weight, String name,  String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases) {
       this.weight = weight;
       this.name = name;
+      this.startingRoom = startingRoom;
       this.isOpenable = isOpenable;
       this.description = description;
       this.aliases = aliases;
       this.quantity = 1;
-      setValidItems();
-    }
-
-    public Item(int weight, String name, boolean isOpenable, String description, int quantity) {
-      this.weight = weight;
-      this.name = name;
-      this.isOpenable = isOpenable;
-      this.description = description;
-      this.quantity = quantity;
     }
 
     public Item(int weight, String name, boolean isOpenable, String description) {
@@ -52,27 +45,17 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.isOpenable = isOpenable;
       this.description = description;
       this.quantity = 1;
-      setValidItems();
-    }
-
-    public Item(int weight, String name, boolean isOpenable) {
-      this.weight = weight;
-      this.name = name;
-      this.isOpenable = isOpenable;
-      this.description = "DEFAULT DESCRIPTION";
-      this.quantity = 1;
-      setValidItems();
     }
     
     /** Set the list of valid items globally for the Item class. */
     private static void setValidItems() {
-        validItems = new ArrayList<String>();
-        for (Object item : Item.getItems()) {
-          validItems.add(((String) ((JSONObject) item).get("name")).toLowerCase());
-          for (Object alias : (JSONArray) ((JSONObject) item).get("aliases")) {
-            validItems.add((String) alias);
-          }
+      validItems = new ArrayList<String>();
+      for (Object item : Item.getItems()) {
+        validItems.add(((String) ((JSONObject) item).get("name")).toLowerCase());
+        for (Object alias : (JSONArray) ((JSONObject) item).get("aliases")) {
+          validItems.add((String) alias);
         }
+      }
     }
     
     public static boolean isValidItem(String item) {
@@ -98,6 +81,10 @@ public class Item extends OpenableObject implements java.io.Serializable {
       } catch (ParseException | IOException e) {
         return null;
       }
+    }
+
+    public String getStartingRoom() {
+        return startingRoom;
     }
 
     public int getWeight() {
