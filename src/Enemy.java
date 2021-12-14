@@ -17,7 +17,12 @@ public class Enemy extends Character{
         this.health = src.health;
     }
 
-    public void setHealth(int damage){
+    public void setHealth(int health){
+        this.health = health;
+        
+    }
+
+    public void attacked(int damage){
         health -= damage;
         
     }

@@ -233,38 +233,29 @@ public class Game {
   }
 
   private void hit(Command command) {
-    /**
-   * Given a command, process (that is: execute) the command.
-   * <p>
-   * TODO: figure out if this can be merged with above method.
-   * @param command
-   * @param weapon
-   */
-  //private void processCommand(Command command, Weapon weapon) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
     }
     String commandWord = command.getCommandWord();
     if(commandWord.equals("hit")){
       int healthstandin;
-      Enemy enemy;
-      //Weapon weapon;
+      Enemy enemy = new Enemy();
+      Weapon weapon = new Weapon();
       if(currentRoom.getRoomName().equals("The Lair")){
         enemy = new Enemy(sasquatch);
-        //weapon = new Weapon();
+        weapon = new Weapon();
       }
-      /*enemy.setHealth(weapon.getDamage());
+      enemy.attacked(weapon.getDamage());
       if(enemy.getHealth()<=0){
         healthstandin=0;
       }else{
         healthstandin = enemy.getHealth();
       }
-        gui.println("The "+enemy.getName()+" lost 10 Health points. It has "+healthstandin+" left.");
+      gui.println("The "+enemy.getName()+" lost "+weapon.getDamage()+" Health points. It has "+healthstandin+" left.");
       if(healthstandin==0){
         gui.println("The "+enemy.getName()+" has died.");
-      }*/
+      }
     }
-    Enemy enemy;
     
     /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
     else if (command.getStringifiedArgs().equals("stop")){
