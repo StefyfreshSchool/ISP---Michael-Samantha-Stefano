@@ -553,7 +553,7 @@ public class Game implements java.io.Serializable {
    * @param secondWord
    */
   public void yell(String secondWord) {
-    if (secondWord != null){
+    if (secondWord != ""){
         gui.println(secondWord.toUpperCase() + "!!!!!!");
         gui.println("Feel better?");
       }else{
