@@ -44,6 +44,7 @@ public class Command {
    */
   public String getStringifiedArgs(){
     String out = "";
+    if (args == null) return out;
     for (String s : args) {
       out += s + " ";
     }
