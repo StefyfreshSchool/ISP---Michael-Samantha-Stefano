@@ -280,8 +280,6 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-   * VERY IMPORTANT. lets player wear hat
-   * @param command what the player is wearing
    * This method is for testing the game.
    * FEEL FREE to add stuff for testing things!!
    */
@@ -563,15 +561,20 @@ public class Game implements java.io.Serializable {
       }
   }
 
+  /*
+  * VERY IMPORTANT. lets player wear hat
+  * @param command what the player is wearing
+  */
   private void wear(String secondWord) {
-    if (secondWord == null){
-      gui.println("What would you like to wear?");
-    } else {
+    if (secondWord != ""){
       if ((secondWord.equals("hat") || secondWord.equals("cap")) && inventory.hasItem(itemMap.get("Coonskin Hat"))){
         gui.println("You are now wearing the fur cap. How stylish!");
+        inventory.removeItem(itemMap.get("hat"));
       } else {
         gui.println("You cannot wear that!");
       }
+    } else {
+      gui.println("What would you like to wear?");
     }
   }
 
