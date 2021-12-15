@@ -48,7 +48,7 @@ public class Game implements java.io.Serializable {
     try {
       initRooms("src\\data\\rooms.json");
       initItems("src/data/items.json");
-      currentRoom = roomMap.get("South of the Cyan House");
+      currentRoom = roomMap.get("Castle Grounds");
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -272,9 +272,9 @@ public class Game implements java.io.Serializable {
     } else if (commandWord.equals("take")){
       take(command);
     } else if (commandWord.equals("heal")){
-      heal(command);
+      heal();
     } else if (commandWord.equals("wear")){
-      wear(command);
+      wear(command.getStringifiedArgs());
     }
     return 0;
   }
@@ -510,6 +510,7 @@ public class Game implements java.io.Serializable {
    * Does things when you enter the fur store. WORKS if you say yes the first time, kinda if you say no
    */
   public void salesman(){
+    inventory.addItem(itemMap.get("pounds"));
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     if (!inventory.hasItem(itemMap.get("Coonskin Hat"))){
       gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
@@ -562,24 +563,27 @@ public class Game implements java.io.Serializable {
       }
   }
 
-  private void wear(Command command) {
-    String commandWord = command.getCommandWord();
-    if ((commandWord.equals("hat") || commandWord.equals("cap")) && inventory.getString().contains("Coonskin Hat")){
-      gui.println("You are now wearing the fur cap. How stylish");
+  private void wear(String secondWord) {
+    if (secondWord == null){
+      gui.println("What would you like to wear?");
     } else {
-      gui.println("You cannot wear that!");
+      if ((secondWord.equals("hat") || secondWord.equals("cap")) && inventory.hasItem(itemMap.get("Coonskin Hat"))){
+        gui.println("You are now wearing the fur cap. How stylish!");
+      } else {
+        gui.println("You cannot wear that!");
+      }
     }
   }
 
   /**
    * when player types "heal" (no args).
    */
-  private void heal(Command command) {
-    if (inventory.getString().contains("Bandages") && player.getHealth() != 100){
+  private void heal() {
+    if (inventory.hasItem(itemMap.get("bandages")) && player.getHealth() != 100){
       player.maxHeal();
       inventory.getItem(inventory.find("Bandages")).setQuantity();
       gui.println("Your wounds have healed. You have been restored to full health.");
-    } else if (inventory.getString().contains("Bandages") && player.getHealth() == 100){
+    } else if (inventory.hasItem(itemMap.get("bandages")) && player.getHealth() == 100){
       gui.println("You are already at maximum health!");
     } else {
       gui.println("You have no healing items!");

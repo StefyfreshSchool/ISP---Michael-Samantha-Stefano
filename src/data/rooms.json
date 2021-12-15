@@ -164,7 +164,7 @@
     {
       "id": "Plaza Outskirts",
       "name": "Plaza Outskirts",
-      "description": "You stand at the edges of the isloated town plaza. Before your feet run the rushing River of Souls.",
+      "description": "You stand at the edges of the isolated town plaza. The rushing River of Souls run at your feet.",
       "exits": [
         {
           "isLocked": false,
@@ -198,7 +198,7 @@
     {
       "id": "Castle Grounds",
       "name": "Castle Grounds",
-      "description": "You stand upon the castle crossroads, gazing around the imperial courtyard. A refurbished bridge is to the west, an alabaster gate is to the south, and the castle steps sit north. You spot an overgrown path to the east.",
+      "description": "You stand upon the castle crossroads, gazing around the imperial courtyard. The castle steps are north, a bridge to the west, and a hidden path is to the east.",
       "exits": [
         {
           "isLocked": false,
@@ -242,7 +242,7 @@
     {
       "id": "Castle of Alaskan Cheese",
       "name": "Castle of Alaskan Cheese",
-      "description": "Climbing up the steps, you stand before the tall, bronze castle doors. They're unlocked, but you soul beckons for you to keep quiet.",
+      "description": "You stand before the tall, bronze castle doors. They're unlocked, but you soul beckons for you to keep quiet.",
       "exits": [
         {
           "isLocked": false,
@@ -259,7 +259,7 @@
     {
       "id": "Frostbitten Tundra",
       "name": "Frostbitten Tundra",
-      "description": "You stand alone in an icy tundra, when snowflakes start falling around you. The path continues from the northwest to the east, where you can see the faint glow of a log cabin.",
+      "description": "You stand alone in an icy tundra, tickled by a layer of fresh snowflakes. The path continues from the northwest to the east, where you can see the faint glow of a log cabin.",
       "exits": [
         {
           "isLocked": false,
