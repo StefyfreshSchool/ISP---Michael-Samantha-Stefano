@@ -1,29 +1,10 @@
 import java.util.ArrayList;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 public class Room implements java.io.Serializable {
   private String roomName;
   private String description;
   private ArrayList<Exit> exits;
   private ArrayList<Item> items;
-
-  public ArrayList<Exit> getExits() {
-    return exits;
-  }
-
-  public void setExits(ArrayList<Exit> exits) {
-    this.exits = exits;
-  }
-
-  /**
-   * Create a room described "description". Initially, it has no exits.
-   * "description" is something like "a kitchen" or "an open court yard".
-   */
-  public Room(String description) {
-    this.description = description;
-    exits = new ArrayList<Exit>();
-  }
 
   public Room() {
     roomName = "DEFAULT ROOM";
@@ -36,20 +17,11 @@ public class Room implements java.io.Serializable {
    */
   public void initItems() {
     items = new ArrayList<Item>();
-    for (Object itemObj : Item.getItems()) {
-      if (((JSONObject) itemObj).get("startingRoom").equals(roomName)){
-        Object weight = ((JSONObject) itemObj).get("weight");
-        String name = (String) ((JSONObject) itemObj).get("name");
-        boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
-        String description = (String) ((JSONObject) itemObj).get("description");
-        ArrayList<String> aliases = new ArrayList<String>();
-        for (Object alias : (JSONArray) ((JSONObject) itemObj).get("aliases")) {
-          aliases.add((String) alias);
-        }
-        Item item = new Item(Integer.parseInt(weight + ""), name, isOpenable, description, aliases);
-        items.add(item);
+    for (String itemName : Game.itemMap.keySet()) {
+      if (Game.itemMap.get(itemName).getStartingRoom().equals(roomName)){
+        items.add(Game.itemMap.get(itemName));
       }
-      }
+    }
   }
 
   public boolean containsItem(String item) {
@@ -63,8 +35,12 @@ public class Room implements java.io.Serializable {
     return false;
   }
 
-  public void addExit(Exit exit) throws Exception {
-    exits.add(exit);
+  public ArrayList<Exit> getExits() {
+    return exits;
+  }
+
+  public void setExits(ArrayList<Exit> exits) {
+    this.exits = exits;
   }
 
   /**
@@ -149,14 +125,6 @@ public class Room implements java.io.Serializable {
     this.items = items;
   }
 
-
-  /*
-   * private int getDirectionIndex(String direction) { int dirIndex = 0; for
-   * (String dir : directions) { if (dir.equals(direction)) return dirIndex; else
-   * dirIndex++; }
-   * 
-   * throw new IllegalArgumentException("Invalid Direction"); }
-   */
   public String getRoomName() {
     return roomName;
   }

@@ -71,4 +71,8 @@ public class Inventory implements java.io.Serializable {
   public ArrayList<Item> getItems() {
     return items;
   }
+
+  public boolean hasItem(Item item){
+    return items.contains(item);
+  }
 }
