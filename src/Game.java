@@ -326,7 +326,6 @@ public class Game implements java.io.Serializable {
       }
     }
   }
-//<<<<<<< HEAD
     
     /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
     else if (command.getStringifiedArgs().equals("stop")){
@@ -360,10 +359,6 @@ public class Game implements java.io.Serializable {
     else {
       gui.println("Invalid music operation!");
     }*/
-//=======
-    Enemy enemy;
-//>>>>>>> 28ced3044d4a56f5e33a1547e4b7d8038a2bd6c7
-  //}
 
   /**
    * Allows the player to take items from the current room.
