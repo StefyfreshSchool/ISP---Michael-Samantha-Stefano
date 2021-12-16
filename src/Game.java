@@ -277,6 +277,8 @@ public class Game implements java.io.Serializable {
       wear(command.getStringifiedArgs());
     } else if (commandWord.equals("read")){
       read(command.getStringifiedArgs());
+    } else if (commandWord.equals("pray")){
+      pray();
     }
     return 0;
   }
@@ -576,6 +578,14 @@ public class Game implements java.io.Serializable {
       }
     } else {
       gui.println("What would you like to wear?");
+    }
+  }
+
+  private void pray() {
+    if (currentRoom.getRoomName().equals("News News Temple Room")){
+      gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
+    } else {
+      gui.println("You cannot pray here.");
     }
   }
 
