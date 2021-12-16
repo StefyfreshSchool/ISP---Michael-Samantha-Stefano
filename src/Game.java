@@ -305,6 +305,7 @@ public class Game implements java.io.Serializable {
     if(commandWord.equals("hit")){
       int healthstandin;
       Enemy enemy = new Enemy();
+      //Inventory.getItem();
       Weapon weapon = new Weapon();
       if(currentRoom.getRoomName().equals("The Lair")){
         enemy = new Enemy(sasquatch);
@@ -321,9 +322,7 @@ public class Game implements java.io.Serializable {
         gui.println("The "+enemy.getName()+" has died.");
       }
     }
-  }
-//<<<<<<< HEAD
-    
+  }  
     /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
     else if (command.getStringifiedArgs().equals("stop")){
       Game.getMusicPlayer().stop();
@@ -356,10 +355,6 @@ public class Game implements java.io.Serializable {
     else {
       gui.println("Invalid music operation!");
     }*/
-//=======
-    Enemy enemy;
-//>>>>>>> 28ced3044d4a56f5e33a1547e4b7d8038a2bd6c7
-  //}
 
   /**
    * Allows the player to take items from the current room.
@@ -534,10 +529,13 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    gui.println("The Sasquatch steps out of the cave");
-    gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
-    gui.println("What would you like to do?");
-    Parser.showCommands();
+    if(!(sasquatch.getHealth()<=0)){
+      gui.println("The Sasquatch steps out of the cave");
+      gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
+    }else{
+      gui.println("The sasquatches corpse lies strewn on the ground.");
+      gui.println("Past the corpse, you can see the entrance to a dark cave.");
+    }
 
   }
 
