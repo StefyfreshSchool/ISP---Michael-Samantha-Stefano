@@ -308,25 +308,62 @@ public class Game implements java.io.Serializable {
     String commandWord = command.getCommandWord();
     if(commandWord.equals("hit")){
       int healthstandin;
-      Enemy enemy;
-      //Weapon weapon;
+      Enemy enemy = new Enemy();
+      Weapon weapon = new Weapon();
       if(currentRoom.getRoomName().equals("The Lair")){
         enemy = new Enemy(sasquatch);
-        //weapon = new Weapon();
+        weapon = new Weapon();
       }
-      /*enemy.setHealth(weapon.getDamage());
+      enemy.attacked(weapon.getDamage());
       if(enemy.getHealth()<=0){
         healthstandin=0;
       }else{
         healthstandin = enemy.getHealth();
       }
-        gui.println("The "+enemy.getName()+" lost 10 Health points. It has "+healthstandin+" left.");
+      gui.println("The "+enemy.getName()+" lost "+weapon.getDamage()+" Health points. It has "+healthstandin+" left.");
       if(healthstandin==0){
         gui.println("The "+enemy.getName()+" has died.");
-      }*/
+      }
     }
-    Enemy enemy;
   }
+//<<<<<<< HEAD
+    
+    /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
+    else if (command.getStringifiedArgs().equals("stop")){
+      Game.getMusicPlayer().stop();
+      gui.println("Music stopped.");
+    } 
+    else if (command.getStringifiedArgs().equals("start")){
+      Game.getMusicPlayer().play();
+      gui.println("Music started!");
+    } 
+    else if (command.getStringifiedArgs().equals("play")){
+      Game.getMusicPlayer().play();
+      gui.println("Music started!");
+    } 
+    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      gui.println("Music volume down.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      gui.println("Music volume up.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      gui.println("Music volume down.");
+    } 
+    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
+      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      gui.println("Music volume up.");
+    } 
+    else {
+      gui.println("Invalid music operation!");
+    }*/
+//=======
+    Enemy enemy;
+//>>>>>>> 28ced3044d4a56f5e33a1547e4b7d8038a2bd6c7
+  //}
 
   /**
    * Allows the player to take items from the current room.
