@@ -25,6 +25,7 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   Enemy sasquatch;
   Weapon geraldo;
+  Enemy[] enemies = new Enemy[5];
 
   private static final int MAX_WEIGHT = 10;
   
@@ -38,11 +39,11 @@ public class Game implements java.io.Serializable {
     inventory = new Inventory(MAX_WEIGHT);
     player = new Player(100);
     startMusic();
+    enemies[0] = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
+    geraldo = new Weapon();
 
     //Init enemies and items
     //TODO: PUT THESE IN MAPS!! IMPORTANT!
-    sasquatch = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
-    geraldo = new Weapon();
 
     //Init rooms and game state
     try {
@@ -261,7 +262,7 @@ public class Game implements java.io.Serializable {
       music(command);
 
     } else if(commandWord.equals("hit")){
-      hit(command);
+      hit(command, command.getStringifiedArgs());
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart", command)){
         resetSaveState();
@@ -297,20 +298,18 @@ public class Game implements java.io.Serializable {
    * Allows the player to hit an enemy.
    * @param command - 
    */
-  private void hit(Command command) {
-    if (command.isUnknown()) {
-      gui.println("I don't know what you mean...");
-    }
-    String commandWord = command.getCommandWord();
-    if(commandWord.equals("hit")){
-      int healthstandin;
-      Enemy enemy = new Enemy();
-      //Inventory.getItem();
-      Weapon weapon = new Weapon();
-      if(currentRoom.getRoomName().equals("The Lair")){
-        enemy = new Enemy(sasquatch);
-        weapon = new Weapon();
-      }
+  private void hit(Command command, String str) {
+    int healthstandin;
+    Enemy enemy = new Enemy();
+    Weapon weapon = new Weapon();
+    if (str.equals("")||!checkenemy(str)){
+      gui.println("What do you want to hit?");
+    }else if (str.indexOf("with")==-1||((str.indexOf("with")!=-1)&&!str.substring(str.indexOf("with ")+1, str.length()).equals("geraldo"))){
+      gui.println("Hit it with what?");
+    }else if (command.getStringifiedArgs().equals("sasquatch")&&currentRoom.getRoomName().equals("The Lair")){
+      enemy = new Enemy(sasquatch);
+      weapon = new Weapon();
+      //if(ene)
       enemy.attacked(weapon.getDamage());
       if(enemy.getHealth()<=0){
         healthstandin=0;
@@ -323,6 +322,15 @@ public class Game implements java.io.Serializable {
       }
     }
   }  
+
+  public boolean checkenemy(String str){
+    for(Enemy enemy: enemies){
+      if(str.equals(enemy.getName())){
+        return true;
+      }
+    }
+    return false;
+  }
     /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
     else if (command.getStringifiedArgs().equals("stop")){
       Game.getMusicPlayer().stop();
