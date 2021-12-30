@@ -22,6 +22,27 @@ public class Command {
     return commandWord;
   }
 
+  public int legitimateHitCommand() {
+    String str = getStringifiedArgs();
+    if(str==" "||str==""){
+      return 5;
+    }
+    if(str.indexOf("with")<0){
+      return 1;
+    }
+    int count = 0;
+    for(int i=0; i<args.size()-1; i++) {
+      if(args.get(i).equals(" ")){
+        count++;
+      }
+    }
+    if(count!=3){
+      return 2;
+    }
+
+    return 0;
+  }
+
   /**
    * Return the first command argument of this command. Returns an empty string if there 
    * were no arguments.

@@ -262,7 +262,7 @@ public class Game implements java.io.Serializable {
       music(command);
 
     } else if(commandWord.equals("hit")){
-      hit(command, command.getStringifiedArgs());
+      hit(command);
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart", command)){
         resetSaveState();
@@ -298,12 +298,43 @@ public class Game implements java.io.Serializable {
     } 
   }
 
+  private Enemy enemyRoomCheck(Room room){
+    String name = room.getRoomName();
+    if(name.equals("The Lair")){
+      return sasquatch;
+    }else if(name.equals("Upper Hall of Enemies")){
+
+    }else if(name.equals("Lower Hall of Enemies")){
+
+    }//more rooms: Dept. of Customer Service
+    return null;
+  }
+
   /**
    * Allows the player to hit an enemy.
    * @param command - 
    */
-  private void hit(Command command, String str) {
+  private void hit(Command command) {
     int healthstandin;
+    Room room = currentRoom;
+    Enemy enemy = enemyRoomCheck(currentRoom);
+    Weapon weapon = new Weapon();
+    if(enemyRoomCheck(currentRoom).equals(null)){
+        gui.println("There is no enemy here.");
+    }else{
+      int hitCode = command.legitimateHitCommand();
+      if(hitCode == 5){
+        gui.println("Hit what?");
+      }else if(hitCode == 1){
+    }
+  }
+    
+  }  
+  /*Please do not delete this old code. I will probably reuse some of it.
+  When I'm done with it, I'll delete it
+  private void hit(Command command) {
+    int healthstandin;
+    String str = command.getStringifiedArgs();
     Enemy enemy = new Enemy();
     Weapon weapon = new Weapon();
     if (str.equals("")||!checkenemy(str)){
@@ -325,7 +356,7 @@ public class Game implements java.io.Serializable {
         gui.println("The "+enemy.getName()+" has died.");
       }
     }
-  }  
+  } */ 
 
   public boolean checkenemy(String str){
     for(Enemy enemy: enemies){
@@ -336,38 +367,6 @@ public class Game implements java.io.Serializable {
     return false;
     
   }
-    /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
-    else if (command.getStringifiedArgs().equals("stop")){
-      Game.getMusicPlayer().stop();
-      gui.println("Music stopped.");
-    } 
-    else if (command.getStringifiedArgs().equals("start")){
-      Game.getMusicPlayer().play();
-      gui.println("Music started!");
-    } 
-    else if (command.getStringifiedArgs().equals("play")){
-      Game.getMusicPlayer().play();
-      gui.println("Music started!");
-    } 
-    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
-      gui.println("Music volume down.");
-    } 
-    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
-      gui.println("Music volume up.");
-    } 
-    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
-      gui.println("Music volume down.");
-    } 
-    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
-      gui.println("Music volume up.");
-    } 
-    else {
-      gui.println("Invalid music operation!");
-    }*/
 
   /**
    * Allows the player to take items from the current room.
