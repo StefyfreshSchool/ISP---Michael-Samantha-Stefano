@@ -49,7 +49,7 @@ public class Game implements java.io.Serializable {
     try {
       initRooms("src\\data\\rooms.json");
       initItems("src/data/items.json");
-      currentRoom = roomMap.get("Castle Grounds");
+      currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -276,6 +276,10 @@ public class Game implements java.io.Serializable {
       heal();
     } else if (commandWord.equals("wear")){
       wear(command.getStringifiedArgs());
+    } else if (commandWord.equals("read")){
+      read(command.getStringifiedArgs());
+    } else if (commandWord.equals("pray")){
+      pray();
     }
     return 0;
   }
@@ -330,6 +334,7 @@ public class Game implements java.io.Serializable {
       }
     }
     return false;
+    
   }
     /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
     else if (command.getStringifiedArgs().equals("stop")){
@@ -551,7 +556,6 @@ public class Game implements java.io.Serializable {
    * Does things when you enter the fur store. WORKS if you say yes the first time, kinda if you say no
    */
   public void salesman(){
-    inventory.addItem(itemMap.get("pounds"));
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     if (!inventory.hasItem(itemMap.get("Coonskin Hat"))){
       gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
@@ -619,6 +623,57 @@ public class Game implements java.io.Serializable {
     } else {
       gui.println("What would you like to wear?");
     }
+  }
+
+  private void pray() {
+    if (currentRoom.getRoomName().equals("News News Temple Room")){
+      gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
+    } else {
+      gui.println("You cannot pray here.");
+    }
+  }
+
+  /**
+   * Lets player read items (tome, diary)
+   * @param command
+   */
+  private void read(String secondWord){
+    if (secondWord != ""){
+      if (secondWord.equals("tome") && inventory.hasItem(itemMap.get("tome"))){
+        readTome();
+      } else if (secondWord.equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
+        readDiary();
+      } else {
+        gui.println("You can't read that!");
+      }
+    } else {
+      gui.println("What would you like to read?");
+    }
+  }
+
+  /**
+   *  Player reads princess diary
+   */
+  private void readDiary() {
+    gui.println("\"SUPER SECRET DO NOT READ\"");
+    gui.println("\"The code is 1234.\"");
+  }
+
+  /**
+   *  Player reads tome of tableland !!!
+   */
+  private void readTome() {
+    gui.println("\"THE TWELVE TRIALS OF THE WHISPERER\"");
+    gui.println("\"Doth whom unleavens ye agèd tome, come with ye eyes here.\"");
+    gui.println("\"1. Conquer ye Guardian Sasquatch of legends yore.\"");
+    gui.println("\"2. Procure thee News News scroll, doth of antiquity.\"");
+    gui.println("\"3. Practice larceny upon morsels of Alaskan cheese.\"");
+    gui.println("\"4. Secure ye fabulous furs in all Canadian lands.\"");
+    gui.println("\"5. Upheave vaccuum  \"");
+    gui.println("\"6. Threaten friends bot\"");
+    gui.println("\"7. Customer service\"");
+    gui.println("\"8. Dog paradise\"");
+    gui.println("\"Then thou will be granted access to the Trial in the Sky\"");
   }
 
   /**

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Parser {
-  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take", "heal", "test", "wear" };
+  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take", "heal", "test", "wear", "read", "pray" };
   private static GUI gui = GUI.getGUI();
 
   public Command getCommand() {

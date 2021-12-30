@@ -470,7 +470,7 @@
     {
       "id": "Master Bedroom",
       "name": "Master Bedroom",
-      "description": "You enter the master bedroom of the Princess of Alaskan Cheese. She's engrossed within a deep sleep in an expensive, marble four-poster bed. Her face reminds you of Ms. Dybala. A leather-bound notebook sits on her bedside table, with one page bookmarked.",
+      "description": "You enter the master bedroom of the Princess of Alaskan Cheese. She's engrossed within a deep sleep in an expensive, marble four-poster bed. Her face reminds you of Ms. Dybala. A leather-bound diary sits on her bedside table, with one page bookmarked.",
       "exits": [
         {
           "isLocked": false,
