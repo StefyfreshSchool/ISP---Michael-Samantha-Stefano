@@ -25,7 +25,7 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   Enemy sasquatch;
   Weapon geraldo;
-  Enemy[] enemies = new Enemy[5];
+  static Enemy[] enemies = new Enemy[5];
 
   private static final int MAX_WEIGHT = 10;
   
@@ -298,6 +298,10 @@ public class Game implements java.io.Serializable {
     } 
   }
 
+  public static Enemy[] getEnemies(){
+    return enemies;
+  }
+
   private Enemy enemyRoomCheck(Room room){
     String name = room.getRoomName();
     if(name.equals("The Lair")){
@@ -322,11 +326,20 @@ public class Game implements java.io.Serializable {
     if(enemyRoomCheck(currentRoom).equals(null)){
         gui.println("There is no enemy here.");
     }else{
-      int hitCode = command.legitimateHitCommand();
-      if(hitCode == 5){
+      String hitCode = command.legitimateHitCommand();
+      if(hitCode.equals("A")){
         gui.println("Hit what?");
-      }else if(hitCode == 1){
-    }
+      }else if(hitCode.equals("B")){
+        gui.println("Hit "+enemy.getName()+" with what?");
+      }else if(hitCode.equals("D")){
+        gui.println(command.getStringifiedArgs()+" is not an enemy.");
+        gui.println("What would you like to hit?");
+      }else if(hitCode.equals("E")){
+        String weirdItemName = command.getStringifiedArgs();
+        weirdItemName = weirdItemName.substring(weirdItemName.indexOf(" with ")+6, weirdItemName.length());
+        gui.println(weirdItemName+" is not a weapon.");
+        gui.println("What would you like to hit "+enemy.getName()+" with?");
+      }
   }
     
   }  
@@ -358,15 +371,6 @@ public class Game implements java.io.Serializable {
     }
   } */ 
 
-  public boolean checkenemy(String str){
-    for(Enemy enemy: enemies){
-      if(str.equals(enemy.getName())){
-        return true;
-      }
-    }
-    return false;
-    
-  }
 
   /**
    * Allows the player to take items from the current room.
