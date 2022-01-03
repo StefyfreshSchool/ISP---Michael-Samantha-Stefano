@@ -279,6 +279,8 @@ public class Game implements java.io.Serializable {
       read(command.getStringifiedArgs());
     } else if (commandWord.equals("pray")){
       pray();
+    } else if (commandWord.equals("inflate")){
+      inflate(command.getStringifiedArgs());
     }
     return 0;
   }
@@ -293,7 +295,9 @@ public class Game implements java.io.Serializable {
       inventory.addItem(itemMap.get("pounds"));
       salesman();
     } else if (command.getStringifiedArgs().equals("2")){
-
+      gui.println("You have been teleported to the Castle Grounds.");
+      currentRoom = roomMap.get("Castle Grounds");
+    } else if (command.getStringifiedArgs().equals("3")){
     } 
   }
 
@@ -540,8 +544,8 @@ public class Game implements java.io.Serializable {
 
   }
 
-    /**
-   * Does things when you enter the fur store. WORKS if you say yes the first time, kinda if you say no
+  /**
+   *  Does when you enter the fur store location. IT WORKS GUYSSS
    */
   public void salesman(){
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
@@ -583,6 +587,21 @@ public class Game implements java.io.Serializable {
     return false;
   }
 
+  private void inflate(String secondWord) {
+    if (secondWord != ""){
+      if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("Balloon")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
+        gui.println("You inflated Balloony's corpse.");
+        gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
+        currentRoom = roomMap.get("Temple of the Sky Gods");
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+      } else {
+        gui.println("That doesn't seem like a good idea. It could explode.");
+      }
+    } else {
+      gui.println("What would you like to inflate?");
+    }
+  }
+
   /** 
    * @param secondWord
    */
@@ -615,9 +634,14 @@ public class Game implements java.io.Serializable {
 
   private void pray() {
     if (currentRoom.getRoomName().equals("News News Temple Room")){
+      gui.println("The sun's rays bounce off the skylight into your eyes.");
+      gui.println("For they glow with the intensity of a thousand souls.");
+      gui.println("For you know they can never be satisfied.");
+      gui.println();
+      gui.println("Suddenly, you feel a quite compelling message from deep within your psyche.");
       gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
     } else {
-      gui.println("You cannot pray here.");
+      gui.println("You cannot pray here. You can only pray at temples.");
     }
   }
 
@@ -643,8 +667,9 @@ public class Game implements java.io.Serializable {
    *  Player reads princess diary
    */
   private void readDiary() {
-    gui.println("\"SUPER SECRET DO NOT READ\"");
-    gui.println("\"The code is 1234.\"");
+    gui.println("\"Dear diary,\"");
+    gui.println("\"Wow, I sure do love cheese.\"");
+    gui.println("\"I sure am glad nobody knows that the secret code for the cheese vault is 1234.\"");
   }
 
   /**

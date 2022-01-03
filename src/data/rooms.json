@@ -20,7 +20,7 @@
     {
       "id": "East of the Cyan House",
       "name": "East of the Cyan House",
-      "description": "You are east of the Cyan House.",
+      "description": "You are east of the Cyan House, surrounded by plains.",
       "exits": [
         {
           "isLocked": false,
@@ -72,7 +72,7 @@
     {
       "id": "West Room",
       "name": "West Room",
-      "description": "You climb through the open window, entering the west room of the Cyan House. It seems to have been looted long ago. A doorframe, but no door, is to the east.",
+      "description": "You climb through the open window, into the sad-looking house. A doorframe, but no door, is to the east.",
       "exits": [
         {
           "isLocked": false,
@@ -90,7 +90,7 @@
     {
       "id": "East Room",
       "name": "East Room",
-      "description": "You enter the east room of the Cyan House. In the room sits a magnificent table adorned with a bottle of water, some bandages, and an ancient tome.",
+      "description": "In the east room sits a magnificent table adorned with a bottle of water, some bandages, and an ancient tome.",
       "exits": [
         {
           "isLocked": false,
@@ -102,7 +102,7 @@
     {
       "id": "West of the Cyan House",
       "name": "West of the Cyan House",
-      "description": "You are west of the Cyan House. A cobbled trail leads further to the west, towards an abandoned city plaza.",
+      "description": "You are west of the Cyan House where a cobbled trail leads toward an abandoned city plaza.",
       "exits": [
         {
           "isLocked": false,
@@ -356,7 +356,7 @@
     {
       "id": "Gates of Hell",
       "name": "Gates of Hell",
-      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Inexplicably, the wooden door to the underground tunnel seems to be locked with an arcane incantation.",
+      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Inexplicably, the door to the underground tunnel seems to be locked with an arcane incantation.",
       "exits": [
         {
           "isLocked": false,
@@ -419,7 +419,7 @@
     {
       "id": "Upper Hall of Enemies",
       "name": "Upper Hall of Enemies",
-      "description": "The upper hall seems vastly different. The floors and walls are a pristine, tiled white, with no corpses in sight.",
+      "description": "The upper hall seems vastly different. The floors and walls are a pristine, tiled white, with no death in sight.",
       "exits": [
         {
           "isLocked": false,
@@ -488,32 +488,6 @@
           "isLocked": false,
           "direction": "West",
           "adjacentRoom": "Upper Atrium"
-        }
-      ]
-    },
-    {
-      "id": "Hallway",
-      "name": "Hallway",
-      "description": "You are in a long hallway. There are family pictures on all of the walls.",
-      "exits": [
-        {
-          "isLocked": true,
-          "direction": "East",
-          "adjacentRoom": "Bathroom",
-          "keyId": "1234"
-        }
-      ]
-    },
-    {
-      "id": "Bathroom",
-      "name": "Bathroom",
-      "description": "You are in a blue bathroom",
-      "exits": [
-        {
-          "isLocked": true,
-          "direction": "West",
-          "adjacentRoom": "Hallway",
-          "keyId": "1234"
         }
       ]
     },
@@ -616,7 +590,7 @@
     {
       "id": "East of Crater",
       "name": "East of Crater",
-      "description": "You stand within the boundaries of the caverous and forested lands. To your west is a large cavern. To your east is the endless forest.",
+      "description": "You stand within the boundaries of the cavernous and forested lands. To your west is a large cavern. To your east is the endless forest.",
       "exits": [
         {
           "isLocked": false,
@@ -656,7 +630,7 @@
     {
       "id": "Forest Tripoint",
       "name": "Forest Tripoint",
-      "description": "You are standing in a forest filled with tall pines. The thick overhead canopy blocks almost all sunlight through. A thick mist blankets the forest floor. You hear a wolf howl in the distance.",
+      "description": "You are standing in a forest filled with tall pines. The thick overhead canopy blocks almost all sunlight through, replaced by a thick mist. You hear a wolf howl in the distance.",
       "exits": [
         {
           "isLocked": false,
@@ -678,12 +652,12 @@
     {
       "id": "Small Clearing",
       "name": "Small Clearing",
-      "description": "The forest opens up into a small clearing. Sunlight streams through the opening in the canopy onto the ground. Flowers bloom in the meadow and you catch a glimpse of a bunny hopping behind a rock.",
+      "description": "The forest opens up into a clearing. Sunlight streams through the opening in the canopy. Flowers bloom on the forest floor and you catch a glimpse of a bunny here and there.",
       "exits": [
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "Campsite Lookout"
+          "adjacentRoom": "Campsite Ruins"
         },
         {
           "isLocked": false,
@@ -698,9 +672,9 @@
       ]
     },
     {
-      "id": "Campsite Lookout",
-      "name": "Campsite Lookout",
-      "description": "The forest opens up into a small clearing. You see a sign that says 'Welcome to Tableland'",
+      "id": "Campsite Ruins",
+      "name": "Campsite Ruins",
+      "description": "The forest opens up into a desolate, looted campsite. The charred remains of fire start to gnaw at your resolve. ",
       "exits": [
         {
           "isLocked": false,
@@ -741,7 +715,7 @@
     {
       "id": "Parliament Steps",
       "name": "Parliament Steps",
-      "description": "You are standing on the steps of the Parliament of Tableland. It reminds you of the Ottawa Parliament Buildings, but you cannot remember what Ottawa is.",
+      "description": "You stand on the steps of the Parliament of Tableland. It reminds you of the Ottawa Parliament Buildings, but you cannot remember what Ottawa is.",
       "exits": [
         {
           "isLocked": false,
@@ -780,7 +754,7 @@
     {
       "id": "Parliament Entrance Room",
       "name": "Parliament Entrance Room",
-      "description": "Description",
+      "description": "In the Parliament of Tableland, no one seems to be here. Every desk and office room is empty. How does anyone do work around here?",
       "exits": [
         {
           "isLocked": false,
@@ -824,7 +798,7 @@
     {
       "id": "Temple Pavillion",
       "name": "Temple Pavillion",
-      "description": "You stand in the grounds of a huge, ornate temple. It looks like Hercules' house.",
+      "description": "You stand in the grounds of a huge, ornate temple. Its golden imperial exterior intimidates you.",
       "exits": [
         {
           "isLocked": false,
@@ -841,15 +815,15 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "News News Temple Room",
+          "adjacentRoom": "News News Temple",
           "keyId": "1234"
         }
       ]
     },
     {
-      "id": "News News Temple Room",
-      "name": "News News Temple Room",
-      "description": "You stand in a spacious temple entryway. Books line every shelf and sunlight beams through the skylight. An ornate, gold door faces you from the other side of the room.",
+      "id": "News News Temple",
+      "name": "News News Temple",
+      "description": "You stand in a spacious temple entryway padded by praying mats. Books line every shelf and sunlight beams through the skylight. An ornate, gold door faces you from the other side of the room.",
       "exits": [
         {
           "isLocked": false,
@@ -873,7 +847,7 @@
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "News News Temple Room",
+          "adjacentRoom": "News News Temple",
           "keyId": "1234"
         }
       ]
@@ -881,7 +855,7 @@
     {
       "id": "Tableland Plains",
       "name": "Tableland Plains",
-      "description": "You are in the plains of Tableland. The Cyan House is to the South, and the Temple of News News is to the Northeast.",
+      "description": "You are in the plains of Tableland. The Cyan House is to the southwest, and the Temple of News News is to the East.",
       "exits": [
         {
           "isLocked": false,
@@ -905,7 +879,7 @@
         {
           "isLocked": false,
           "direction": "Up",
-          "adjacentRoom": "Entrance to Temple of the Sky Gods",
+          "adjacentRoom": "Temple of the Sky Gods",
           "keyId": "1234"
         },
         {
