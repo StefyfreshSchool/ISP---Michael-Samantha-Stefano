@@ -552,10 +552,15 @@ public class Game implements java.io.Serializable {
   public void sasquatch(){
     if(!(sasquatch.getHealth()<=0)){
       gui.println("The Sasquatch steps out of the cave");
-      gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
+      gui.println(sasquatch.getCatchphrase()+" He screams.");
     }else{
       gui.println("The sasquatches corpse lies strewn on the ground.");
-      gui.println("Past the corpse, you can see the entrance to a dark cave.");
+      gui.println("Past the corpse, you can a dark, ominous cave.");
+      if(!inventory.hasItem(itemMap.get("Scroll of News News"))&&!inventory.hasItem(itemMap.get("Talked to Sky Gods"))){
+        gui.println("Just inside of the cave you can see a beat up scroll.");
+      }else if((inventory.hasItem(itemMap.get("Scroll of News News"))&&!inventory.hasItem(itemMap.get("Talked to Sky Gods")))||(!inventory.hasItem(itemMap.get("Scroll of News News"))&&inventory.hasItem(itemMap.get("Talked to Sky Gods")))){
+        gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
+      }
     }
 
   }

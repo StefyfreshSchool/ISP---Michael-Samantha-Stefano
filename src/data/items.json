@@ -147,6 +147,16 @@
       "isWeapon": false,
       "weight": 5,
       "startingRoom": "Underground Tunnel"
+    },
+    {
+      "id": "Talked to Sky Gods",
+      "name": "Talked to Sky Gods",
+      "aliases": ["Talked to Sky Gods"],
+      "description": "placeholder item",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 0,
+      "startingRoom": "Sky Palace Hall"
     }
   ]
 }
