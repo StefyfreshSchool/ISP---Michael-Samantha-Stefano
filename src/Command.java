@@ -22,6 +22,46 @@ public class Command {
     return commandWord;
   }
 
+  public String legitimateHitCommand() {
+    String str = getStringifiedArgs();
+    if(str==" "||str==""){
+      return "A";
+    }else if(str.indexOf(" with ")<0&&(!checkenemy(str)||!checkenemy(str+" "))){
+      return "D";
+    }
+    if(str.indexOf(" with ")<0){
+      return "B";
+    }
+    String cut = str.substring(str.indexOf(" with ")+6, str.length());
+    if(cut.equals(" ")){
+      return "B";
+    }
+    if(!cut.equals("geraldo")){
+      return "E";
+    }
+    int count = 0;
+    for(int i=0; i<args.size()-1; i++) {
+      if(args.get(i).equals(" ")){
+        count++;
+      }
+    }
+    if(count!=3){
+      //return 2;
+    }
+    return "";
+    //return 0;
+  }
+
+  public boolean checkenemy(String str){
+    for(Enemy enemy: Game.getEnemies()){
+      if(str.equals(enemy.getName())){
+        return true;
+      }
+    }
+    return false;
+    
+  }
+
   /**
    * Return the first command argument of this command. Returns an empty string if there 
    * were no arguments.

@@ -25,6 +25,7 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   Enemy sasquatch;
   Weapon geraldo;
+  static Enemy[] enemies = new Enemy[5];
 
   private static final int MAX_WEIGHT = 10;
   
@@ -38,11 +39,11 @@ public class Game implements java.io.Serializable {
     inventory = new Inventory(MAX_WEIGHT);
     player = new Player(100);
     startMusic();
+    enemies[0] = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
+    geraldo = new Weapon();
 
     //Init enemies and items
     //TODO: PUT THESE IN MAPS!! IMPORTANT!
-    sasquatch = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
-    geraldo = new Weapon();
 
     //Init rooms and game state
     try {
@@ -301,23 +302,66 @@ public class Game implements java.io.Serializable {
     } 
   }
 
+  public static Enemy[] getEnemies(){
+    return enemies;
+  }
+
+  private Enemy enemyRoomCheck(Room room){
+    String name = room.getRoomName();
+    if(name.equals("The Lair")){
+      return sasquatch;
+    }else if(name.equals("Upper Hall of Enemies")){
+
+    }else if(name.equals("Lower Hall of Enemies")){
+
+    }//more rooms: Dept. of Customer Service
+    return null;
+  }
+
   /**
    * Allows the player to hit an enemy.
    * @param command - 
    */
   private void hit(Command command) {
-    if (command.isUnknown()) {
-      gui.println("I don't know what you mean...");
-    }
-    String commandWord = command.getCommandWord();
-    if(commandWord.equals("hit")){
-      int healthstandin;
-      Enemy enemy = new Enemy();
-      Weapon weapon = new Weapon();
-      if(currentRoom.getRoomName().equals("The Lair")){
-        enemy = new Enemy(sasquatch);
-        weapon = new Weapon();
+    int healthstandin;
+    Room room = currentRoom;
+    Enemy enemy = enemyRoomCheck(currentRoom);
+    Weapon weapon = new Weapon();
+    if(enemyRoomCheck(currentRoom).equals(null)){
+        gui.println("There is no enemy here.");
+    }else{
+      String hitCode = command.legitimateHitCommand();
+      if(hitCode.equals("A")){
+        gui.println("Hit what?");
+      }else if(hitCode.equals("B")){
+        gui.println("Hit "+enemy.getName()+" with what?");
+      }else if(hitCode.equals("D")){
+        gui.println(command.getStringifiedArgs()+" is not an enemy.");
+        gui.println("What would you like to hit?");
+      }else if(hitCode.equals("E")){
+        String weirdItemName = command.getStringifiedArgs();
+        weirdItemName = weirdItemName.substring(weirdItemName.indexOf(" with ")+6, weirdItemName.length());
+        gui.println(weirdItemName+" is not a weapon.");
+        gui.println("What would you like to hit "+enemy.getName()+" with?");
       }
+  }
+    
+  }  
+  /*Please do not delete this old code. I will probably reuse some of it.
+  When I'm done with it, I'll delete it
+  private void hit(Command command) {
+    int healthstandin;
+    String str = command.getStringifiedArgs();
+    Enemy enemy = new Enemy();
+    Weapon weapon = new Weapon();
+    if (str.equals("")||!checkenemy(str)){
+      gui.println("What do you want to hit?");
+    }else if (str.indexOf("with")==-1||((str.indexOf("with")!=-1)&&!str.substring(str.indexOf("with ")+1, str.length()).equals("geraldo"))){
+      gui.println("Hit it with what?");
+    }else if (command.getStringifiedArgs().equals("sasquatch")&&currentRoom.getRoomName().equals("The Lair")){
+      enemy = new Enemy(sasquatch);
+      weapon = new Weapon();
+      //if(ene)
       enemy.attacked(weapon.getDamage());
       if(enemy.getHealth()<=0){
         healthstandin=0;
@@ -329,40 +373,8 @@ public class Game implements java.io.Serializable {
         gui.println("The "+enemy.getName()+" has died.");
       }
     }
-  }
-    
-    /*if (!command.hasSecondWord()) gui.println("What do you want to hit?");
-    else if (command.getStringifiedArgs().equals("stop")){
-      Game.getMusicPlayer().stop();
-      gui.println("Music stopped.");
-    } 
-    else if (command.getStringifiedArgs().equals("start")){
-      Game.getMusicPlayer().play();
-      gui.println("Music started!");
-    } 
-    else if (command.getStringifiedArgs().equals("play")){
-      Game.getMusicPlayer().play();
-      gui.println("Music started!");
-    } 
-    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
-      gui.println("Music volume down.");
-    } 
-    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
-      gui.println("Music volume up.");
-    } 
-    else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
-      gui.println("Music volume down.");
-    } 
-    else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
-      gui.println("Music volume up.");
-    } 
-    else {
-      gui.println("Invalid music operation!");
-    }*/
+  } */ 
+
 
   /**
    * Allows the player to take items from the current room.
@@ -537,10 +549,13 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    gui.println("The Sasquatch steps out of the cave");
-    gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
-    gui.println("What would you like to do?");
-    Parser.showCommands();
+    if(!(sasquatch.getHealth()<=0)){
+      gui.println("The Sasquatch steps out of the cave");
+      gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
+    }else{
+      gui.println("The sasquatches corpse lies strewn on the ground.");
+      gui.println("Past the corpse, you can see the entrance to a dark cave.");
+    }
 
   }
 
