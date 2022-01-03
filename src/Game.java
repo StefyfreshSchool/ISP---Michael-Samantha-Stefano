@@ -327,7 +327,7 @@ public class Game implements java.io.Serializable {
     Room room = currentRoom;
     Enemy enemy = enemyRoomCheck(currentRoom);
     Weapon weapon = new Weapon();
-    if(enemyRoomCheck(currentRoom).equals(null)){
+    if(enemyRoomCheck(currentRoom) == null){
         gui.println("There is no enemy here.");
     }else{
       String hitCode = command.legitimateHitCommand();
