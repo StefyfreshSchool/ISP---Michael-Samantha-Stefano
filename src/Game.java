@@ -335,6 +335,7 @@ public class Game implements java.io.Serializable {
         gui.println(command.getStringifiedArgs()+" is not an enemy.");
         gui.println("What would you like to hit?");
       }else if(hitCode.equals("E")){
+        //test comment
         String weirdItemName = command.getStringifiedArgs();
         weirdItemName = weirdItemName.substring(weirdItemName.indexOf(" with ")+6, weirdItemName.length());
         gui.println(weirdItemName+" is not a weapon.");
