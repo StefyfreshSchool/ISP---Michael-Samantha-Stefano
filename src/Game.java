@@ -17,15 +17,15 @@ public class Game implements java.io.Serializable {
   private transient static GUI gui;
   private static MusicPlayer music;
 
-  public static HashMap<String, Room> roomMap = new HashMap<String, Room>();
-  public static HashMap<String, Item> itemMap = new HashMap<String, Item>();
+  public static HashMap<String, Room> roomMap;
+  public static HashMap<String, Item> itemMap;
+  public static HashMap<String, Enemy> enemyMap;
   private Inventory inventory;
   private Player player;
   private Parser parser;
   private Room currentRoom;
-  Enemy sasquatch;
+  private boolean isInSasquatch;
   Weapon geraldo;
-  static Enemy[] enemies = new Enemy[5];
 
   private static final int MAX_WEIGHT = 10;
   
@@ -39,16 +39,14 @@ public class Game implements java.io.Serializable {
     inventory = new Inventory(MAX_WEIGHT);
     player = new Player(100);
     startMusic();
-    enemies[0] = new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25);
     geraldo = new Weapon();
 
-    //Init enemies and items
-    //TODO: PUT THESE IN MAPS!! IMPORTANT!
 
     //Init rooms and game state
     try {
-      initRooms("src\\data\\rooms.json");
       initItems("src/data/items.json");
+      initRooms("src\\data\\rooms.json");
+      initEnemies();
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
@@ -82,6 +80,7 @@ public class Game implements java.io.Serializable {
             inventory = save.getInventory();
             currentRoom = save.getCurrentRoom();
             player = save.getPlayer();
+            enemyMap = save.getEnemyMap();
             gui.printInfo("Restored from saved game.\n");
             validInput = true;
           } else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
@@ -100,7 +99,16 @@ public class Game implements java.io.Serializable {
     parser = new Parser();
   }
 
+  private void initEnemies() {
+    enemyMap = new HashMap<String, Enemy>();
+    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25));
+    enemyMap.put("vacuum", new Enemy("Vacuum", "DESCRIPTOION", 20));
+    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
+    isInSasquatch = false;
+  }
+
   private void initItems(String fileName) {
+    itemMap = new HashMap<String, Item>();
     for (Object itemObj : Item.getItems()){
       String itemId = (String) ((JSONObject) itemObj).get("id");
       String name = (String) ((JSONObject) itemObj).get("name");
@@ -131,6 +139,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void initRooms(String fileName) throws Exception {
+    roomMap = new HashMap<String, Room>();
     Path path = Path.of(fileName);
     String jsonString = Files.readString(path);
     JSONParser parser = new JSONParser();
@@ -175,34 +184,9 @@ public class Game implements java.io.Serializable {
     while (!finished) {
       Command command;
       command = parser.getCommand();
-      int status = processCommand(command);
+      processCommand(command);
       gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
-      if (status == 1){
-        finished = true;
-      } 
-      if (status == 2){
-        music.stop();
-        gui.reset();
-        gui.printInfo("Game restarted.\n");
-        try {
-          initRooms("src\\data\\rooms.json");
-          currentRoom = roomMap.get("South of the Cyan House");
-          inventory = new Inventory(MAX_WEIGHT);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        printWelcome();
-        startMusic();
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
-      }
-      
     }
-
-    gui.println("\nThank you for playing. Good bye.");
-
-    //Nice transition to exit the game
-    sleep(1000);
-    System.exit(0);
   }
 
   /**Starts the background music. */
@@ -230,10 +214,10 @@ public class Game implements java.io.Serializable {
    * @param command
    * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
    */
-  private int processCommand(Command command) {
+  private void processCommand(Command command) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
-      return 0;
+      return;
     } 
     String commandWord = command.getCommandWord();
     if (commandWord.equals("test")) testing(command);
@@ -241,7 +225,7 @@ public class Game implements java.io.Serializable {
       ArrayList<String> args = new ArrayList<String>();
       args.add(commandWord);
       Parser.printCommandHelp(new Command("help", args));
-      return 0;
+      return;
     }
     if (commandWord.equals("help")){
       printHelp(command);
@@ -250,11 +234,7 @@ public class Game implements java.io.Serializable {
       goRoom(command);
     }
     else if (commandWord.equals("quit")) {
-      if (quitRestart("quit", command)){
-        resetSaveState();
-        return 1;
-      }
-
+      if (quitRestart("quit", command)) endGame();
     } else if (commandWord.equals("yell")){
       yell(command.getStringifiedArgs());
     
@@ -265,11 +245,25 @@ public class Game implements java.io.Serializable {
       hit(command);
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart", command)){
+        restartGame();
         resetSaveState();
-        return 2;
+        music.stop();
+        gui.reset();
+        gui.printInfo("Game restarted.\n");
+        try {
+          initItems("src/data/items.json");
+          initRooms("src\\data\\rooms.json");
+          currentRoom = roomMap.get("South of the Cyan House");
+          inventory = new Inventory(MAX_WEIGHT);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        printWelcome();
+        startMusic();
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       }
     } else if (commandWord.equals("save")){
-      if (save(command)) return 1;
+      if (save(command)) endGame();
     } else if (commandWord.equals("take")){
       take(command);
     } else if (commandWord.equals("heal")){
@@ -282,8 +276,44 @@ public class Game implements java.io.Serializable {
       pray();
     } else if (commandWord.equals("inflate")){
       inflate(command.getStringifiedArgs());
+    } else if (commandWord.equals("info")){
+      gui.println(currentRoom.longDescription());
+      gui.println();
+      gui.println("Player info:");
+      gui.println("Inventory: " + inventory.getString());
+      gui.println("Health: " + player.getHealth());
+      gui.println();
+      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     }
-    return 0;
+    return;
+  }
+
+  private void restartGame() {
+    resetSaveState();
+    music.stop();
+    gui.reset();
+    gui.printInfo("Game restarted.\n");
+    try {
+      initItems("src/data/items.json");
+      initRooms("src\\data\\rooms.json");
+      initEnemies();
+      currentRoom = roomMap.get("South of the Cyan House");
+      inventory = new Inventory(MAX_WEIGHT);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    printWelcome();
+    startMusic();
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+  }
+
+  private void endGame() {
+    gui.println("Thank you for playing. Good bye.");
+
+    //Nice transition to exit the game
+    sleep(1000);
+    System.exit(0);
   }
 
   /**
@@ -299,23 +329,22 @@ public class Game implements java.io.Serializable {
       gui.println("You have been teleported to the Castle Grounds.");
       currentRoom = roomMap.get("Castle Grounds");
     } else if (command.getStringifiedArgs().equals("3")){
+      sasquatch();
     } 
-  }
-
-  public static Enemy[] getEnemies(){
-    return enemies;
   }
 
   private Enemy enemyRoomCheck(Room room){
     String name = room.getRoomName();
     if(name.equals("The Lair")){
-      return sasquatch;
+      // return sasquatch;
     }else if(name.equals("Upper Hall of Enemies")){
 
     }else if(name.equals("Lower Hall of Enemies")){
 
     }//more rooms: Dept. of Customer Service
-    return null;
+    // return sasquatch;
+    return enemyMap.get("sasquatch");
+    // return null;
   }
 
   /**
@@ -324,28 +353,44 @@ public class Game implements java.io.Serializable {
    */
   private void hit(Command command) {
     int healthstandin;
-    Room room = currentRoom;
     Enemy enemy = enemyRoomCheck(currentRoom);
-    Weapon weapon = new Weapon();
-    if(enemyRoomCheck(currentRoom).equals(null)){
+    if (enemy == null){
         gui.println("There is no enemy here.");
-    }else{
-      String hitCode = command.legitimateHitCommand();
-      if(hitCode.equals("A")){
-        gui.println("Hit what?");
-      }else if(hitCode.equals("B")){
-        gui.println("Hit "+enemy.getName()+" with what?");
-      }else if(hitCode.equals("D")){
-        gui.println(command.getStringifiedArgs()+" is not an enemy.");
+    } else {
+      ArrayList<String> args = command.getArgs();
+      String argsStr = command.getStringifiedArgs();
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0){
+        gui.println("Hit what enemy?");
+      } else if (!args.contains("with")){
+        gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      }else if(hitCode.equals("E")){
-        String weirdItemName = command.getStringifiedArgs();
-        weirdItemName = weirdItemName.substring(weirdItemName.indexOf(" with ")+6, weirdItemName.length());
-        gui.println(weirdItemName+" is not a weapon.");
-        gui.println("What would you like to hit "+enemy.getName()+" with?");
-      }
-  }
-    
+      } else if (!args.contains("with") || Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){
+        gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
+        gui.println("What would you like to hit?");
+      } else if (!args.contains("geraldo") && args.get(args.size() - 1).equals("with")){
+        gui.println("What weapon would you like to use?");
+      } else if (!args.contains("geraldo")){
+        String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
+        gui.println(weirdItemName + " is not a weapon.");
+        gui.println("What would you like to hit " + enemy.getName()+" with?");
+      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){
+        gui.println(args.get(0) + "is not an enemy in this room.");
+      } 
+      // String hitCode = command.legitimateHitCommand();
+      // if(hitCode.equals("A")){
+      //   gui.println("Hit what?");
+      // }else if(hitCode.equals("B")){
+      //   gui.println("Hit "+enemy.getName()+" with what?");
+      // }else if(hitCode.equals("D")){
+      //   gui.println(command.getStringifiedArgs()+" is not an enemy.");
+      //   gui.println("What would you like to hit?");
+      // }else if(hitCode.equals("E")){
+      //   String weirdItemName = command.getStringifiedArgs();
+      //   weirdItemName = weirdItemName.substring(weirdItemName.indexOf(" with ")+6, weirdItemName.length());
+      //   gui.println(weirdItemName+" is not a weapon.");
+      //   gui.println("What would you like to hit "+enemy.getName()+" with?");
+      // }
+    }
   }  
   /*Please do not delete this old code. I will probably reuse some of it.
   When I'm done with it, I'll delete it
@@ -431,7 +476,7 @@ public class Game implements java.io.Serializable {
     data.put("inProgress", true);
     data.put("room", currentRoom.getRoomName());
 
-    Save game = new Save(roomMap, inventory, currentRoom, player);
+    Save game = new Save(roomMap, inventory, currentRoom, player, enemyMap);
     try {
       FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -466,6 +511,7 @@ public class Game implements java.io.Serializable {
         inventory = save.getInventory();
         currentRoom = save.getCurrentRoom();
         player = save.getPlayer();
+        enemyMap = save.getEnemyMap();
         
         music.stop();
         startMusic();
@@ -528,18 +574,23 @@ public class Game implements java.io.Serializable {
     
     if (nextRoom == null)
       gui.println(direction + " is not a valid direction.");
-    else if (!currentRoom.canGoDirection(direction)){
+    else if (!currentRoom.canGoDirection(direction, inventory)){
       gui.println("That exit is locked! Come back later.");
     } else {
-      currentRoom = nextRoom;
-      if(currentRoom.getRoomName().equals("The Lair")){
+      if(!isInSasquatch && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
+        currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         sasquatch();
-      } else if(currentRoom.getRoomName().equals("Fur Store")){
+      } else if (!isInSasquatch){
+        currentRoom = nextRoom;
+        gui.println(currentRoom.longDescription());
+      } else {
+        gui.println("You cannot leave while the sasquatch is still at large!");
+      }
+      if(currentRoom.getRoomName().equals("Fur Store")){
         gui.println(currentRoom.shortDescription());
         salesman();
-      } else {
-        gui.println(currentRoom.longDescription());
       }
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
@@ -549,14 +600,28 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    if(!(sasquatch.getHealth()<=0)){
+    isInSasquatch = true;
+    Enemy sasquatch = enemyMap.get("sasquatch");
+    if (!(sasquatch.getHealth() <= 0)){
       gui.println("The Sasquatch steps out of the cave");
-      gui.println("\"You have missed a day of school! You are my dinner now!\" He screams.");
-    }else{
+      gui.println(sasquatch.getCatchphrase()+" He screams.");
+      while(sasquatch.getHealth() > 0){
+        // Make commands work
+        Command command = parser.getCommand();
+        processCommand(command);
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+      }
+      gui.println("Just inside of the cave you can see a beat up scroll.");
+    } else{
       gui.println("The sasquatches corpse lies strewn on the ground.");
-      gui.println("Past the corpse, you can see the entrance to a dark cave.");
+      gui.println("Past the corpse, you can a dark, ominous cave.");
+      if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !inventory.hasItem(itemMap.get("Talked to Sky Gods"))){
+        gui.println("Just inside of the cave you can see a beat up scroll.");
+      } else if((inventory.hasItem(itemMap.get("Scroll of News News")) && !inventory.hasItem(itemMap.get("Talked to Sky Gods"))) || (!inventory.hasItem(itemMap.get("Scroll of News News")) && inventory.hasItem(itemMap.get("Talked to Sky Gods")))){
+        gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
+      }
     }
-
+    isInSasquatch = false;
   }
 
   /**
@@ -594,7 +659,7 @@ public class Game implements java.io.Serializable {
       if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
       else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no")){
         gui.println("\"Then what are you doing in a fur shop? Buy something or get out!\"");
-        validInput = true;
+        return false;
       } else {
         gui.println("\"" + in + "\" is not a valid choice!");
       }

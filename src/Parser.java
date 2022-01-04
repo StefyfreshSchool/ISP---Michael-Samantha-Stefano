@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Parser {
-  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take", "heal", "test", "wear", "read", "pray", "inflate" };
+  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take", "heal", "test", "wear", "read", "pray", "inflate", "info" };
   private static GUI gui = GUI.getGUI();
 
   public Command getCommand() {
@@ -10,7 +10,7 @@ public class Parser {
     String[] words;
     ArrayList<String> args = new ArrayList<String>();
 
-    words = inputLine.split(" ");
+    words = inputLine.trim().split(" ");
     
     for (int i = 1; i < words.length; i++) {
       args.add(words[i]);

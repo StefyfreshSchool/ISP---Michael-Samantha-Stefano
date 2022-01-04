@@ -136,6 +136,11 @@
           "isLocked": false,
           "direction": "South",
           "adjacentRoom": "Plaza Outskirts"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "West of the Cyan House"
         }
       ]
     },
@@ -559,7 +564,7 @@
       "description": "You are in a huge cave. A pile of rocks sit at your feet.",
       "exits": [
         {
-          "isLocked": true,
+          "isLocked": false,
           "direction": "South",
           "adjacentRoom": "North of Crater"
         }
@@ -860,7 +865,7 @@
         {
           "isLocked": false,
           "direction": "Southwest",
-          "adjacentRoom": "North of Cyan House",
+          "adjacentRoom": "North of the Cyan House",
           "keyId": "1234"
         },
         {
