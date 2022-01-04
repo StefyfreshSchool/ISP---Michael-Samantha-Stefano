@@ -47,8 +47,8 @@ public class Game implements java.io.Serializable {
 
     //Init rooms and game state
     try {
-      initRooms("src\\data\\rooms.json");
       initItems("src/data/items.json");
+      initRooms("src\\data\\rooms.json");
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
@@ -551,9 +551,17 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
+    Room lair = currentRoom;
     if(!(sasquatch.getHealth()<=0)){
       gui.println("The Sasquatch steps out of the cave");
       gui.println(sasquatch.getCatchphrase()+" He screams.");
+      while(sasquatch.getHealth()>0){
+      if(!lair.equals(currentRoom)){
+        currentRoom = lair;
+        gui.println("You cannot leave while the sasquatch is still at large!");
+      }
+      }
+      gui.println("Just inside of the cave you can see a beat up scroll.");
     }else{
       gui.println("The sasquatches corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
