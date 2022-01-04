@@ -378,7 +378,7 @@ public class Game implements java.io.Serializable {
 
 
   /**
-   * Allows the player to take items from the current room.
+   * Allows the player to take items from the current room. Also now prints description.
    * @param command
    */
   private void take(Command command) {
@@ -398,6 +398,7 @@ public class Game implements java.io.Serializable {
       } else {
         if (inventory.addItem(currentRoom.getItem(itemName))){
           gui.println(currentRoom.getItem(itemName).getName() + " taken!");
+          gui.println(currentRoom.getItem(itemName).getDescription());
           currentRoom.removeItem(itemName);
         }
       }
