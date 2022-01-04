@@ -842,7 +842,7 @@
     {
       "id": "News News Vault",
       "name": "News News Vault",
-      "description": "You stand in a large, beautiful vault. Gold coins pool at your feet. On the other side of the room, an antique scroll sits in a clear, glass case.",
+      "description": "You stand in a large, beautiful vault. Gold coins pool at your feet.",
       "exits": [
         {
           "isLocked": false,

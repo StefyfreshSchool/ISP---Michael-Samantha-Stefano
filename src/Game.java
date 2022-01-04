@@ -561,17 +561,52 @@ public class Game implements java.io.Serializable {
         gui.println("You cannot leave while the sasquatch is still at large!");
       }
       }
-      gui.println("Just inside of the cave you can see a beat up scroll.");
+      gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
     }else{
-      gui.println("The sasquatches corpse lies strewn on the ground.");
+      gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
-      if(!inventory.hasItem(itemMap.get("Scroll of News News"))&&!inventory.hasItem(itemMap.get("Talked to Sky Gods"))){
-        gui.println("Just inside of the cave you can see a beat up scroll.");
-      }else if((inventory.hasItem(itemMap.get("Scroll of News News"))&&!inventory.hasItem(itemMap.get("Talked to Sky Gods")))||(!inventory.hasItem(itemMap.get("Scroll of News News"))&&inventory.hasItem(itemMap.get("Talked to Sky Gods")))){
+      if(!inventory.hasItem(itemMap.get("1000 British Pounds"))&&!player.getTalkedToSkyGods()){
+        gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?.");
+      }else if((inventory.hasItem(itemMap.get("1000 British Pounds"))&&!player.getTalkedToSkyGods())||(!inventory.hasItem(itemMap.get("1000 British Pounds"))&&player.getTalkedToSkyGods())){
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
     }
 
+  }
+
+  public void newsNewsScroll(){
+    if(!inventory.hasItem(itemMap.get("Scroll of News News"))&&!player.getTalkedToSkyGods()){
+      gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
+      gui.println("You hear a voice on the intercom say \"Welcome to the vault of News News. In order to remove the scroll from the locked case, you must solve the following problems.\"");
+      gui.println("Problem 1: How many Whisperer articles have there been?");
+      gui.println("Problem 2: How many planets are in our solar system?");
+      gui.println("Problem 3: Crystal is the traditional gift for how many years of marriage?");
+      gui.println("Problem 4: What is the average age of the grade elevens?");
+      gui.println("Problem 5: What is the lowest prime number that contains consecutive digits?");
+      gui.println("Problem 6: What is the answer to the ultimate question of life, the universe, and everything?");
+      gui.println("You should have six numbers, each one an answer to one of the six problems. What are these six numbers?");
+      if(newsNewsAnswers()){
+        gui.println("Congratulations! Those are the right numbers! You can now take the scroll of news news. ");
+      }else{
+        gui.println("Those aren't the right numbers. As punishment, you are thrown out of the news news temple! Good riddance! ");
+        currentRoom = roomMap.get("Temple Pavillion");
+      }
+    }else{
+      if((inventory.hasItem(itemMap.get("Scroll of News News"))&&!player.getTalkedToSkyGods())||(!inventory.hasItem(itemMap.get("Scroll of News News"))&&player.getTalkedToSkyGods())){
+        gui.println("On the other side of the room is an empty glass case.");
+      }
+    }
+  }
+
+
+
+  private boolean newsNewsAnswers() {
+    String in = gui.readCommand();
+    if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
+      return true;
+    }else {
+      return false;
+    }
   }
 
   /**
