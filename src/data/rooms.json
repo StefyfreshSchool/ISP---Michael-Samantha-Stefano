@@ -720,7 +720,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Parliament Entrance"
+          "adjacentRoom": "Parliament Entrance Room"
         },
         {
           "isLocked": false,
@@ -754,7 +754,7 @@
     {
       "id": "Parliament Entrance Room",
       "name": "Parliament Entrance Room",
-      "description": "In the Parliament of Tableland, no one seems to be here. Every desk and office room is empty. How does anyone do work around here?",
+      "description": "In the Parliament of Tableland, no one seems to be here. Every desk and office room is empty. How does anyone do work around here? At the end of the room, there is a door with a sign reading \"Tableland Department of Customer Service\".",
       "exits": [
         {
           "isLocked": false,
@@ -766,6 +766,57 @@
           "isLocked": false,
           "direction": "North",
           "adjacentRoom": "Dept. of Customer Service",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Dept. of Customer Service",
+      "name": "Dept. of Customer Service",
+      "description": "The rooms looks like it with a hurricane. Paper shreds are littered all over the room. You talk, and hear your voice has gotten higher. You sound like a chipmunk. What could have caused this?",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Parliament Entrance Room",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Teleporter Room",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Teleporter Room",
+      "name": "Teleporter Room",
+      "description": "A hulking metal machine sits in the middle of the room. You suddenly remember something from machine class you took at Perfect City High School. The machine standing in front of you is a teleporter. Teleporters used to be all over Perfect City, before Quebec retaliated and vaporized it.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Dept. of Customer Service",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "Teleport",
+          "adjacentRoom": "Dog Paradise",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Dog Paradise",
+      "name": "Dog Paradise",
+      "description": "You feel your body being pulled and taken through time and space to land on a cloud. Living on the cloud and hundreds and hundreds of dogs.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Teleport",
+          "adjacentRoom": "Teleporter Room",
           "keyId": "1234"
         }
       ]

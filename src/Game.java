@@ -598,6 +598,17 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  public void dogParadise(){
+    if(!inventory.hasItem(itemMap.get("Moral Support"))&&!player.getTalkedToSkyGods()){
+      gui.println("Three adorable dogs walk up to you. The first dog was a caramel mini-labradoodle. The second was a lighter-coloured cockapoo. The third a _________.");
+      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively. ");
+      gui.println("\"Hello, welcome to dog paradise, potential whisperer successor! My name is Lucky. We would like to offer you help one your long journey.\"");
+      gui.println("Lucky dropped a small glowing onto the ground.");
+      gui.println("\"This is moral support. It will glow brighter and fill your head with encouraging thoughts.\" said Luna");
+      gui.println("\"You cannot open it or activate it by yourself. It will only activate when you need it most.\" said Maggie");
+    }
+  }
+
 
 
   private boolean newsNewsAnswers() {

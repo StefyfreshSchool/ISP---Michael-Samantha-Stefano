@@ -46,7 +46,7 @@
     {
       "id": "Moral Support",
       "name": "Moral Support",
-      "aliases": ["moral support"],
+      "aliases": ["moral support", "orb", "glowing orb"],
       "description": "A small box. You can hear encouraging words coming from it.",
       "isOpenable": false,
       "isWeapon": false,
