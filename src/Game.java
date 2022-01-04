@@ -47,8 +47,8 @@ public class Game implements java.io.Serializable {
 
     //Init rooms and game state
     try {
-      initRooms("src\\data\\rooms.json");
       initItems("src/data/items.json");
+      initRooms("src\\data\\rooms.json");
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
