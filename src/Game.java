@@ -559,7 +559,8 @@ public class Game implements java.io.Serializable {
         currentRoom = lair;
         gui.println("You cannot leave while the sasquatch is still at large!");
       }
-    }
+      }
+      gui.println("Just inside of the cave you can see a beat up scroll.");
     }else{
       gui.println("The sasquatches corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
