@@ -550,9 +550,16 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
+    Room lair = currentRoom;
     if(!(sasquatch.getHealth()<=0)){
       gui.println("The Sasquatch steps out of the cave");
       gui.println(sasquatch.getCatchphrase()+" He screams.");
+      while(sasquatch.getHealth()>0){
+      if(!lair.equals(currentRoom)){
+        currentRoom = lair;
+        gui.println("You cannot leave while the sasquatch is still at large!");
+      }
+    }
     }else{
       gui.println("The sasquatches corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
