@@ -102,7 +102,7 @@ public class Game implements java.io.Serializable {
   private void initEnemies() {
     enemyMap = new HashMap<String, Enemy>();
     enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25));
-    enemyMap.put("vacuum", new Enemy("Vacuum", "DESCRIPTOION", 20));
+    enemyMap.put("vacuum", new Enemy("Vacuum", "DESCRIPTION", 20));
     enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
     isInSasquatch = false;
   }
@@ -361,14 +361,14 @@ public class Game implements java.io.Serializable {
       String argsStr = command.getStringifiedArgs();
       if (!command.hasArgs() || argsStr.indexOf("with") == 0){
         gui.println("Hit what enemy?");
-      } else if (!args.contains("with")){
+      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (!args.contains("with") || Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){
+      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (!args.contains("geraldo") && args.get(args.size() - 1).equals("with")){
-        gui.println("What weapon would you like to use?");
+      } else if ((!args.contains("geraldo") && args.get(args.size() - 1).equals("with")) || !args.contains("with")){
+        gui.println("Hit with what weapon?");
       } else if (!args.contains("geraldo")){
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
@@ -422,7 +422,7 @@ public class Game implements java.io.Serializable {
 
 
   /**
-   * Allows the player to take items from the current room.
+   * Allows the player to take items from the current room. Also now prints description.
    * @param command
    */
   private void take(Command command) {
@@ -442,6 +442,7 @@ public class Game implements java.io.Serializable {
       } else {
         if (inventory.addItem(currentRoom.getItem(itemName))){
           gui.println(currentRoom.getItem(itemName).getName() + " taken!");
+          gui.println(currentRoom.getItem(itemName).getDescription());
           currentRoom.removeItem(itemName);
         }
       }
@@ -611,17 +612,63 @@ public class Game implements java.io.Serializable {
         processCommand(command);
         gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       }
-      gui.println("Just inside of the cave you can see a beat up scroll.");
-    } else{
-      gui.println("The sasquatches corpse lies strewn on the ground.");
+      gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
+    } else {
+      gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
-      if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !inventory.hasItem(itemMap.get("Talked to Sky Gods"))){
-        gui.println("Just inside of the cave you can see a beat up scroll.");
-      } else if((inventory.hasItem(itemMap.get("Scroll of News News")) && !inventory.hasItem(itemMap.get("Talked to Sky Gods"))) || (!inventory.hasItem(itemMap.get("Scroll of News News")) && inventory.hasItem(itemMap.get("Talked to Sky Gods")))){
+      if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()){
+        gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?.");
+      } else if ((inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("1000 British Pounds")) && player.getTalkedToSkyGods())){
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
     }
     isInSasquatch = false;
+  }
+
+  public void newsNewsScroll(){
+    if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
+      gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
+      gui.println("You hear a voice on the intercom say \"Welcome to the vault of News News. In order to remove the scroll from the locked case, you must solve the following problems.\"");
+      gui.println("Problem 1: How many Whisperer articles have there been?");
+      gui.println("Problem 2: How many planets are in our solar system?");
+      gui.println("Problem 3: Crystal is the traditional gift for how many years of marriage?");
+      gui.println("Problem 4: What is the average age of the grade elevens?");
+      gui.println("Problem 5: What is the lowest prime number that contains consecutive digits?");
+      gui.println("Problem 6: What is the answer to the ultimate question of life, the universe, and everything?");
+      gui.println("You should have six numbers, each one an answer to one of the six problems. What are these six numbers?");
+      if (newsNewsAnswers()){
+        gui.println("Congratulations! Those are the right numbers! You can now take the scroll of news news. ");
+      } else {
+        gui.println("Those aren't the right numbers. As punishment, you are thrown out of the news news temple! Good riddance! ");
+        currentRoom = roomMap.get("Temple Pavillion");
+      }
+    } else {
+      if((inventory.hasItem(itemMap.get("Scroll of News News") ) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("Scroll of News News"))&&player.getTalkedToSkyGods())){
+        gui.println("On the other side of the room is an empty glass case.");
+      }
+    }
+  }
+
+  public void dogParadise(){
+    if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+      gui.println("Three adorable dogs walk up to you. The first dog was a caramel mini-labradoodle. The second was a lighter-coloured cockapoo. The third a _________.");
+      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively. ");
+      gui.println("\"Hello, welcome to dog paradise, potential whisperer successor! My name is Lucky. We would like to offer you help one your long journey.\"");
+      gui.println("Lucky dropped a small glowing onto the ground.");
+      gui.println("\"This is moral support. It will glow brighter and fill your head with encouraging thoughts.\" said Luna");
+      gui.println("\"You cannot open it or activate it by yourself. It will only activate when you need it most.\" said Maggie");
+    }
+  }
+
+
+
+  private boolean newsNewsAnswers() {
+    String in = gui.readCommand();
+    if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
+      return true;
+    }else {
+      return false;
+    }
   }
 
   /**

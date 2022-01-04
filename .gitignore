@@ -4,3 +4,4 @@ src/zork
 src/CommandWords.java
 src/data/gameState.json
 src/data/game.ser
+.vscode

@@ -46,7 +46,7 @@
     {
       "id": "Moral Support",
       "name": "Moral Support",
-      "aliases": ["moral support"],
+      "aliases": ["moral support", "orb", "glowing orb"],
       "description": "A small box. You can hear encouraging words coming from it.",
       "isOpenable": false,
       "isWeapon": false,
@@ -78,7 +78,7 @@
     {
       "id": "1000 British Pounds",
       "name": "1000 British Pounds",
-      "aliases": ["1000 pounds", "1000 british pounds", "pounds"],
+      "aliases": ["1000 pounds", "1000 british pounds", "pounds", "paper"],
       "description": "A crisp thousand-pound bill, straight from England. You have no idea how it got here.",
       "isOpenable": false,
       "isWeapon": false,
@@ -147,6 +147,16 @@
       "isWeapon": false,
       "weight": 5,
       "startingRoom": "Underground Tunnel"
+    },
+    {
+      "id": "Talked to Sky Gods",
+      "name": "Talked to Sky Gods",
+      "aliases": ["Talked to Sky Gods"],
+      "description": "placeholder item",
+      "isOpenable": false,
+      "isWeapon": false,
+      "weight": 0,
+      "startingRoom": "Sky Palace Hall"
     }
   ]
 }
