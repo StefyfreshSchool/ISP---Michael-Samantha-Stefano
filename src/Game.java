@@ -284,6 +284,8 @@ public class Game implements java.io.Serializable {
       gui.println("Health: " + player.getHealth());
       gui.println();
       gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+    } else if (commandWord.equals("cls")){
+      gui.reset();
     }
     return;
   }
