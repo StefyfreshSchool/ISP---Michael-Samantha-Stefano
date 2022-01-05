@@ -622,6 +622,7 @@ public class Game implements java.io.Serializable {
   }
 
   public void newsNewsScroll(){
+    isInTrial = true;
     if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       gui.println("You hear a voice on the intercom say \"Welcome to the vault of News News. In order to remove the scroll from the locked case, you must solve the following problems.\"");
@@ -643,6 +644,7 @@ public class Game implements java.io.Serializable {
         gui.println("On the other side of the room is an empty glass case.");
       }
     }
+    isInTrial = false;
   }
 
   private boolean newsNewsAnswers() {
@@ -662,10 +664,19 @@ public class Game implements java.io.Serializable {
       gui.println("Three adorable dogs walk up to you. The first dog was a caramel mini-labradoodle. The second was a lighter-coloured cockapoo. The third a brown and white spotted austrailian labradoodle.");
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively. ");
       gui.println("\"Hello, welcome to dog paradise, potential whisperer successor! My name is Lucky. We would like to offer you help one your long journey.\"");
-
+      inventory.addItem(currentRoom.getItem("Moral Support"));
       gui.println("\"We have just added the glowing orb of moral support to your inventory.\"");
       gui.println("\"This is the orb of moral support. It will glow brighter and fill your head with encouraging thoughts.\" said Luna");
       gui.println("\"You cannot open it or activate it by yourself. It will only activate when you need it most.\" said Maggie");
+      gui.println("You feel a calm wash over you. You feel peaceful for the first time this whole journey.");
+      gui.println("\"I have sense that you have somewhere else you need to be.\" Lucky said.");
+      gui.println("\"You must save our world potential whisperer successor.\" Luna said.");
+      gui.println("\"Go on your way. We will always be right here rooting for you.\" Maggie said.");
+    }else if(inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+      gui.println("Three adorable dogs walk up to you.");
+      gui.println("\"I have sense that you have somewhere else you need to be.\" Lucky said.");
+      gui.println("\"You must save our world potential whisperer successor.\" Luna said.");
+      gui.println("\"Go on your way. We will always be right here rooting for you.\" Maggie said.");
     }
   }
 
