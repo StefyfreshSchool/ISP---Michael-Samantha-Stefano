@@ -26,7 +26,7 @@ public class Game implements java.io.Serializable {
   private Player player;
   private Parser parser;
   private Room currentRoom;
-  private boolean isInSasquatch;
+  private boolean isInTrial;
   Weapon geraldo;
 
   private static final int MAX_WEIGHT = 10;
@@ -113,7 +113,7 @@ public class Game implements java.io.Serializable {
     enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25));
     enemyMap.put("vacuum", new Enemy("Vacuum", "DESCRIPTION", 20));
     enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
-    isInSasquatch = false;
+    isInTrial = false;
   }
 
   private void initItems(String fileName) {
@@ -574,12 +574,12 @@ public class Game implements java.io.Serializable {
     else if (!currentRoom.canGoDirection(direction, inventory)){
       gui.println("That exit is locked! Come back later.");
     } else {
-      if(!isInSasquatch && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
+      if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         sasquatch();
-      } else if (!isInSasquatch){
+      } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
       } else {
@@ -597,7 +597,7 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    isInSasquatch = true;
+    isInTrial = true;
     Enemy sasquatch = enemyMap.get("sasquatch");
     if (!(sasquatch.getHealth() <= 0)){
       gui.println("The Sasquatch steps out of the cave");
@@ -618,7 +618,7 @@ public class Game implements java.io.Serializable {
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
     }
-    isInSasquatch = false;
+    isInTrial = false;
   }
 
   public void newsNewsScroll(){
@@ -645,19 +645,6 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  public void dogParadise(){
-    if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
-      gui.println("Three adorable dogs walk up to you. The first dog was a caramel mini-labradoodle. The second was a lighter-coloured cockapoo. The third a _________.");
-      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively. ");
-      gui.println("\"Hello, welcome to dog paradise, potential whisperer successor! My name is Lucky. We would like to offer you help one your long journey.\"");
-      gui.println("Lucky dropped a small glowing onto the ground.");
-      gui.println("\"This is moral support. It will glow brighter and fill your head with encouraging thoughts.\" said Luna");
-      gui.println("\"You cannot open it or activate it by yourself. It will only activate when you need it most.\" said Maggie");
-    }
-  }
-
-
-
   private boolean newsNewsAnswers() {
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
@@ -666,6 +653,22 @@ public class Game implements java.io.Serializable {
       return false;
     }
   }
+
+  //answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
+  //if you know a better question for problem three, feel free to replace it
+
+  public void dogParadise(){
+    if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+      gui.println("Three adorable dogs walk up to you. The first dog was a caramel mini-labradoodle. The second was a lighter-coloured cockapoo. The third a brown and white spotted austrailian labradoodle.");
+      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively. ");
+      gui.println("\"Hello, welcome to dog paradise, potential whisperer successor! My name is Lucky. We would like to offer you help one your long journey.\"");
+
+      gui.println("\"We have just added the glowing orb of moral support to your inventory.\"");
+      gui.println("\"This is the orb of moral support. It will glow brighter and fill your head with encouraging thoughts.\" said Luna");
+      gui.println("\"You cannot open it or activate it by yourself. It will only activate when you need it most.\" said Maggie");
+    }
+  }
+
 
   /**
    *  Does when you enter the fur store location. IT WORKS GUYSSS
@@ -756,7 +759,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void pray() {
-    if (currentRoom.getRoomName().equals("News News Temple Room")){
+    if (currentRoom.getRoomName().equals("News News Temple")){
       gui.println("The sun's rays bounce off the skylight into your eyes.");
       gui.println("For they glow with the intensity of a thousand souls.");
       gui.println("For you know they can never be satisfied.");
