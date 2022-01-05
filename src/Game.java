@@ -26,7 +26,7 @@ public class Game implements java.io.Serializable {
   private Player player;
   private Parser parser;
   private Room currentRoom;
-  private boolean isInSasquatch;
+  private boolean isInTrial;
   Weapon geraldo;
 
   private static final int MAX_WEIGHT = 10;
@@ -115,7 +115,7 @@ public class Game implements java.io.Serializable {
     enemyMap.put("robot", new Enemy("Friends Robot", "\"B33P B00P\"", 20));
     enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
     enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200));
-    isInSasquatch = false;
+    isInTrial = false;
   }
 
   private void initItems(String fileName) {
@@ -344,9 +344,8 @@ public class Game implements java.io.Serializable {
     }else if(name.equals("Lower Hall of Enemies")){
 
     }//more rooms: Dept. of Customer Service
-    // return sasquatch;
-    return enemyMap.get("sasquatch");
-    // return null;
+    // return enemyMap.get("sasquatch");
+    return null;
   }
 
   /**
@@ -578,12 +577,12 @@ public class Game implements java.io.Serializable {
     else if (!currentRoom.canGoDirection(direction, inventory)){
       gui.println("That exit is locked! Come back later.");
     } else {
-      if(!isInSasquatch && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
+      if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         sasquatch();
-      } else if (!isInSasquatch){
+      } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
       } else {
@@ -601,7 +600,7 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    isInSasquatch = true;
+    isInTrial = true;
     Enemy sasquatch = enemyMap.get("sasquatch");
     if (!(sasquatch.getHealth() <= 0)){
       gui.println("The Sasquatch steps out of the cave");
@@ -622,10 +621,11 @@ public class Game implements java.io.Serializable {
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
     }
-    isInSasquatch = false;
+    isInTrial = false;
   }
 
   public void newsNewsScroll(){
+    isInTrial = true;
     if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
@@ -648,19 +648,7 @@ public class Game implements java.io.Serializable {
         gui.println("On the other side of the room is an empty glass case.");
       }
     }
-  }
-
-  public void dogParadise(){
-    if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
-      gui.println("You feel great vertigo as your eyes settle into Dog Paradise.");
-      gui.println("Suddenly, three adorable dogs approach you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The last, a brown-and-white spotted lab.");
-      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
-      gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
-      gui.println("Lucky procures an incorporeal, glowing orb, and places it in your hands.");
-      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the sky, and fill your head with encouraging thoughts.\"");
-      gui.println("The dog named Maggie speaks to you. \"No being, mortal or god, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
-      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
-    }
+    isInTrial = false;
   }
 
   private boolean newsNewsAnswers() {
@@ -669,6 +657,28 @@ public class Game implements java.io.Serializable {
       return true;
     }else {
       return false;
+    }
+  }
+
+  //answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
+  //if you know a better question for problem three, feel free to replace it
+
+  public void dogParadise(){
+    if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+      gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
+      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
+      gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
+      inventory.addItem(currentRoom.getItem("Moral Support"));
+      gui.println("\"We have just added the glowing orb of moral support to your inventory.\"");
+      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the sky, and fill your head with encouraging thoughts.\"");
+      gui.println("The dog named Maggie speaks to you. \"No being, mortal or god, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
+      gui.println("You feel a sense of calm wash over you. You feel resolve for the first time in this whole journey.");
+      gui.println("Lucky speaks. \"I sense your great potential. You have somewhere you need to be.\"");
+      gui.println("Luna speaks. \"You are the Whisperer's successor. You must save our world.\"");
+      gui.println("Maggie speaks. \"Do not fall astray on your path. We all will watch your journey with the greatest interest.\"");
+      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
+    }else if(inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+      gui.println("There is nothing for you here.");
     }
   }
 
@@ -764,7 +774,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void pray() {
-    if (currentRoom.getRoomName().equals("News News Temple Room")){
+    if (currentRoom.getRoomName().equals("News News Temple")){
       gui.println("The sun's rays bounce off the skylight into your eyes.");
       gui.println("For they glow with the intensity of a thousand souls.");
       gui.println("For you know they can never be satisfied.");
