@@ -1,4 +1,4 @@
-public class Enemy extends Character implements java.io.Serializable{
+public class Enemy extends Character{
     private int health;
     private String name;
 

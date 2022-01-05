@@ -1,6 +1,6 @@
 public class Player implements java.io.Serializable{
-    public int health;
-    public boolean talkedToSkyGods;
+    private int health;
+    private boolean talkedToSkyGods;
 
     public Player(int health){
         this.health = health;

@@ -1,4 +1,4 @@
-public class Character {
+public class Character implements java.io.Serializable{
     private String name;
     private String catchphrase;
 
@@ -14,7 +14,4 @@ public class Character {
     public String getCatchphrase(){
         return catchphrase;
     }
-
-
-
 }
