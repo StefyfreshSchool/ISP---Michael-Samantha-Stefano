@@ -340,9 +340,8 @@ public class Game implements java.io.Serializable {
     }else if(name.equals("Lower Hall of Enemies")){
 
     }//more rooms: Dept. of Customer Service
-    // return sasquatch;
-    return enemyMap.get("sasquatch");
-    // return null;
+    // return enemyMap.get("sasquatch");
+    return null;
   }
 
   /**
