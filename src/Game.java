@@ -1,4 +1,5 @@
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
@@ -14,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Game implements java.io.Serializable {
+  private static final String GAME_SAVE_LOCATION = "src/data/game.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
 
@@ -51,7 +53,8 @@ public class Game implements java.io.Serializable {
       
       //Initialize the game if a previous state was recorded
       Save save = null;
-      try (FileInputStream fileIn = new FileInputStream("src/data/game.ser")) {
+      try {
+        FileInputStream fileIn = new FileInputStream(GAME_SAVE_LOCATION);
         ObjectInputStream in = new ObjectInputStream(fileIn);
         save = (Save) in.readObject();
         in.close();
@@ -59,10 +62,14 @@ public class Game implements java.io.Serializable {
       } catch (InvalidClassException e) {
         gui.printerr("InvalidClassException - a local class has been altered! Resetting game save.");
         resetSaveState();
-      } catch (IOException e){
-        System.err.println("Error while loading game state. Resetting.");
+      } catch (FileNotFoundException e){
+        gui.println("No game save file was found! Creating file.");
+        gui.println();
         resetSaveState();
-      }
+      } catch (IOException e){
+        gui.printerr("Error while loading saved game. Resetting.");
+        resetSaveState();
+      } 
 
       if (save != null){
         gui.println("A previously saved game state was recorded.");
@@ -481,7 +488,7 @@ public class Game implements java.io.Serializable {
 
     Save game = new Save(roomMap, inventory, currentRoom, player, enemyMap);
     try {
-      FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
+      FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
       out.writeObject(game);
       out.close();
@@ -503,7 +510,7 @@ public class Game implements java.io.Serializable {
   private void loadSave() {
     Save save = null;
     try {
-      FileInputStream fileIn = new FileInputStream("src/data/game.ser");
+      FileInputStream fileIn = new FileInputStream(GAME_SAVE_LOCATION);
       ObjectInputStream in = new ObjectInputStream(fileIn);
       save = (Save) in.readObject();
       in.close();
@@ -893,7 +900,7 @@ public class Game implements java.io.Serializable {
    */
   private void resetSaveState() {
     try {
-      FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
+      FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
       out.writeObject(null);
       out.close();

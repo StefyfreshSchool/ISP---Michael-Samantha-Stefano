@@ -5,3 +5,4 @@ src/CommandWords.java
 src/data/gameState.json
 src/data/game.ser
 .vscode
+Game Save.ser
