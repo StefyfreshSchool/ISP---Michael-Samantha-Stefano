@@ -111,8 +111,10 @@ public class Game implements java.io.Serializable {
   private void initEnemies() {
     enemyMap = new HashMap<String, Enemy>();
     enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25));
-    enemyMap.put("vacuum", new Enemy("Vacuum", "DESCRIPTION", 20));
+    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VRRRRRRRRRRR!!!\"", 20));
+    enemyMap.put("robot", new Enemy("Friends Robot", "\"B33P B00P\"", 20));
     enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
+    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200));
     isInSasquatch = false;
   }
 
@@ -303,7 +305,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void endGame() {
-    gui.println("Thank you for playing. Good bye.");
+    gui.println("Thank you for playing. Goodbye.");
 
     //Nice transition to exit the game
     sleep(1000);
@@ -327,6 +329,8 @@ public class Game implements java.io.Serializable {
       sasquatch();
     } else if (c.equals("4")){
       inventory.addItem(Game.itemMap.get("balloony"));
+    } else if (c.equals("5")){
+      player.setHealth(90);
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -624,19 +628,20 @@ public class Game implements java.io.Serializable {
   public void newsNewsScroll(){
     if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
-      gui.println("You hear a voice on the intercom say \"Welcome to the vault of News News. In order to remove the scroll from the locked case, you must solve the following problems.\"");
-      gui.println("Problem 1: How many Whisperer articles have there been?");
-      gui.println("Problem 2: How many planets are in our solar system?");
-      gui.println("Problem 3: Crystal is the traditional gift for how many years of marriage?");
-      gui.println("Problem 4: What is the average age of the grade elevens?");
-      gui.println("Problem 5: What is the lowest prime number that contains consecutive digits?");
-      gui.println("Problem 6: What is the answer to the ultimate question of life, the universe, and everything?");
-      gui.println("You should have six numbers, each one an answer to one of the six problems. What are these six numbers?");
+      gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
+      gui.println("Question 1: How many Whisperer articles have there been?");
+      gui.println("Question 2: How many planets are in our solar system?");
+      gui.println("Question 3: Crystal is the traditional gift for how many years of marriage?");
+      gui.println("Question 4: What is the average age of the grade elevens?");
+      gui.println("Question 5: What is the lowest prime number that contains consecutive digits?");
+      gui.println("Question 6: What is the answer to the ultimate question of life, the universe, and everything?");
+      gui.println("\"You will have six numbers, each an answer to the six questions. Only then you will prove your worth!\"");
       if (newsNewsAnswers()){
-        gui.println("Congratulations! Those are the right numbers! You can now take the scroll of news news. ");
+        gui.println("\"Wow. I'm truly impressed. Those are the right numbers! Traveller, you have proved yourself more than worthy of the scroll.\"");
       } else {
-        gui.println("Those aren't the right numbers. As punishment, you are thrown out of the news news temple! Good riddance! ");
+        gui.println("\"I'm afraid, traveller, that those aren't the right numbers. You clearly are not worthy to be in this temple! Good riddance!\"");
         currentRoom = roomMap.get("Temple Pavillion");
+        gui.println(currentRoom.shortDescription());
       }
     } else {
       if((inventory.hasItem(itemMap.get("Scroll of News News") ) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("Scroll of News News"))&&player.getTalkedToSkyGods())){
@@ -647,16 +652,16 @@ public class Game implements java.io.Serializable {
 
   public void dogParadise(){
     if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
-      gui.println("Three adorable dogs walk up to you. The first dog was a caramel mini-labradoodle. The second was a lighter-coloured cockapoo. The third a _________.");
-      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively. ");
-      gui.println("\"Hello, welcome to dog paradise, potential whisperer successor! My name is Lucky. We would like to offer you help one your long journey.\"");
-      gui.println("Lucky dropped a small glowing onto the ground.");
-      gui.println("\"This is moral support. It will glow brighter and fill your head with encouraging thoughts.\" said Luna");
-      gui.println("\"You cannot open it or activate it by yourself. It will only activate when you need it most.\" said Maggie");
+      gui.println("You feel great vertigo as your eyes settle into Dog Paradise.");
+      gui.println("Suddenly, three adorable dogs approach you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The last, a brown-and-white spotted lab.");
+      gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
+      gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
+      gui.println("Lucky procures an incorporeal, glowing orb, and places it in your hands.");
+      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the sky, and fill your head with encouraging thoughts.\"");
+      gui.println("The dog named Maggie speaks to you. \"No being, mortal or god, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
+      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
     }
   }
-
-
 
   private boolean newsNewsAnswers() {
     String in = gui.readCommand();
@@ -702,6 +707,9 @@ public class Game implements java.io.Serializable {
       if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
       else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no")){
         gui.println("\"Then what are you doing in a fur shop? Buy something or get out!\"");
+        gui.println("With a heavy kick, he blasts you out the door. You land in a pile of snow. \n");
+        currentRoom = roomMap.get("Snowy Cabin");
+        gui.println(currentRoom.shortDescription());
         return false;
       } else {
         gui.println("\"" + in + "\" is not a valid choice!");
@@ -716,7 +724,7 @@ public class Game implements java.io.Serializable {
         gui.println("You inflated Balloony's corpse.");
         gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
         currentRoom = roomMap.get("Temple of the Sky Gods");
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+        gui.println(currentRoom.shortDescription());
       } else {
         gui.println("That doesn't seem like a good idea. It could explode.");
       }
@@ -792,7 +800,7 @@ public class Game implements java.io.Serializable {
   private void readDiary() {
     gui.println("\"Dear diary,\"");
     gui.println("\"Wow, I sure do love cheese.\"");
-    gui.println("\"I sure am glad nobody knows that the secret code for the cheese vault is 1234.\"");
+    gui.println("\"I sure am glad nobody knows that the secret code for the cheese vault is 2956.\"");
   }
 
   /**
@@ -819,9 +827,22 @@ public class Game implements java.io.Serializable {
     if (inventory.hasItem(itemMap.get("bandages")) && player.getHealth() != 100){
       player.maxHeal();
       inventory.getItem(inventory.find("Bandages")).setQuantity();
+      if (inventory.getItem(inventory.find("Bandages")).getQuantity() > 1){
+        gui.println("You have " + inventory.getItem(inventory.find("Bandages")).getQuantity() + " bandages left.");
+      } else if (inventory.getItem(inventory.find("Bandages")).getQuantity() != 0){
+        gui.println("You have 1 bandage left.");
+      } else {
+        gui.println("You have no more bandages.");
+        inventory.removeItem(itemMap.get("bandages"));
+      }
       gui.println("Your wounds have healed. You have been restored to full health.");
     } else if (inventory.hasItem(itemMap.get("bandages")) && player.getHealth() == 100){
       gui.println("You are already at maximum health!");
+      if (inventory.getItem(inventory.find("Bandages")).getQuantity() > 1){
+        gui.println("You have " + inventory.getItem(inventory.find("Bandages")).getQuantity() + " bandages left.");
+      } else if (inventory.getItem(inventory.find("Bandages")).getQuantity() != 0){
+        gui.println("You have 1 bandage left.");
+      }
     } else {
       gui.println("You have no healing items!");
     }

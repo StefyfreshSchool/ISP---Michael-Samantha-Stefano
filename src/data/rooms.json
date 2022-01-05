@@ -622,13 +622,31 @@
         {
           "isLocked": true,
           "direction": "West",
-          "adjacentRoom": "Gates of Hell",
+          "adjacentRoom": "Underground Tunnel",
           "keyId": "1234"
         },
         {
           "isLocked": false,
           "direction": "East",
           "adjacentRoom": "Shrouded Grave"
+        }
+      ]
+    },
+    {
+      "id": "Underground Tunnel",
+      "name": "Underground Tunnel",
+      "description": "You find yourself in a dank, moss-covered tunnel. Why are you doing this again?",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gates of Hell",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Mysterious Entrance"
         }
       ]
     },
@@ -942,6 +960,70 @@
           "isLocked": false,
           "direction": "Southwest",
           "adjacentRoom": "East of the Cyan House",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Caldera Bridge",
+      "name": "Caldera Bridge",
+      "description": "Up ahead is the towering Table Caldera, named for its table-like top. Standing on a brimstone bridge over lava is not pleasant.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Stefano's House",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Table Caldera Platform",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Table Caldera Platform",
+      "name": "Table Caldera Platform",
+      "description": "The air around tightens its grip around your throat. But you've come too far to give up now. At least the view is nice from up here.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Caldera Bridge",
+          "keyId": "1234"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Volcano Peak",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Volcano Peak",
+      "name": "Volcano Peak",
+      "description": "You feel your soul tremble as you gaze into the volcano. You know you have no choice.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Down",
+          "adjacentRoom": "Hall of the Volcano King",
+          "keyId": "1234"
+        }
+      ]
+    },
+    {
+      "id": "Hall of the Volcano King",
+      "name": "Hall of the Volcano King",
+      "description": "...",
+      "exits": [
+        {
+          "isLocked": true,
+          "direction": "Up",
+          "adjacentRoom": "Volcano Peak",
           "keyId": "0000"
         }
       ]
