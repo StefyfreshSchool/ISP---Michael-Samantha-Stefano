@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Game implements java.io.Serializable {
-  private static final String GAME_SAVE_LOCATION = "Game Save.ser";
+  private static final String GAME_SAVE_LOCATION = "src/data/game.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
 
