@@ -315,6 +315,8 @@ public class Game implements java.io.Serializable {
    * FEEL FREE to add stuff for testing things!!
    */
   private void testing(Command command) {
+    // gui.println("Don't you dare use this command if you aren't a dev!");
+    // return;
     //In the game, type "test #" to activate one of the following tests.
     String c = command.getStringifiedArgs();
     if (c.equals("1")){
