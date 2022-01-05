@@ -1,4 +1,5 @@
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
@@ -14,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Game implements java.io.Serializable {
+  private static final String GAME_SAVE_LOCATION = "src/data/game.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
 
@@ -51,18 +53,25 @@ public class Game implements java.io.Serializable {
       
       //Initialize the game if a previous state was recorded
       Save save = null;
-      try (FileInputStream fileIn = new FileInputStream("src/data/game.ser")) {
+      try {
+        FileInputStream fileIn = new FileInputStream(GAME_SAVE_LOCATION);
         ObjectInputStream in = new ObjectInputStream(fileIn);
         save = (Save) in.readObject();
         in.close();
         fileIn.close();
       } catch (InvalidClassException e) {
-        gui.printerr("InvalidClassException - a local class has been altered! Resetting game save.");
+        gui.printerr("A local class has been altered without resetting the game save! Resetting.");
+        gui.println();
+        resetSaveState();
+      } catch (FileNotFoundException e){
+        gui.printInfo("No game save file was found! Creating file.");
+        gui.println();
         resetSaveState();
       } catch (IOException e){
-        System.err.println("Error while loading game state. Resetting.");
+        gui.printerr("Error while loading saved game. Resetting.");
+        gui.println();
         resetSaveState();
-      }
+      } 
 
       if (save != null){
         gui.println("A previously saved game state was recorded.");
@@ -204,7 +213,7 @@ public class Game implements java.io.Serializable {
   private void printWelcome() {
     gui.println("Welcome to Zork!");
     gui.println("Zork is an amazing text adventure game!");
-    gui.println("Type 'help' if you need help.");
+    gui.println("Type 'help' for more information about the game and the available commands.");
     gui.println();
     gui.println(currentRoom.longDescription());
   }
@@ -221,13 +230,11 @@ public class Game implements java.io.Serializable {
     } 
     String commandWord = command.getCommandWord();
     if (commandWord.equals("test")) testing(command);
-    if (!command.isUnknown() && command.getFirstArg().equals("/?")){
+    else if (!command.isUnknown() && command.getFirstArg().equals("/?")){
       ArrayList<String> args = new ArrayList<String>();
       args.add(commandWord);
       Parser.printCommandHelp(new Command("help", args));
-      return;
-    }
-    if (commandWord.equals("help")){
+    } else if (commandWord.equals("help")){
       printHelp(command);
     }
     else if (commandWord.equals("go")){
@@ -244,24 +251,7 @@ public class Game implements java.io.Serializable {
     } else if(commandWord.equals("hit")){
       hit(command);
     } else if (commandWord.equals("restart")) {
-      if (quitRestart("restart", command)){
-        restartGame();
-        resetSaveState();
-        music.stop();
-        gui.reset();
-        gui.printInfo("Game restarted.\n");
-        try {
-          initItems("src/data/items.json");
-          initRooms("src\\data\\rooms.json");
-          currentRoom = roomMap.get("South of the Cyan House");
-          inventory = new Inventory(MAX_WEIGHT);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        printWelcome();
-        startMusic();
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
-      }
+      if (quitRestart("restart", command)) restartGame();
     } else if (commandWord.equals("save")){
       if (save(command)) endGame();
     } else if (commandWord.equals("take")){
@@ -284,6 +274,10 @@ public class Game implements java.io.Serializable {
       gui.println("Health: " + player.getHealth());
       gui.println();
       gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+    } else if (commandWord.equals("cls")){
+      gui.reset();
+    } else {
+      gui.println("That command has no logic...");
     }
     return;
   }
@@ -322,15 +316,19 @@ public class Game implements java.io.Serializable {
    */
   private void testing(Command command) {
     //In the game, type "test #" to activate one of the following tests.
-    if (command.getStringifiedArgs().equals("1")){
+    String c = command.getStringifiedArgs();
+    if (c.equals("1")){
       inventory.addItem(itemMap.get("pounds"));
       salesman();
-    } else if (command.getStringifiedArgs().equals("2")){
+    } else if (c.equals("2")){
       gui.println("You have been teleported to the Castle Grounds.");
       currentRoom = roomMap.get("Castle Grounds");
-    } else if (command.getStringifiedArgs().equals("3")){
+    } else if (c.equals("3")){
       sasquatch();
-    } 
+    } else if (c.equals("4")){
+      inventory.addItem(Game.itemMap.get("balloony"));
+    }
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   private Enemy enemyRoomCheck(Room room){
@@ -367,7 +365,7 @@ public class Game implements java.io.Serializable {
       } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if ((!args.contains("geraldo") && args.get(args.size() - 1).equals("with")) || !args.contains("with")){
+      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){
         gui.println("Hit with what weapon?");
       } else if (!args.contains("geraldo")){
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
@@ -457,13 +455,11 @@ public class Game implements java.io.Serializable {
     boolean quit = false;
     if (command.getLastArg().equalsIgnoreCase("quit")){
       quit = true;
-    } else if (command.getLastArg().equalsIgnoreCase("game")){ 
+    } else if (command.getLastArg().equalsIgnoreCase("game") || !command.hasArgs()){ 
     } else if (command.getLastArg().equalsIgnoreCase("load")){
       loadSave();
       gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       return false;
-    } else if (command.getLastArg().equals("")){
-      gui.println("What would you like to do?");
     } else if (command.getLastArg().equalsIgnoreCase("clear") || command.getLastArg().equalsIgnoreCase("reset")){
       resetSaveState();
       gui.println("Cleared game save.");
@@ -479,7 +475,7 @@ public class Game implements java.io.Serializable {
 
     Save game = new Save(roomMap, inventory, currentRoom, player, enemyMap);
     try {
-      FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
+      FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
       out.writeObject(game);
       out.close();
@@ -501,7 +497,7 @@ public class Game implements java.io.Serializable {
   private void loadSave() {
     Save save = null;
     try {
-      FileInputStream fileIn = new FileInputStream("src/data/game.ser");
+      FileInputStream fileIn = new FileInputStream(GAME_SAVE_LOCATION);
       ObjectInputStream in = new ObjectInputStream(fileIn);
       save = (Save) in.readObject();
       in.close();
@@ -536,9 +532,9 @@ public class Game implements java.io.Serializable {
    * @return True or false based on if the user cancelled the operation or not.
    */
   private boolean quitRestart(String string, Command command) {
-    if (command.getLastArg().equalsIgnoreCase("confirm")) return true;
+    if (command.getLastArg().equalsIgnoreCase("confirm") || command.getLastArg().equalsIgnoreCase("y")) return true;
     else if (command.getArgs() != null){
-      gui.println("Not a valid restart command!");
+      gui.println("Not a valid " + string + " command!");
       return false;
     }
     gui.println("Are you sure you would like to " + string + " the game?");
@@ -548,7 +544,7 @@ public class Game implements java.io.Serializable {
       String in = gui.readCommand();
       if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")) return true;
       else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
-        gui.println("Cancelled.");
+        gui.println("Not " + (string.equals("quit") ? "quitting." : "restarting."));
         validInput = true;
       } else {
         gui.println("\"" + in + "\" is not a valid choice!");
@@ -839,9 +835,8 @@ public class Game implements java.io.Serializable {
   public void printHelp(Command command) {
     if (command.hasArgs()) Parser.printCommandHelp(command);
     else{
-      //TODO: Fix help messages
-      gui.println("You are lost. You are alone. You wander");
-      gui.println("around at Monash Uni, Peninsula Campus.");
+      gui.println("You are an adventurer in the marvelous lands of Tableland,");
+      gui.println("always in search for things to do and items to collect.");
       gui.println();
       gui.println("Your command words are:");
       Parser.showCommands();
@@ -891,7 +886,7 @@ public class Game implements java.io.Serializable {
    */
   private void resetSaveState() {
     try {
-      FileOutputStream fileOut = new FileOutputStream("src/data/game.ser");
+      FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
       out.writeObject(null);
       out.close();

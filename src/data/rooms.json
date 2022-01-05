@@ -945,6 +945,19 @@
           "keyId": "0000"
         }
       ]
+    },
+    {
+      "id": "Temple of the Sky Gods",
+      "name": "Temple of the Sky Gods",
+      "description": "This room is unfinished.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Down",
+          "adjacentRoom": "Shadowed Plains",
+          "keyId": "0000"
+        }
+      ]
     }
   ]
 }
