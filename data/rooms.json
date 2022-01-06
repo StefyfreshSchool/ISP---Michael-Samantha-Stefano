@@ -953,7 +953,7 @@
         {
           "isLocked": true,
           "direction": "Up",
-          "adjacentRoom": "Temple of the Sky Gods",
+          "adjacentRoom": "Temple of the Sky Gods Pavillion",
           "keyId": "1234"
         },
         {
@@ -1029,14 +1029,33 @@
       ]
     },
     {
-      "id": "Temple of the Sky Gods",
-      "name": "Temple of the Sky Gods",
-      "description": "This room is unfinished.",
+      "id": "Temple of the Sky Gods Pavillion",
+      "name": "Temple of the Sky Gods Pavillion",
+      "description": "You stand at the base of large castle floating on top of the clouds. The spires of the castle turn, twist, and reach into the sky. The frosted glass walls reflect and refract the image of the clouds all around creating milky swirl images on the castle walls.",
       "exits": [
         {
           "isLocked": false,
           "direction": "Down",
           "adjacentRoom": "Shadowed Plains",
+          "keyId": "0000"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Temple of the Sky Gods",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Temple of the Sky Gods",
+      "name": "Temple of the Sky Gods",
+      "description": "You stand in the throne room of the Sky Palace. Three large ornate thrones float on clouds on the back of room. Sitting on the thrones are three people. You realize that they are the Gods of Tableland.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Temple of the Sky Gods Pavillion",
           "keyId": "0000"
         }
       ]

@@ -589,7 +589,7 @@ public class Game implements java.io.Serializable {
       }
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
-    } else {
+    }else if((sasquatch.getHealth() <= 0)&&currentRoom.getRoomName().equals("The Lair")){
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
       if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()){
