@@ -1,6 +1,10 @@
 public class Zork {
   public static void main(String[] args) {
-    Game game = new Game();
-    game.play();
+    try {
+      Game game = new Game();
+      game.play();
+    } catch (Error e) {
+      GUI.getGUI().printerr("\nGame cannot start.");
+    }
   }
 }

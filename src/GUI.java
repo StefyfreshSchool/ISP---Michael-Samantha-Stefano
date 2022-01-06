@@ -1,5 +1,6 @@
 //Wildcard imports because there are too many imported classes...
 import javax.swing.text.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import javax.swing.plaf.basic.BasicScrollBarUI;
@@ -11,6 +12,8 @@ import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -35,6 +38,7 @@ public class GUI {
     private JScrollPane scroll;
     private JPanel inputContainer;
     private JTextArea roomInfo;
+    private boolean isErrored;
 
     //class variable
     private static GUI gui;
@@ -62,7 +66,11 @@ public class GUI {
         frame = new JFrame("ZORK - Adventure Into Tableland");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 450);
-        frame.setIconImage(new ImageIcon(getClass().getResource("images/icon.png")).getImage());
+        try {
+            frame.setIconImage(ImageIO.read(new File("data/images/icon.png")));
+        } catch (IOException e1) {
+            isErrored = true;
+        }
         frame.setLocationRelativeTo(null);
         Container pane = frame.getContentPane();
         pane.setBackground(Color.BLACK);
@@ -215,6 +223,9 @@ public class GUI {
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
+        if (isErrored){
+            GameError.fileNotFound("data/images/icon.png");
+        } 
     }
 
     /**

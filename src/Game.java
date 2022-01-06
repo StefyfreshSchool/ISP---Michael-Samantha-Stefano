@@ -6,16 +6,13 @@ import java.io.InvalidClassException;
 import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 public class Game implements java.io.Serializable {
-  private static final String GAME_SAVE_LOCATION = "src/data/game.ser";
+  private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
 
@@ -40,15 +37,16 @@ public class Game implements java.io.Serializable {
     gui.createWindow();
     inventory = new Inventory(MAX_WEIGHT);
     player = new Player(100);
-    startMusic();
+    
     geraldo = new Weapon();
 
 
     //Init rooms and game state
     try {
-      initItems("src/data/items.json");
-      initRooms("src\\data\\rooms.json");
+      initItems("data/items.json");
+      initRooms("data/rooms.json");
       initEnemies();
+      startMusic();
       currentRoom = roomMap.get("South of the Cyan House");
       
       //Initialize the game if a previous state was recorded
@@ -94,7 +92,7 @@ public class Game implements java.io.Serializable {
             validInput = true;
           } else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
             gui.reset();
-            gui.println("Ignoring old game state.\n");
+            gui.printInfo("Ignoring old game state.\n");
             resetSaveState();
             validInput = true;
           } else {
@@ -102,9 +100,14 @@ public class Game implements java.io.Serializable {
           }
         } 
       }  
+    } catch (FileNotFoundException e){
+      GameError.fileNotFound(e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
-    }
+      gui.printerr("ERROR! Could not initialize the game!");
+    } catch (Error e) {
+      GameError.javaDependenciesNotFound();
+    } 
     parser = new Parser();
   }
 
@@ -116,7 +119,8 @@ public class Game implements java.io.Serializable {
     isInSasquatch = false;
   }
 
-  private void initItems(String fileName) {
+  private void initItems(String fileName) throws FileNotFoundException {
+    if (Item.getItems() == null) throw new FileNotFoundException("data/items.json");
     itemMap = new HashMap<String, Item>();
     for (Object itemObj : Item.getItems()){
       String itemId = (String) ((JSONObject) itemObj).get("id");
@@ -147,16 +151,10 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  private void initRooms(String fileName) throws Exception {
+  private void initRooms(String fileName) throws FileNotFoundException {
+    if (Room.getRooms() == null) throw new FileNotFoundException("data/rooms.json");
     roomMap = new HashMap<String, Room>();
-    Path path = Path.of(fileName);
-    String jsonString = Files.readString(path);
-    JSONParser parser = new JSONParser();
-    JSONObject json = (JSONObject) parser.parse(jsonString);
-
-    JSONArray jsonRooms = (JSONArray) json.get("rooms");
-
-    for (Object roomObj : jsonRooms) {
+    for (Object roomObj : Room.getRooms()) {
       Room room = new Room();
       String roomName = (String) ((JSONObject) roomObj).get("name");
       String roomId = (String) ((JSONObject) roomObj).get("id");
@@ -199,8 +197,8 @@ public class Game implements java.io.Serializable {
   }
 
   /**Starts the background music. */
-  private void startMusic() {
-    music = new MusicPlayer("src/audio/background.wav");
+  private void startMusic() throws FileNotFoundException{
+    music = new MusicPlayer("data/audio/background.wav");
     music.setVolume(-25f);
     music.play();
   }
@@ -284,12 +282,11 @@ public class Game implements java.io.Serializable {
 
   private void restartGame() {
     resetSaveState();
-    music.stop();
     gui.reset();
     gui.printInfo("Game restarted.\n");
     try {
-      initItems("src/data/items.json");
-      initRooms("src\\data\\rooms.json");
+      initItems("data/items.json");
+      initRooms("data/rooms.json");
       initEnemies();
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(MAX_WEIGHT);
@@ -298,7 +295,6 @@ public class Game implements java.io.Serializable {
     }
 
     printWelcome();
-    startMusic();
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
@@ -343,8 +339,8 @@ public class Game implements java.io.Serializable {
 
     }//more rooms: Dept. of Customer Service
     // return sasquatch;
-    return enemyMap.get("sasquatch");
-    // return null;
+    // return enemyMap.get("sasquatch");
+    return null;
   }
 
   /**
@@ -512,8 +508,6 @@ public class Game implements java.io.Serializable {
         player = save.getPlayer();
         enemyMap = save.getEnemyMap();
         
-        music.stop();
-        startMusic();
         gui.reset();
         gui.printInfo("Game reloaded from saved data.\n");
         gui.println(currentRoom.longDescription());
@@ -910,7 +904,14 @@ public class Game implements java.io.Serializable {
     try {
       Thread.sleep(m);
     } catch (InterruptedException e) {
-      e.printStackTrace();
     }
+  }
+
+  /**
+   * Causes the current thread to stop. 
+   * Only used in an error condition so the game cannot continue.
+   */
+  public static void stop(){
+    Thread.currentThread().stop();
   }
 }

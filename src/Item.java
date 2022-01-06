@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -74,9 +75,13 @@ public class Item extends OpenableObject implements java.io.Serializable {
       return aliases;
     }
 
+    /**
+   * Loads the items.json file and returns a JSONArray of the items in the game.
+   * @return A JSONArray
+   */
     public static JSONArray getItems() {
       try {
-        JSONObject json = (JSONObject) new JSONParser().parse(Files.readString(Path.of("src/data/items.json")));
+        JSONObject json = (JSONObject) new JSONParser().parse(Files.readString(Path.of("data/items.json")));
         return (JSONArray) json.get("items");
       } catch (ParseException | IOException e) {
         return null;

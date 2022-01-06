@@ -1,4 +1,12 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class Room implements java.io.Serializable {
   private String roomName;
@@ -104,6 +112,19 @@ public class Room implements java.io.Serializable {
       }
     }
     return null;
+  }
+
+  /**
+   * Loads the rooms.json file and returns a JSONArray of the rooms in the game.
+   * @return A JSONArray
+   */
+  public static JSONArray getRooms() {
+    try {
+      JSONObject json = (JSONObject) new JSONParser().parse(Files.readString(Path.of("data/rooms.json")));
+      return (JSONArray) json.get("rooms");
+    } catch (ParseException | IOException e) {
+      return null;
+    }
   }
 
   /**

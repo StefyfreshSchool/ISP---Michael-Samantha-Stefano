@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -19,14 +20,17 @@ public class MusicPlayer {
     /**
      * Instantiates a new MusicPlayer with an input file specified by {@code filePath}.
      * <p>
-     * It unobtrusively logs errors to {@code System.err}.
+     * It unobtrusively logs errors to {@code System.err} except for the FileNotFound exception.
      * @param filePath - path to playable music file
      */
-    public MusicPlayer(String filePath) {
+    public MusicPlayer(String filePath) throws FileNotFoundException{
         try {
             audioInput = AudioSystem.getAudioInputStream(new File(filePath));
             clip = AudioSystem.getClip();
             clip.open(audioInput);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (FileNotFoundException e){
+            throw new FileNotFoundException(filePath);
         } catch (IOException | LineUnavailableException e) {
             System.err.println("ERROR: Audio not playing!");
             e.printStackTrace();
@@ -34,7 +38,6 @@ public class MusicPlayer {
             System.err.println("ERROR: Audio file not supported!");
             e.printStackTrace();
         }
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
         //TODO: keep thread alive to let music loop
     }
     
