@@ -369,7 +369,7 @@ public class Game implements java.io.Serializable {
         gui.println("What would you like to hit?");
       } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){
         gui.println("Hit with what weapon?");
-      } else if (!args.contains("geraldo")||!args.contains("rocks")){
+      } else if (!args.contains("geraldo")&&!args.contains("rocks")){
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName()+" with?");
@@ -396,46 +396,9 @@ public class Game implements java.io.Serializable {
           gui.println("The "+enemy.getName()+" has died.");
         }
       }
-      // String hitCode = command.legitimateHitCommand();
-      // if(hitCode.equals("A")){
-      //   gui.println("Hit what?");
-      // }else if(hitCode.equals("B")){
-      //   gui.println("Hit "+enemy.getName()+" with what?");
-      // }else if(hitCode.equals("D")){
-      //   gui.println(command.getStringifiedArgs()+" is not an enemy.");
-      //   gui.println("What would you like to hit?");
-      // }else if(hitCode.equals("E")){
-      //   String weirdItemName = command.getStringifiedArgs();
-      //   weirdItemName = weirdItemName.substring(weirdItemName.indexOf(" with ")+6, weirdItemName.length());
-      //   gui.println(weirdItemName+" is not a weapon.");
-      //   gui.println("What would you like to hit "+enemy.getName()+" with?");
-      // }
+      
     }
   }  
-  /*Please do not delete this old code. I will probably reuse some of it.
-  When I'm done with it, I'll delete it
-  private void hit(Command command) {
-    int healthstandin;
-    String str = command.getStringifiedArgs();
-    Enemy enemy = new Enemy();
-    Weapon weapon = new Weapon();
-    
-    }else if (command.getStringifiedArgs().equals("sasquatch")&&currentRoom.getRoomName().equals("The Lair")){
-      enemy = new Enemy(sasquatch);
-      weapon = new Weapon();
-      //if(ene)
-      enemy.attacked(weapon.getDamage());
-      if(enemy.getHealth()<=0){
-        healthstandin=0;
-      }else{
-        healthstandin = enemy.getHealth();
-      }
-      gui.println("The "+enemy.getName()+" lost "+weapon.getDamage()+" Health points. It has "+healthstandin+" left.");
-      if(healthstandin==0){
-        gui.println("The "+enemy.getName()+" has died.");
-      }
-    }
-  } */ 
 
 
   /**
