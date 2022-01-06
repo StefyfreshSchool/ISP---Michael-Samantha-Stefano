@@ -9,6 +9,9 @@ public class Player implements java.io.Serializable{
 
     public void setHealth(int damage){
         health -= damage;
+        if (health < 0){
+            health = 0;
+        }
     }
 
     public void maxHeal(){

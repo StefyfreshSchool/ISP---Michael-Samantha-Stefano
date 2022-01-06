@@ -2,8 +2,7 @@ public class Weapon extends Item{
     private int damage;
 
   /**
-   * Create a room described "description". Initially, it has no exits.
-   * "description" is something like "a kitchen" or "an open court yard".
+   * Creates a weapon described "description". 
    */
   public Weapon(String description, int weight, String name, int damage) {
     super(weight, name, false, description);
@@ -23,16 +22,14 @@ public class Weapon extends Item{
   }
 
   /**
-   * Return the description of the room (the one that was defined in the
-   * constructor).
+   * Return the description of the weapon
    */
   public String shortDescription() {
     return "Weapon: " + getName() + "\n\n" + getDescription();
   }
 
   /**
-   * Return a long description of this room, on the form: You are in the kitchen.
-   * Exits: north west
+   * Return a long description of this weapon (Name and damage)
    */
   public String longDescription() {
 

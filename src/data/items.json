@@ -50,7 +50,7 @@
       "description": "A small box. You can hear encouraging words coming from it.",
       "isOpenable": false,
       "isWeapon": false,
-      "weight": 5,
+      "weight": 0,
       "startingRoom": "Dog Paradise"
     },
     {
