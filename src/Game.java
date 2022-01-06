@@ -325,6 +325,8 @@ public class Game implements java.io.Serializable {
       inventory.addItem(Game.itemMap.get("balloony"));
     } else if (c.equals("5")){
       player.setHealth(90);
+    } else if (c.equals("6")){
+      player.talkedToSkyGods();
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -347,7 +349,7 @@ public class Game implements java.io.Serializable {
    * @param command - 
    */
   private void hit(Command command) {
-    int healthstandin;
+    int healthStandIn;
     Enemy enemy = enemyRoomCheck(currentRoom);
     Weapon weapon = new Weapon();
     if (enemy == null){
@@ -371,25 +373,25 @@ public class Game implements java.io.Serializable {
         gui.println("What would you like to hit " + enemy.getName()+" with?");
       } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){
         gui.println(args.get(0) + "is not an enemy in this room.");
-      } //hit sasquatch with geraldo
+      }
       else {
         Item item = itemMap.get(command.getLastArg());
         int damage = 0;
-        if(command.getLastArg().equals("geraldo")||command.getLastArg().equals("rocks")){
+        if (command.getLastArg().equals("geraldo") || command.getLastArg().equals("rocks")){
           damage = 10;
-        }else{
+        } else {
           damage = 50;
         }
         weapon = new Weapon(item.getName(), item.getDescription(), damage, item.getWeight());
         enemy.attacked(weapon.getDamage());
-        if(enemy.getHealth()<=0){
-          healthstandin=0;
-        }else{
-          healthstandin = enemy.getHealth();
+        if (enemy.getHealth() <= 0){
+          healthStandIn = 0;
+        } else {
+          healthStandIn = enemy.getHealth();
         }
-        gui.println("The "+enemy.getName()+" lost "+weapon.getDamage()+" Health points. It has "+healthstandin+" left.");
-        if(healthstandin==0){
-          gui.println("The "+enemy.getName()+" has died.");
+        gui.println("The " + enemy.getName() + " lost " + weapon.getDamage() + " Health points. It has " + healthStandIn + " left.");
+        if (healthStandIn == 0){
+          gui.println("The " + enemy.getName() + " has died.");
         }
       }
       
@@ -547,7 +549,7 @@ public class Game implements java.io.Serializable {
     
     if (nextRoom == null)
       gui.println(direction + " is not a valid direction.");
-    else if (!currentRoom.canGoDirection(direction, inventory)){
+    else if (!currentRoom.canGoDirection(direction, inventory, player)){
       gui.println("You can't go this way yet. Try looking around.");
     } else {
       if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
