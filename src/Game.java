@@ -109,11 +109,11 @@ public class Game implements java.io.Serializable {
 
   private void initEnemies() {
     enemyMap = new HashMap<String, Enemy>();
-    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25));
-    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VRRRRRRRRRRR!!!\"", 20));
-    enemyMap.put("robot", new Enemy("Friends Robot", "\"B33P B00P\"", 20));
-    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
-    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200));
+    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25, 10));
+    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VRRRRRRRRRRR!!!\"", 20, 15));
+    enemyMap.put("robot", new Enemy("Friends Robot", "\"B33P B00P\"", 20, 15));
+    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30, 20));
+    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200, 50));
     isInTrial = false;
   }
 
@@ -324,13 +324,14 @@ public class Game implements java.io.Serializable {
       gui.println("You have been teleported to the Castle Grounds.");
       currentRoom = roomMap.get("Castle Grounds");
     } else if (c.equals("3")){
-      sasquatch();
+      gui.println("You have been teleported to North of Crater.");
+      currentRoom = roomMap.get("North of Crater");
     } else if (c.equals("4")){
       inventory.addItem(Game.itemMap.get("balloony"));
     } else if (c.equals("5")){
       player.setHealth(90);
     } else if (c.equals("6")){
-      currentRoom = roomMap.get("North of Crater");
+      player.talkedToSkyGods();
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -376,8 +377,7 @@ public class Game implements java.io.Serializable {
         gui.println("What would you like to hit " + enemy.getName()+" with?");
       } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
         gui.println(args.get(0) + "is not an enemy in this room.");
-      } // hit enemy with weapon
-      else {
+      } else { // hit enemy with weapon
         Item item = itemMap.get(command.getLastArg());
         enemy.attacked(item.getDamage());
         if (enemy.getHealth() <= 0) {
@@ -411,7 +411,7 @@ public class Game implements java.io.Serializable {
       if (!Item.isValidItem(itemName)){
         gui.print("Not a valid item!");
       } else if (!currentRoom.containsItem(itemName)){
-        gui.print("That item is not in this room!");
+        gui.print("You can't seem to find that item here.");
       } else {
         if (inventory.addItem(currentRoom.getItem(itemName))){
           gui.println(currentRoom.getItem(itemName).getName() + " taken!");
@@ -547,7 +547,7 @@ public class Game implements java.io.Serializable {
     
     if (nextRoom == null)
       gui.println(direction + " is not a valid direction.");
-    else if (!currentRoom.canGoDirection(direction, inventory)){
+    else if (!currentRoom.canGoDirection(direction, inventory, player)){
       gui.println("You can't go this way yet. Try looking around.");
     } else {
       if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
@@ -576,19 +576,15 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    isInTrial = true;
     Enemy sasquatch = enemyMap.get("sasquatch");
     if (!(sasquatch.getHealth() <= 0)){
+      isInTrial = true;
       gui.println("The Sasquatch steps out of the cave");
       gui.println(sasquatch.getCatchphrase()+" He screams.");
-      while(sasquatch.getHealth() > 0){
-        // Make commands work
-        Command command = parser.getCommand();
-        processCommand(command);
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
-      }
+      enemyAttack(sasquatch);
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
-    } else {
+      isInTrial = false;
+    }else if((sasquatch.getHealth() <= 0)&&currentRoom.getRoomName().equals("The Lair")){
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
       if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()){
@@ -597,7 +593,15 @@ public class Game implements java.io.Serializable {
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
     }
-    isInTrial = false;
+  }
+
+  private void enemyAttack(Enemy enemy) {
+    while(enemy.getHealth() > 0){
+      Command command = parser.getCommand();
+      processCommand(command);
+      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+      player.setHealth(player.getHealth() - enemy.getDamage());
+    }
   }
 
   public void newsNewsScroll(){

@@ -365,8 +365,8 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "South",
-          "adjacentRoom": "Stefano's House"
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 1"
         }
       ]
     },
@@ -953,7 +953,7 @@
         {
           "isLocked": true,
           "direction": "Up",
-          "adjacentRoom": "Temple of the Sky Gods",
+          "adjacentRoom": "Sky Temple Pavillion",
           "keyId": "1234"
         },
         {
@@ -972,7 +972,7 @@
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "Stefano's House",
+          "adjacentRoom": "Gloomy Forest 9",
           "keyId": "1234"
         },
         {
@@ -1029,15 +1029,549 @@
       ]
     },
     {
-      "id": "Temple of the Sky Gods",
-      "name": "Temple of the Sky Gods",
-      "description": "This room is unfinished.",
+      "id": "Sky Temple Pavillion",
+      "name": "Sky Temple Pavillion",
+      "description": "You look up at the towering castle, perched on the cloudcapt sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
       "exits": [
         {
           "isLocked": false,
           "direction": "Down",
           "adjacentRoom": "Shadowed Plains",
           "keyId": "0000"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Temple of the Sky Gods",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Temple of the Sky Gods",
+      "name": "Temple of the Sky Gods",
+      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling. On them sit three humans. Somehow, you know they are the true Gods of Tableland.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Temple of the Sky Gods Pavillion",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 1",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 2"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 18"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 26"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 2",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 3"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 14"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 25"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southeast",
+          "adjacentRoom": "Gloomy Forest 13"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 1"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 3",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 2"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 15"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 4"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 19"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southeast",
+          "adjacentRoom": "Gloomy Forest 14"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 4",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 3"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 5"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 14"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 5",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 4"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 6"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 6",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 5"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 7"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 10"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 7",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 6"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 8"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 8",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 7"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 1"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 9"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 9",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Caldera Bridge"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 10",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 6"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 11",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 2"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 23"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 25"
+        },
+        {
+          "isLocked": false,
+          "direction": "Northeast",
+          "adjacentRoom": "Gloomy Forest 24"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 12",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 13"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 14"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 13",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "Northwest",
+          "adjacentRoom": "Gloomy Forest 2"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 12"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 18"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 14",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 4"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 2"
+        },
+        {
+          "isLocked": false,
+          "direction": "Northwest",
+          "adjacentRoom": "Gloomy Forest 3"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 15",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 3"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 17"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 16",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 17"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 22"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 17",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 15"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 16"
+        },
+        {
+          "isLocked": false,
+          "direction": "Northeast",
+          "adjacentRoom": "Gloomy Forest 20"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 18",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 1"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 13"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 19",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Gloomy Forest 20"
+        },
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 3"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 20",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 19"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 21"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 23"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southwest",
+          "adjacentRoom": "Gloomy Forest 17"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 21",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 22"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 20"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 22",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 16"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 21"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 23",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 11"
+        },
+        {
+          "isLocked": false,
+          "direction": "East",
+          "adjacentRoom": "Gloomy Forest 24"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 20"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 24",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 25"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 23"
+        },
+        {
+          "isLocked": false,
+          "direction": "Southwest",
+          "adjacentRoom": "Gloomy Forest 11"
+        }
+      ]
+    },
+    {
+      "id": "Gloomy Forest 25",
+      "name": "Gloomy Forest",
+      "description": "Fog enshrouds your vision. You cannot see more than a few feet.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Gloomy Forest 1"
+        },
+        {
+          "isLocked": false,
+          "direction": "West",
+          "adjacentRoom": "Gloomy Forest 11"
+        },
+        {
+          "isLocked": false,
+          "direction": "north",
+          "adjacentRoom": "Gloomy Forest 24"
         }
       ]
     }

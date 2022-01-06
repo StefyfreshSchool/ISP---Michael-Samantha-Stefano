@@ -26,7 +26,7 @@ public class Room implements java.io.Serializable {
   public void initItems() {
     items = new ArrayList<Item>();
     for (String itemName : Game.itemMap.keySet()) {
-      if (Game.itemMap.get(itemName).getStartingRoom().equals(roomName)){
+      if (Game.itemMap.get(itemName).getStartingRoom().equals(roomName) && !items.contains(Game.itemMap.get(itemName))){
         items.add(Game.itemMap.get(itemName));
       }
     }
@@ -84,14 +84,17 @@ public class Room implements java.io.Serializable {
    * @param direction - The direction to go.
    * @throws IllegalArgumentException if the direction is not valid.
    */
-  public boolean canGoDirection(String direction, Inventory inventory) {
+  public boolean canGoDirection(String direction, Inventory inventory, Player player) {
     //JANKY, needs to be edited.
     if ((roomName.equals("West of the Cyan House") || roomName.equals("East of the Cyan House") || roomName.equals("North of the Cyan House")) && inventory.hasItem(Game.itemMap.get("tome"))){
         return true;
     }
-    // EXTRA JANK. i'm sorry
+    
     if (roomName.equals("Shadowed Plains") && inventory.hasItem(Game.itemMap.get("balloony"))){
         Game.printBalloonHelp();
+    }
+    if (roomName.equals("Mysterious Entrance") && player.getTalkedToSkyGods()){
+      return true;
     }
 
     for (Exit exit : exits) {
