@@ -86,10 +86,13 @@ public class Room implements java.io.Serializable {
    */
   public boolean canGoDirection(String direction, Inventory inventory) {
     //JANKY, needs to be edited.
-    if ((roomName.equals("West of the Cyan House") || roomName.equals("East of the Cyan House") || roomName.equals("North of the Cyan House")) && inventory.hasItem(Game.itemMap.get("tome"))
-    || (roomName.equals("Shadowed Plains") && inventory.hasItem(Game.itemMap.get("balloony")))){
+    if ((roomName.equals("West of the Cyan House") || roomName.equals("East of the Cyan House") || roomName.equals("North of the Cyan House")) && inventory.hasItem(Game.itemMap.get("tome"))){
         return true;
-      }
+    }
+    // EXTRA JANK. i'm sorry
+    if (roomName.equals("Shadowed Plains") && inventory.hasItem(Game.itemMap.get("balloony"))){
+        Game.printBalloonHelp();
+    }
 
     for (Exit exit : exits) {
       if (exit.getDirection().equalsIgnoreCase(direction)) {
