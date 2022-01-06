@@ -89,7 +89,6 @@ public class Room implements java.io.Serializable {
     if ((roomName.equals("West of the Cyan House") || roomName.equals("East of the Cyan House") || roomName.equals("North of the Cyan House")) && inventory.hasItem(Game.itemMap.get("tome"))){
         return true;
     }
-    // EXTRA JANK. i'm sorry
     if (roomName.equals("Shadowed Plains") && inventory.hasItem(Game.itemMap.get("balloony"))){
         Game.printBalloonHelp();
     }

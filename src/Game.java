@@ -109,11 +109,11 @@ public class Game implements java.io.Serializable {
 
   private void initEnemies() {
     enemyMap = new HashMap<String, Enemy>();
-    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25));
-    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VRRRRRRRRRRR!!!\"", 20));
-    enemyMap.put("robot", new Enemy("Friends Robot", "\"B33P B00P\"", 20));
-    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30));
-    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200));
+    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25, 10));
+    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VRRRRRRRRRRR!!!\"", 20, 15));
+    enemyMap.put("robot", new Enemy("Friends Robot", "\"B33P B00P\"", 20, 15));
+    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 30, 20));
+    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200, 50));
     isInTrial = false;
   }
 
@@ -581,12 +581,7 @@ public class Game implements java.io.Serializable {
     if (!(sasquatch.getHealth() <= 0)){
       gui.println("The Sasquatch steps out of the cave");
       gui.println(sasquatch.getCatchphrase()+" He screams.");
-      while(sasquatch.getHealth() > 0){
-        // Make commands work
-        Command command = parser.getCommand();
-        processCommand(command);
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
-      }
+      enemyAttack(sasquatch);
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
     } else {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
@@ -598,6 +593,15 @@ public class Game implements java.io.Serializable {
       }
     }
     isInTrial = false;
+  }
+
+  private void enemyAttack(Enemy enemy) {
+    while(enemy.getHealth() > 0){
+      Command command = parser.getCommand();
+      processCommand(command);
+      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+      player.setHealth(player.getHealth() - enemy.getDamage());
+    }
   }
 
   public void newsNewsScroll(){
