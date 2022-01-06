@@ -1,10 +1,12 @@
 public class Enemy extends Character{
     private int health;
     private String name;
+    private int damage;
 
-    public Enemy(String name, String catchphrase, int health){
+    public Enemy(String name, String catchphrase, int health, int damage){
         super(name, catchphrase);
         this.health = health;
+        this.damage = damage;
     }
 
     public Enemy(){
@@ -30,5 +32,8 @@ public class Enemy extends Character{
     public int getHealth(){
         return health;
         
+    }
+    public int getDamage() {
+        return damage;
     }
 }
