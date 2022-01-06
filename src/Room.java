@@ -26,7 +26,7 @@ public class Room implements java.io.Serializable {
   public void initItems() {
     items = new ArrayList<Item>();
     for (String itemName : Game.itemMap.keySet()) {
-      if (Game.itemMap.get(itemName).getStartingRoom().equals(roomName)){
+      if (Game.itemMap.get(itemName).getStartingRoom().equals(roomName) && !items.contains(Game.itemMap.get(itemName))){
         items.add(Game.itemMap.get(itemName));
       }
     }
