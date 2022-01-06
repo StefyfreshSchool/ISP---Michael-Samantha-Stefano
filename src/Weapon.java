@@ -36,11 +36,11 @@ public class Weapon extends Item{
     return "Weapon: " + getName() + "\n\n" + getDescription() + "\nDamage:"+damage;
   }
 
-  public Integer getDamage() {
+  public int getDamage() {
     return damage;
   }
 
-  public void setWeaponDamage(int damage) {
+  public void setDamage(int damage) {
     this.damage = damage;
   }
 }

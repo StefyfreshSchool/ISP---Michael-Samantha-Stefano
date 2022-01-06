@@ -127,16 +127,20 @@ public class Game implements java.io.Serializable {
       Object quantity = ((JSONObject) itemObj).get("quantity");
       Object weight = ((JSONObject) itemObj).get("weight");
       boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+      boolean isWeapon = (boolean) ((JSONObject) itemObj).get("isWeapon");
       String description = (String) ((JSONObject) itemObj).get("description");
       String startingRoom = (String) ((JSONObject) itemObj).get("startingRoom");
+      int damage = (int) (long) ((JSONObject) itemObj).get("damage");
       ArrayList<String> aliases = new ArrayList<String>();
       for (Object alias : (JSONArray) ((JSONObject) itemObj).get("aliases")) {
         aliases.add((String) alias);
       }
 
       Item item;
-      if (quantity == null){
+      if (quantity == null && !isWeapon){
         item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases);
+      } else if (isWeapon) {
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, isWeapon, damage);
       } else {
         item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, ((Long) quantity).intValue());
       }
@@ -325,6 +329,8 @@ public class Game implements java.io.Serializable {
       inventory.addItem(Game.itemMap.get("balloony"));
     } else if (c.equals("5")){
       player.setHealth(90);
+    } else if (c.equals("6")){
+      currentRoom = roomMap.get("North of Crater");
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -347,54 +353,45 @@ public class Game implements java.io.Serializable {
    * @param command - 
    */
   private void hit(Command command) {
-    int healthstandin;
+    int enemyHealth;
     Enemy enemy = enemyRoomCheck(currentRoom);
-    Weapon weapon = new Weapon();
     if (enemy == null){
         gui.println("There is no enemy here. You cannot hit anything");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
-      if (!command.hasArgs() || argsStr.indexOf("with") == 0){
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0){ // hit, no args
         gui.println("Hit what enemy?");
-      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){
+      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){ // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){
+      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){ // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){
+      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){ // hit with, no weapon
         gui.println("Hit with what weapon?");
-      } else if (!args.contains("geraldo") && !args.contains("rocks")){
+      } else if (!args.contains("geraldo") && !args.contains("rocks")){ // hit enemy with, invalid weapon
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName()+" with?");
-      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){
+      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
         gui.println(args.get(0) + "is not an enemy in this room.");
-      } //hit sasquatch with geraldo
+      } // hit enemy with weapon
       else {
         Item item = itemMap.get(command.getLastArg());
-        int damage = 0;
-        if(command.getLastArg().equals("geraldo")||command.getLastArg().equals("rocks")){
-          damage = 10;
-        }else{
-          damage = 50;
+        enemy.attacked(item.getDamage());
+        if (enemy.getHealth() <= 0) {
+          enemyHealth = 0;
+        } else {
+          enemyHealth = enemy.getHealth();
         }
-        weapon = new Weapon(item.getName(), item.getDescription(), damage, item.getWeight());
-        enemy.attacked(weapon.getDamage());
-        if(enemy.getHealth()<=0){
-          healthstandin=0;
-        }else{
-          healthstandin = enemy.getHealth();
-        }
-        gui.println("The "+enemy.getName()+" lost "+weapon.getDamage()+" Health points. It has "+healthstandin+" left.");
-        if(healthstandin==0){
-          gui.println("The "+enemy.getName()+" has died.");
+        gui.println("The " + enemy.getName() + " lost " + item.getDamage() + " HP. It has " + enemyHealth + " HP left.");
+        if (enemyHealth == 0) {
+          gui.println("The " + enemy.getName() + " has died.");
         }
       }
-      
     }
-  }  
+  }
 
 
   /**
@@ -419,6 +416,9 @@ public class Game implements java.io.Serializable {
         if (inventory.addItem(currentRoom.getItem(itemName))){
           gui.println(currentRoom.getItem(itemName).getName() + " taken!");
           gui.println(currentRoom.getItem(itemName).getDescription());
+          if (currentRoom.getItem(itemName).getDamage() != 0){
+            gui.println("Deals " + currentRoom.getItem(itemName).getDamage() + " HP to enemies.");
+          }
           currentRoom.removeItem(itemName);
         }
       }
@@ -627,6 +627,7 @@ public class Game implements java.io.Serializable {
     isInTrial = false;
   }
 
+  // answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
   private boolean newsNewsAnswers() {
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
@@ -635,9 +636,6 @@ public class Game implements java.io.Serializable {
       return false;
     }
   }
-
-  //answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
-  //if you know a better question for problem three, feel free to replace it
 
   public void dogParadise(){
     if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
@@ -719,7 +717,7 @@ public class Game implements java.io.Serializable {
         gui.println(currentRoom.shortDescription());
       }
     } else {
-      gui.println("The vault door still hangs wide open.");
+      gui.println("The vault door still hangs wide open, just as you left it.");
     }
   }
 
@@ -778,8 +776,7 @@ public class Game implements java.io.Serializable {
     if (currentRoom.getRoomName().equals("News News Temple")){
       gui.println("The sun's rays bounce off the skylight into your eyes.");
       gui.println("For they glow with the intensity of a thousand souls.");
-      gui.println("For you know they can never be satisfied.");
-      gui.println();
+      gui.println("For you know they can never be satisfied. \n");
       gui.println("Suddenly, you feel a quite compelling message from deep within your psyche.");
       gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
     } else {
