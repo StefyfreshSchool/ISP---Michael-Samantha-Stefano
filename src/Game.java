@@ -576,9 +576,9 @@ public class Game implements java.io.Serializable {
    * Does things when you encounter the Sasquatch.
    */
   public void sasquatch(){
-    isInTrial = true;
     Enemy sasquatch = enemyMap.get("sasquatch");
     if (!(sasquatch.getHealth() <= 0)){
+      isInTrial = true;
       gui.println("The Sasquatch steps out of the cave");
       gui.println(sasquatch.getCatchphrase()+" He screams.");
       while(sasquatch.getHealth() > 0){
@@ -588,6 +588,7 @@ public class Game implements java.io.Serializable {
         gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       }
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
+      isInTrial = false;
     } else {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can a dark, ominous cave.");
@@ -597,7 +598,6 @@ public class Game implements java.io.Serializable {
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
     }
-    isInTrial = false;
   }
 
   public void newsNewsScroll(){
@@ -637,7 +637,6 @@ public class Game implements java.io.Serializable {
   }
 
   //answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
-  //if you know a better question for problem three, feel free to replace it
 
   public void dogParadise(){
     if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
