@@ -27,7 +27,6 @@ public class Game implements java.io.Serializable {
   private Parser parser;
   private Room currentRoom;
   private boolean isInTrial;
-  Weapon geraldo;
 
   private static final int MAX_WEIGHT = 10;
   
@@ -41,7 +40,6 @@ public class Game implements java.io.Serializable {
     inventory = new Inventory(MAX_WEIGHT);
     player = new Player(100);
     startMusic();
-    geraldo = new Weapon();
 
 
     //Init rooms and game state
@@ -334,7 +332,7 @@ public class Game implements java.io.Serializable {
   private Enemy enemyRoomCheck(Room room){
     String name = room.getRoomName();
     if(name.equals("The Lair")){
-      // return sasquatch;
+      return enemyMap.get("sasquatch");
     }else if(name.equals("Upper Hall of Enemies")){
 
     }else if(name.equals("Lower Hall of Enemies")){
@@ -351,8 +349,9 @@ public class Game implements java.io.Serializable {
   private void hit(Command command) {
     int healthstandin;
     Enemy enemy = enemyRoomCheck(currentRoom);
+    Weapon weapon = new Weapon();
     if (enemy == null){
-        gui.println("There is no enemy here.");
+        gui.println("There is no enemy here. You cannot hit anything");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
@@ -366,13 +365,33 @@ public class Game implements java.io.Serializable {
         gui.println("What would you like to hit?");
       } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){
         gui.println("Hit with what weapon?");
-      } else if (!args.contains("geraldo")){
+      } else if (!args.contains("geraldo")||!args.contains("rocks")){
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName()+" with?");
       } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){
         gui.println(args.get(0) + "is not an enemy in this room.");
-      } 
+      } //hit sasquatch with geraldo
+      else {
+        Item item = itemMap.get(command.getLastArg());
+        int damage = 0;
+        if(command.getLastArg().equals("geraldo")||command.getLastArg().equals("rocks")){
+          damage = 10;
+        }else{
+          damage = 50;
+        }
+        weapon = new Weapon(item.getName(), item.getDescription(), damage, item.getWeight());
+        enemy.attacked(weapon.getDamage());
+        if(enemy.getHealth()<=0){
+          healthstandin=0;
+        }else{
+          healthstandin = enemy.getHealth();
+        }
+        gui.println("The "+enemy.getName()+" lost "+weapon.getDamage()+" Health points. It has "+healthstandin+" left.");
+        if(healthstandin==0){
+          gui.println("The "+enemy.getName()+" has died.");
+        }
+      }
       // String hitCode = command.legitimateHitCommand();
       // if(hitCode.equals("A")){
       //   gui.println("Hit what?");
@@ -396,10 +415,7 @@ public class Game implements java.io.Serializable {
     String str = command.getStringifiedArgs();
     Enemy enemy = new Enemy();
     Weapon weapon = new Weapon();
-    if (str.equals("")||!checkenemy(str)){
-      gui.println("What do you want to hit?");
-    }else if (str.indexOf("with")==-1||((str.indexOf("with")!=-1)&&!str.substring(str.indexOf("with ")+1, str.length()).equals("geraldo"))){
-      gui.println("Hit it with what?");
+    
     }else if (command.getStringifiedArgs().equals("sasquatch")&&currentRoom.getRoomName().equals("The Lair")){
       enemy = new Enemy(sasquatch);
       weapon = new Weapon();

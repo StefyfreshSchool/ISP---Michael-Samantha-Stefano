@@ -46,6 +46,14 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.description = description;
       this.quantity = 1;
     }
+
+    public Item(Item item) {
+      this.weight = item.weight;
+      this.name = item.name;
+      this.isOpenable = item.isOpenable;
+      this.description = item.description;
+      this.quantity = 1;
+    }
     
     /** Set the list of valid items globally for the Item class. */
     private static void setValidItems() {
