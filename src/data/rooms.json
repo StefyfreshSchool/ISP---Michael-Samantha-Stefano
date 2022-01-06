@@ -487,7 +487,7 @@
     {
       "id": "Cheese Vault",
       "name": "Cheese Vault",
-      "description": "You enter the prestigous cheese vault, containing many precious Alaskan Cheeses. Unfortunately, they have all been locked within a safe.",
+      "description": "You enter the prestigous cheese vault, containing many precious Alaskan Cheeses locked within its grasp.",
       "exits": [
         {
           "isLocked": false,
@@ -951,7 +951,7 @@
       "description": "Standing in the grassy knolls of Tableland, a huge cloud casts a shadow around you. You feel compelled to visit it, high in the sky.",
       "exits": [
         {
-          "isLocked": false,
+          "isLocked": true,
           "direction": "Up",
           "adjacentRoom": "Temple of the Sky Gods",
           "keyId": "1234"

@@ -575,7 +575,7 @@ public class Game implements java.io.Serializable {
     if (nextRoom == null)
       gui.println(direction + " is not a valid direction.");
     else if (!currentRoom.canGoDirection(direction, inventory)){
-      gui.println("That exit is locked! Come back later.");
+      gui.println("You can't go this way yet. Try looking around.");
     } else {
       if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
         currentRoom = nextRoom;
@@ -586,11 +586,14 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
       } else {
-        gui.println("You cannot leave while the sasquatch is still at large!");
+        gui.println("You cannot leave while the enemy is still at large!");
       }
       if(currentRoom.getRoomName().equals("Fur Store")){
         gui.println(currentRoom.shortDescription());
         salesman();
+      }
+      if (currentRoom.getRoomName().equals("Cheese Vault")){
+        cheeseVault();
       }
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
@@ -631,7 +634,7 @@ public class Game implements java.io.Serializable {
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
       gui.println("Question 1: How many Whisperer articles have there been?");
       gui.println("Question 2: How many planets are in our solar system?");
-      gui.println("Question 3: Crystal is the traditional gift for how many years of marriage?");
+      gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
       gui.println("Question 4: What is the average age of the grade elevens?");
       gui.println("Question 5: What is the lowest prime number that contains consecutive digits?");
       gui.println("Question 6: What is the answer to the ultimate question of life, the universe, and everything?");
@@ -669,13 +672,13 @@ public class Game implements java.io.Serializable {
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
       gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
       inventory.addItem(currentRoom.getItem("Moral Support"));
-      gui.println("\"We have just added the glowing orb of moral support to your inventory.\"");
-      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the sky, and fill your head with encouraging thoughts.\"");
-      gui.println("The dog named Maggie speaks to you. \"No being, mortal or god, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
+      gui.println("\"We have added the glowing orb of moral support to your inventory.\"");
+      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the sky, and fill your head with the most encouraging thoughts.\"");
+      gui.println("The dog named Maggie speaks to you. \"No being, mortal or deity, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
       gui.println("You feel a sense of calm wash over you. You feel resolve for the first time in this whole journey.");
       gui.println("Lucky speaks. \"I sense your great potential. You have somewhere you need to be.\"");
       gui.println("Luna speaks. \"You are the Whisperer's successor. You must save our world.\"");
-      gui.println("Maggie speaks. \"Do not fall astray on your path. We all will watch your journey with the greatest interest.\"");
+      gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
     }else if(inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
       gui.println("There is nothing for you here.");
@@ -728,9 +731,34 @@ public class Game implements java.io.Serializable {
     return false;
   }
 
+  public void cheeseVault(){
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+    if(!inventory.hasItem(itemMap.get("cheese"))){
+      gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
+      gui.println("ENTER CODE:");
+      if (correctCode()){
+        gui.println("Something clicks and the door swings open! Satisfied, you grab a morsel of pristine Alaskan Cheese.");
+        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer.");
+        inventory.addItem(itemMap.get("cheese")); 
+      } else {
+        gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
+        currentRoom = roomMap.get("Upper Atrium");
+        gui.println(currentRoom.shortDescription());
+      }
+    } else {
+      gui.println("The vault door still hangs wide open.");
+    }
+  }
+
+  public boolean correctCode(){
+    String in = gui.readCommand();
+    if (in.equalsIgnoreCase("2956")) return true;
+    return false;
+  }
+
   private void inflate(String secondWord) {
     if (secondWord != ""){
-      if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("Balloon")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
+      if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
         gui.println("You inflated Balloony's corpse.");
         gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
         currentRoom = roomMap.get("Temple of the Sky Gods");
@@ -823,11 +851,11 @@ public class Game implements java.io.Serializable {
     gui.println("\"2. Procure thee News News scroll, doth of antiquity.\"");
     gui.println("\"3. Practice larceny upon morsels of Alaskan cheese.\"");
     gui.println("\"4. Secure ye fabulous furs in all Canadian lands.\"");
-    gui.println("\"5. Upheave vaccuum  \"");
-    gui.println("\"6. Threaten friends bot\"");
-    gui.println("\"7. Customer service\"");
-    gui.println("\"8. Dog paradise\"");
-    gui.println("\"Then thou will be granted access to the Trial in the Sky\"");
+    gui.println("\"5. Upheave a vaccuum.  \"");
+    gui.println("\"6. Threaten friends bot with the most deadliest liquid.\"");
+    gui.println("\"7. Usurp the head of Customer Service.\"");
+    gui.println("\"8. Visit dog paradise.\"");
+    gui.println("\"Then thou will be granted access to the Trial in the Sky.\"");
   }
 
   /**
@@ -859,6 +887,12 @@ public class Game implements java.io.Serializable {
     gui.println("Your current health is " + player.getHealth() + ".");
   }
 
+  /**
+   *  If you try to 'go up' with balloony in ur inventory
+   */
+  public static void printBalloonHelp() {
+    gui.println("The clouds are too high in the sky. Maybe try inflating Balloony?");
+  }
   /**
    * Print out some help information. Here we print some stupid, cryptic message
    * and a list of the command words.
