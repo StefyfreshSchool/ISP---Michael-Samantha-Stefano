@@ -32,18 +32,18 @@ public class Game implements java.io.Serializable {
    * Create the game and initialize its internal map.
    */
   public Game() {
+    //Init GUI and player stuff
+    gui = GUI.getGUI();
+    gui.createWindow();
+    inventory = new Inventory(MAX_WEIGHT);
+    player = new Player(100);
+
     //Check that all dependencies are present
     try {
       existJavaDependencies();
     } catch (Error e) {
       GameError.javaDependenciesNotFound();
     }
-
-    //Init GUI and player stuff
-    gui = GUI.getGUI();
-    gui.createWindow();
-    inventory = new Inventory(MAX_WEIGHT);
-    player = new Player(100);
 
     //Init rooms and game state
     try {
@@ -271,6 +271,8 @@ public class Game implements java.io.Serializable {
       if (save(command)) endGame();
     } else if (commandWord.equals("take")){
       take(command);
+    } else if (commandWord.equals("threaten")){
+      threaten(command);
     } else if (commandWord.equals("drop")){
       drop(command);
     } else if (commandWord.equals("heal")){
@@ -377,7 +379,7 @@ public class Game implements java.io.Serializable {
     int enemyHealth;
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
-        gui.println("There is no enemy here. You cannot hit anything");
+        gui.println("There is no enemy here. You cannot hit anything.");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
@@ -390,13 +392,13 @@ public class Game implements java.io.Serializable {
           && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("Who would you like to hit?");
-      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
+      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
         gui.println("Hit with what weapon?");
-      } else if (!args.contains("geraldo") && !args.contains("rocks")){ // hit enemy with, invalid weapon
+      } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("sword").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName() + " with?");
-      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())) { // valid enemy, invalid room
+      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
         gui.println(args.get(0) + "is not an enemy in this room.");
       } else { // hit enemy with weapon
         Item item = itemMap.get(command.getLastArg());
@@ -410,6 +412,38 @@ public class Game implements java.io.Serializable {
         if (enemyHealth == 0) {
           gui.println("The " + enemy.getName() + " has died.");
         }
+      }
+    }
+  }
+
+  /**
+   * Allows the player to threaten an enemy.
+   * @param command - 
+   */
+  private void threaten(Command command) {
+    Enemy enemy = enemyRoomCheck(currentRoom);
+    if (enemy == null){
+        gui.println("There is no enemy here. You cannot threaten anything.");
+    } else {
+      ArrayList<String> args = command.getArgs();
+      String argsStr = command.getStringifiedArgs();
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0){ // threaten, no args
+        gui.println("Threaten what enemy?");
+      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){ // threaten, invalid enemy
+        gui.println(argsStr + " is not an enemy.");
+        gui.println("What would you like to threaten?");
+      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){ // threaten with, invalid enemy
+        gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
+        gui.println("What would you like to threaten?");
+      } else if ((!args.contains("water") && command.getLastArg().equals("with")) || !args.contains("with")){ // threaten with, no weapon
+        gui.println("Threaten with what?");
+      } else if (!itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // threaten enemy with, invalid weapon
+        gui.println("You can't threaten with that.");
+        gui.println("What would you like to threaten " + enemy.getName() + " with?");
+      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
+        gui.println(args.get(0) + "is not an enemy in this room.");
+      } else { // threaten enemy with weapon
+        
       }
     }
   }
@@ -609,6 +643,9 @@ public class Game implements java.io.Serializable {
       if (currentRoom.getRoomName().equals("Cheese Vault")){
         cheeseVault();
       }
+      if (currentRoom.getRoomName().equals("News News Vault")){
+        newsNewsScroll();
+      }
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -668,7 +705,6 @@ public class Game implements java.io.Serializable {
   }
 
   public void newsNewsScroll(){
-    isInTrial = true;
     if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
@@ -691,7 +727,6 @@ public class Game implements java.io.Serializable {
         gui.println("On the other side of the room is an empty glass case.");
       }
     }
-    isInTrial = false;
   }
 
   // answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
@@ -721,6 +756,10 @@ public class Game implements java.io.Serializable {
     } else if (inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
       gui.println("There is nothing for you here.");
     }
+  }
+
+  public void deptCustomerService(){
+
   }
 
   /**
@@ -859,16 +898,21 @@ public class Game implements java.io.Serializable {
    */
   private void read(String secondWord){
     if (secondWord != ""){
-      if (secondWord.equals("tome") && inventory.hasItem(itemMap.get("tome"))){
+      if ((secondWord.toLowerCase().equals("tome") || secondWord.equals("tome of tableland")) && inventory.hasItem(itemMap.get("tome"))){
         readTome();
-      } else if (secondWord.equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (secondWord.toLowerCase().equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
         readDiary();
+      } else if ((secondWord.toLowerCase().equals("scroll") || secondWord.equals("scroll of tableland")) && currentRoom.getRoomName().equals("Master Bedroom")){
+        readScroll();
       } else {
         gui.println("You can't read that!");
       }
     } else {
       gui.println("What would you like to read?");
     }
+  }
+
+  private void readScroll() {
   }
 
   /**

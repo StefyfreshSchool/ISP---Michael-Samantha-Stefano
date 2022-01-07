@@ -172,6 +172,15 @@ public class Item extends OpenableObject implements java.io.Serializable {
     public boolean isOpenable() {
       return isOpenable;
     }
+
+    public boolean isThisItem(String itemName){
+      boolean out = false;
+      if (itemName.equalsIgnoreCase(name)) out = true;
+      for (String alias : aliases){
+        if (itemName.equalsIgnoreCase(alias)) out = true;
+      }
+      return out;
+    }
   
     public void setOpenable(boolean isOpenable) {
       this.isOpenable = isOpenable;
