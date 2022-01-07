@@ -921,7 +921,7 @@ public class Game implements java.io.Serializable {
     gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
     gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
     gui.println("\"Balloony told the people of Tableland \"");
-    gui.println();
+    gui.println("Connie wins Election!!!");
     gui.println("\"not yet news news: The official newspaper of Tableland\"");
     gui.println("\"November 10th, 2019\"");
     gui.println("\"not yet news news: Connie and Balloony Tie Election!\"");
