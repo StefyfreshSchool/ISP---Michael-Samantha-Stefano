@@ -570,6 +570,9 @@ public class Game implements java.io.Serializable {
       if (currentRoom.getRoomName().equals("Cheese Vault")){
         cheeseVault();
       }
+      if (currentRoom.getRoomName().equals("News News Vault")){
+        newsNewsScroll();
+      }
     }
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -607,7 +610,6 @@ public class Game implements java.io.Serializable {
   }
 
   public void newsNewsScroll(){
-    isInTrial = true;
     if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
@@ -630,7 +632,6 @@ public class Game implements java.io.Serializable {
         gui.println("On the other side of the room is an empty glass case.");
       }
     }
-    isInTrial = false;
   }
 
   private boolean newsNewsAnswers() {
@@ -661,6 +662,10 @@ public class Game implements java.io.Serializable {
     }else if(inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
       gui.println("There is nothing for you here.");
     }
+  }
+
+  public void deptCustomerService(){
+
   }
 
   /**
@@ -798,16 +803,21 @@ public class Game implements java.io.Serializable {
    */
   private void read(String secondWord){
     if (secondWord != ""){
-      if (secondWord.equals("tome") && inventory.hasItem(itemMap.get("tome"))){
+      if ((secondWord.toLowerCase().equals("tome") || secondWord.equals("tome of tableland")) && inventory.hasItem(itemMap.get("tome"))){
         readTome();
-      } else if (secondWord.equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (secondWord.toLowerCase().equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
         readDiary();
+      } else if ((secondWord.toLowerCase().equals("scroll") || secondWord.equals("scroll of tableland")) && currentRoom.getRoomName().equals("Master Bedroom")){
+        readScroll();
       } else {
         gui.println("You can't read that!");
       }
     } else {
       gui.println("What would you like to read?");
     }
+  }
+
+  private void readScroll() {
   }
 
   /**
