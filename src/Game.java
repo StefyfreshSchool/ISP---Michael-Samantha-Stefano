@@ -340,10 +340,8 @@ public class Game implements java.io.Serializable {
       inventory.addItem(itemMap.get("pounds"));
       salesman();
     } else if (c.equals("2")){
-      gui.println("You have been teleported to the Castle Grounds.");
       currentRoom = roomMap.get("Castle Grounds");
     } else if (c.equals("3")){
-      gui.println("You have been teleported to North of Crater.");
       currentRoom = roomMap.get("North of Crater");
     } else if (c.equals("4")){
       inventory.addItem(Game.itemMap.get("balloony"));
@@ -354,7 +352,6 @@ public class Game implements java.io.Serializable {
     } else if (c.equals("7")){
       inventory.addItem(itemMap.get("Bandages"));
     }
-
     gui.println("Test activated.");
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
@@ -363,13 +360,15 @@ public class Game implements java.io.Serializable {
     String name = room.getRoomName();
     if (name.equals("The Lair")){
       return enemyMap.get("sasquatch");
-    } else if(name.equals("Upper Hall of Enemies")){
-
     } else if(name.equals("Lower Hall of Enemies")){
-
-    }//more rooms: Dept. of Customer Service
-    // return enemyMap.get("sasquatch");
-    return null;
+      return enemyMap.get("vaccuum");
+    } else if(name.equals("Upper Hall of Enemies")){
+      return enemyMap.get("robot");
+    } else if(name.equals("Dept. of Customer Service")){
+      return enemyMap.get("balloony");
+    } else if(name.equals("Hall of the Volcano King")){
+      return enemyMap.get("deslauriers");
+    } return null;
   }
 
   /**
@@ -384,17 +383,18 @@ public class Game implements java.io.Serializable {
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
-      if (!command.hasArgs() || argsStr.indexOf("with") == 0){ // hit, no args
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0) { // hit, no args
         gui.println("Hit what enemy?");
-      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){ // hit, invalid enemy
+      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){ // hit with, invalid enemy
+      } else if (args.contains("with")
+          && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
-        gui.println("What would you like to hit?");
-      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){ // hit with, no weapon
+        gui.println("Who would you like to hit?");
+      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
         gui.println("Hit with what weapon?");
-      } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
+      } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("sword").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName() + " with?");
@@ -625,6 +625,11 @@ public class Game implements java.io.Serializable {
         gui.println(currentRoom.shortDescription());
         gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         sasquatch();
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
+        currentRoom = nextRoom;
+        gui.println(currentRoom.shortDescription());
+        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+        vaccuum();
       } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
@@ -652,18 +657,40 @@ public class Game implements java.io.Serializable {
     Enemy sasquatch = enemyMap.get("sasquatch");
     if (!(sasquatch.getHealth() <= 0)){
       isInTrial = true;
-      gui.println("The Sasquatch steps out of the cave");
-      gui.println(sasquatch.getCatchphrase()+" He screams.");
+      gui.println("The Sasquatch steps out of the cave.");
+      gui.println(sasquatch.getCatchphrase() + " He screams.");
       enemyAttack(sasquatch);
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
-    }else if((sasquatch.getHealth() <= 0)&&currentRoom.getRoomName().equals("The Lair")){
+    } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
+      enemyMap.get("sasquatch").setIsDead(true);
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can see a dark, ominous cave.");
-      if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()){
+      if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) {
         gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
-      } else if ((inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("1000 British Pounds")) && player.getTalkedToSkyGods())){
-        gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
+      } else if ((inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("1000 British Pounds")) && player.getTalkedToSkyGods())) {
+        gui.println("Your conscience speaks to you. \"There are more important things to do than explore perilous caves.\"");
+      }
+    }
+  }
+
+    /**
+   * Does things when you encounter the Vaccuum.
+   */
+  public void vaccuum(){
+    Enemy vaccuum = enemyMap.get("vaccuum");
+    if (vaccuum.getHealth() > 0){
+      isInTrial = true;
+      gui.println("The Vaccuum wheels itself towards you.");
+      gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
+      enemyAttack(vaccuum);
+      gui.println("A brass key lies on the floor, dropped by the vaccuum.");
+      isInTrial = false;
+    } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("")){
+      enemyMap.get("vaccuum").setIsDead(true);
+      gui.println("The vaccuum sits on the concrete floor, out of battery.");
+      if (enemyMap.get("robot").getIsDead()){
+        gui.println("Past its lifeless body, you can see an aluminum ladder.");
       }
     }
   }
@@ -745,11 +772,13 @@ public class Game implements java.io.Serializable {
       gui.println("\"Would you like to buy my furs? Only for a small fee of £500!\" He says.");
       gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
       if (buyFurs()){
-        if (inventory.hasItem(itemMap.get("1000 British Pounds"))){
+        if (inventory.hasItem(itemMap.get("pounds"))){
           gui.println("\"Pleasure doing business with you, good sir.\"");
           inventory.removeItem(itemMap.get("pounds"));
           inventory.addItem(itemMap.get("hat")); 
           inventory.addItem(itemMap.get("euros"));
+        } else if (inventory.hasItem(itemMap.get("pounds")) && inventory.getCurrentWeight() - itemMap.get("pounds").getWeight() + itemMap.get("hat").getWeight() + itemMap.get("euros").getWeight() > inventory.getMaxWeight()){
+          gui.println("\"Hmm... I can sense your pockets are too heavy. What a shame.");
         } else {
           gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
         }
