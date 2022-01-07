@@ -210,7 +210,7 @@ public class Game implements java.io.Serializable {
   }
 
   /**Starts the background music. */
-  private void startMusic(){
+  private void startMusic() {
     try {
       music = new MusicPlayer("data/audio/background.wav", true);
     } catch (FileNotFoundException e) {
