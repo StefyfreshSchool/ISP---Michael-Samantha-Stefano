@@ -271,6 +271,8 @@ public class Game implements java.io.Serializable {
       if (save(command)) endGame();
     } else if (commandWord.equals("take")){
       take(command);
+    } else if (commandWord.equals("threaten")){
+      threaten(command);
     } else if (commandWord.equals("drop")){
       drop(command);
     } else if (commandWord.equals("heal")){
@@ -378,7 +380,7 @@ public class Game implements java.io.Serializable {
     int enemyHealth;
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
-        gui.println("There is no enemy here. You cannot hit anything");
+        gui.println("There is no enemy here. You cannot hit anything.");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
@@ -392,10 +394,10 @@ public class Game implements java.io.Serializable {
         gui.println("What would you like to hit?");
       } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){ // hit with, no weapon
         gui.println("Hit with what weapon?");
-      } else if (!args.contains("geraldo") && !args.contains("rocks")){ // hit enemy with, invalid weapon
-        String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
+      } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
+        String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
-        gui.println("What would you like to hit " + enemy.getName()+" with?");
+        gui.println("What would you like to hit " + enemy.getName() + " with?");
       } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
         gui.println(args.get(0) + "is not an enemy in this room.");
       } else { // hit enemy with weapon
@@ -410,6 +412,38 @@ public class Game implements java.io.Serializable {
         if (enemyHealth == 0) {
           gui.println("The " + enemy.getName() + " has died.");
         }
+      }
+    }
+  }
+
+  /**
+   * Allows the player to threaten an enemy.
+   * @param command - 
+   */
+  private void threaten(Command command) {
+    Enemy enemy = enemyRoomCheck(currentRoom);
+    if (enemy == null){
+        gui.println("There is no enemy here. You cannot threaten anything.");
+    } else {
+      ArrayList<String> args = command.getArgs();
+      String argsStr = command.getStringifiedArgs();
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0){ // threaten, no args
+        gui.println("Threaten what enemy?");
+      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){ // threaten, invalid enemy
+        gui.println(argsStr + " is not an enemy.");
+        gui.println("What would you like to threaten?");
+      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){ // threaten with, invalid enemy
+        gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
+        gui.println("What would you like to threaten?");
+      } else if ((!args.contains("water") && command.getLastArg().equals("with")) || !args.contains("with")){ // threaten with, no weapon
+        gui.println("Threaten with what?");
+      } else if (!itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // threaten enemy with, invalid weapon
+        gui.println("You can't threaten with that.");
+        gui.println("What would you like to threaten " + enemy.getName() + " with?");
+      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
+        gui.println(args.get(0) + "is not an enemy in this room.");
+      } else { // threaten enemy with weapon
+        
       }
     }
   }
