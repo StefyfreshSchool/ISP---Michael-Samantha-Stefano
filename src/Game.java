@@ -135,21 +135,25 @@ public class Game implements java.io.Serializable {
       String itemId = (String) ((JSONObject) itemObj).get("id");
       String name = (String) ((JSONObject) itemObj).get("name");
 
-      Object quantity = ((JSONObject) itemObj).get("quantity");
+      Long quantity = (Long) ((JSONObject) itemObj).get("quantity");
       Object weight = ((JSONObject) itemObj).get("weight");
       boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+      boolean isWeapon = (boolean) ((JSONObject) itemObj).get("isWeapon");
       String description = (String) ((JSONObject) itemObj).get("description");
       String startingRoom = (String) ((JSONObject) itemObj).get("startingRoom");
+      Long damage = (Long) ((JSONObject) itemObj).get("damage");
       ArrayList<String> aliases = new ArrayList<String>();
       for (Object alias : (JSONArray) ((JSONObject) itemObj).get("aliases")) {
         aliases.add((String) alias);
       }
 
       Item item;
-      if (quantity == null){
+      if (quantity == null && !isWeapon){
         item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases);
+      } else if (isWeapon) {
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, isWeapon, damage.intValue());
       } else {
-        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, ((Long) quantity).intValue());
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, quantity.intValue());
       }
 
       itemMap.put(itemId, item);
@@ -335,7 +339,8 @@ public class Game implements java.io.Serializable {
       gui.println("You have been teleported to the Castle Grounds.");
       currentRoom = roomMap.get("Castle Grounds");
     } else if (c.equals("3")){
-      sasquatch();
+      gui.println("You have been teleported to North of Crater.");
+      currentRoom = roomMap.get("North of Crater");
     } else if (c.equals("4")){
       inventory.addItem(Game.itemMap.get("balloony"));
     } else if (c.equals("5")){
@@ -425,11 +430,14 @@ public class Game implements java.io.Serializable {
       if (!Item.isValidItem(itemName)){
         gui.print("Not a valid item!");
       } else if (!currentRoom.containsItem(itemName)){
-        gui.print("That item is not in this room!");
+        gui.print("You can't seem to find that item here.");
       } else {
         if (inventory.addItem(currentRoom.getItem(itemName))){
           gui.println(currentRoom.getItem(itemName).getName() + " taken!");
           gui.println(currentRoom.getItem(itemName).getDescription());
+          if (currentRoom.getItem(itemName).getDamage() != 0){
+            gui.println("Deals " + currentRoom.getItem(itemName).getDamage() + " HP to enemies.");
+          }
           currentRoom.removeItem(itemName);
         }
       }
@@ -595,7 +603,7 @@ public class Game implements java.io.Serializable {
       enemyAttack(sasquatch);
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
-    } else {
+    }else if((sasquatch.getHealth() <= 0)&&currentRoom.getRoomName().equals("The Lair")){
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can see a dark, ominous cave.");
       if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()){
@@ -642,6 +650,7 @@ public class Game implements java.io.Serializable {
     isInTrial = false;
   }
 
+  // answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
   private boolean newsNewsAnswers() {
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
@@ -650,9 +659,6 @@ public class Game implements java.io.Serializable {
       return false;
     }
   }
-
-  
-  //answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
 
   public void dogParadise(){
     if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
@@ -734,7 +740,7 @@ public class Game implements java.io.Serializable {
         gui.println(currentRoom.shortDescription());
       }
     } else {
-      gui.println("The vault door still hangs wide open.");
+      gui.println("The vault door still hangs wide open, just as you left it.");
     }
   }
 
@@ -793,8 +799,7 @@ public class Game implements java.io.Serializable {
     if (currentRoom.getRoomName().equals("News News Temple")){
       gui.println("The sun's rays bounce off the skylight into your eyes.");
       gui.println("For they glow with the intensity of a thousand souls.");
-      gui.println("For you know they can never be satisfied.");
-      gui.println();
+      gui.println("For you know they can never be satisfied. \n");
       gui.println("Suddenly, you feel a quite compelling message from deep within your psyche.");
       gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
     } else {

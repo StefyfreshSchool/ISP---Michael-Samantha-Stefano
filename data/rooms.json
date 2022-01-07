@@ -953,7 +953,7 @@
         {
           "isLocked": true,
           "direction": "Up",
-          "adjacentRoom": "Temple of the Sky Gods",
+          "adjacentRoom": "Sky Temple Pavillion",
           "keyId": "1234"
         },
         {
@@ -1029,14 +1029,33 @@
       ]
     },
     {
-      "id": "Temple of the Sky Gods",
-      "name": "Temple of the Sky Gods",
-      "description": "This room is unfinished.",
+      "id": "Sky Temple Pavillion",
+      "name": "Sky Temple Pavillion",
+      "description": "You look up at the towering castle, perched on the cloudcapt sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
       "exits": [
         {
           "isLocked": false,
           "direction": "Down",
           "adjacentRoom": "Shadowed Plains",
+          "keyId": "0000"
+        },
+        {
+          "isLocked": false,
+          "direction": "North",
+          "adjacentRoom": "Temple of the Sky Gods",
+          "keyId": "0000"
+        }
+      ]
+    },
+    {
+      "id": "Temple of the Sky Gods",
+      "name": "Temple of the Sky Gods",
+      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling. On them sit three humans. Somehow, you know they are the true Gods of Tableland.",
+      "exits": [
+        {
+          "isLocked": false,
+          "direction": "South",
+          "adjacentRoom": "Temple of the Sky Gods Pavillion",
           "keyId": "0000"
         }
       ]
