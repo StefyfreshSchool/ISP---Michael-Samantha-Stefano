@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.awaitility.Awaitility;
 
 public class Game implements java.io.Serializable {
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
@@ -31,6 +32,13 @@ public class Game implements java.io.Serializable {
    * Create the game and initialize its internal map.
    */
   public Game() {
+    //Check that all dependencies are present
+    try {
+      existJavaDependencies();
+    } catch (Error e) {
+      GameError.javaDependenciesNotFound();
+    }
+
     //Init GUI and player stuff
     gui = GUI.getGUI();
     gui.createWindow();
@@ -95,16 +103,19 @@ public class Game implements java.io.Serializable {
             gui.println("\"" + in + "\" is not a valid choice!");
           }
         } 
-      }  
-    } catch (FileNotFoundException e){
-      GameError.fileNotFound(e.getMessage());
+      }
     } catch (Exception e) {
       e.printStackTrace();
       gui.printerr("ERROR! Could not initialize the game!");
-    } catch (Error e) {
-      GameError.javaDependenciesNotFound();
-    } 
+    }
+
     parser = new Parser();
+  }
+
+  /**Checks if the required Java dependencies are accessible. */
+  private void existJavaDependencies() {
+    new JSONArray();
+    new Awaitility();
   }
 
   private void initEnemies() {
@@ -117,8 +128,8 @@ public class Game implements java.io.Serializable {
     isInTrial = false;
   }
 
-  private void initItems(String fileName) throws FileNotFoundException {
-    if (Item.getItems() == null) throw new FileNotFoundException("data/items.json");
+  private void initItems(String fileName) {
+    if (Item.getItems() == null) GameError.fileNotFound("data/items.json");
     itemMap = new HashMap<String, Item>();
     for (Object itemObj : Item.getItems()){
       String itemId = (String) ((JSONObject) itemObj).get("id");
@@ -149,8 +160,8 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  private void initRooms(String fileName) throws FileNotFoundException {
-    if (Room.getRooms() == null) throw new FileNotFoundException("data/rooms.json");
+  private void initRooms(String fileName) {
+    if (Room.getRooms() == null) GameError.fileNotFound("data/rooms.json");
     roomMap = new HashMap<String, Room>();
     for (Object roomObj : Room.getRooms()) {
       Room room = new Room();
@@ -195,8 +206,12 @@ public class Game implements java.io.Serializable {
   }
 
   /**Starts the background music. */
-  private void startMusic() throws FileNotFoundException{
-    music = new MusicPlayer("data/audio/background.wav");
+  private void startMusic(){
+    try {
+      music = new MusicPlayer("data/audio/background.wav", true);
+    } catch (FileNotFoundException e) {
+      GameError.fileNotFound("data/audio/background.wav");
+    }
     music.setVolume(-25f);
     music.play();
   }
@@ -327,17 +342,21 @@ public class Game implements java.io.Serializable {
       player.setHealth(90);
     } else if (c.equals("6")){
       player.talkedToSkyGods();
+    } else if (c.equals("7")){
+      inventory.addItem(itemMap.get("Bandages"));
     }
+
+    gui.println("Test activated.");
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   private Enemy enemyRoomCheck(Room room){
     String name = room.getRoomName();
-    if(name.equals("The Lair")){
+    if (name.equals("The Lair")){
       return enemyMap.get("sasquatch");
-    }else if(name.equals("Upper Hall of Enemies")){
+    } else if(name.equals("Upper Hall of Enemies")){
 
-    }else if(name.equals("Lower Hall of Enemies")){
+    } else if(name.equals("Lower Hall of Enemies")){
 
     }//more rooms: Dept. of Customer Service
     // return enemyMap.get("sasquatch");
@@ -349,54 +368,44 @@ public class Game implements java.io.Serializable {
    * @param command - 
    */
   private void hit(Command command) {
-    int healthStandIn;
+    int enemyHealth;
     Enemy enemy = enemyRoomCheck(currentRoom);
-    Weapon weapon = new Weapon();
     if (enemy == null){
         gui.println("There is no enemy here. You cannot hit anything");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
-      if (!command.hasArgs() || argsStr.indexOf("with") == 0){
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0){ // hit, no args
         gui.println("Hit what enemy?");
-      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){
+      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){ // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){
+      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){ // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){
+      } else if ((!args.contains("geraldo") && command.getLastArg().equals("with")) || !args.contains("with")){ // hit with, no weapon
         gui.println("Hit with what weapon?");
-      } else if (!args.contains("geraldo") && !args.contains("rocks")){
+      } else if (!args.contains("geraldo") && !args.contains("rocks")){ // hit enemy with, invalid weapon
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ")+6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName()+" with?");
-      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){
+      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
         gui.println(args.get(0) + "is not an enemy in this room.");
-      }
-      else {
+      } else { // hit enemy with weapon
         Item item = itemMap.get(command.getLastArg());
-        int damage = 0;
-        if (command.getLastArg().equals("geraldo") || command.getLastArg().equals("rocks")){
-          damage = 10;
+        enemy.attacked(item.getDamage());
+        if (enemy.getHealth() <= 0) {
+          enemyHealth = 0;
         } else {
-          damage = 50;
+          enemyHealth = enemy.getHealth();
         }
-        weapon = new Weapon(item.getName(), item.getDescription(), damage, item.getWeight());
-        enemy.attacked(weapon.getDamage());
-        if (enemy.getHealth() <= 0){
-          healthStandIn = 0;
-        } else {
-          healthStandIn = enemy.getHealth();
-        }
-        gui.println("The " + enemy.getName() + " lost " + weapon.getDamage() + " Health points. It has " + healthStandIn + " left.");
-        if (healthStandIn == 0){
+        gui.println("The " + enemy.getName() + " lost " + item.getDamage() + " HP. It has " + enemyHealth + " HP left.");
+        if (enemyHealth == 0) {
           gui.println("The " + enemy.getName() + " has died.");
         }
       }
-      
     }
-  }  
+  }
 
 
   /**
@@ -588,9 +597,9 @@ public class Game implements java.io.Serializable {
       isInTrial = false;
     } else {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
-      gui.println("Past the corpse, you can a dark, ominous cave.");
+      gui.println("Past the corpse, you can see a dark, ominous cave.");
       if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()){
-        gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?.");
+        gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       } else if ((inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("1000 British Pounds")) && player.getTalkedToSkyGods())){
         gui.println("You get the feeling that you should not be here. 'There are more important things to do away from this cave,' says the little voice in your head.");
       }
@@ -642,6 +651,7 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  
   //answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
 
   public void dogParadise(){
@@ -658,7 +668,7 @@ public class Game implements java.io.Serializable {
       gui.println("Luna speaks. \"You are the Whisperer's successor. You must save our world.\"");
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
-    }else if(inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+    } else if (inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
       gui.println("There is nothing for you here.");
     }
   }
@@ -840,27 +850,27 @@ public class Game implements java.io.Serializable {
    * when player types "heal" (no args).
    */
   private void heal() {
-    if (inventory.hasItem(itemMap.get("bandages")) && player.getHealth() != 100){
+    if (!inventory.hasItem(itemMap.get("Bandages"))){
+      gui.println("You have no healing items!");
+    } else if (player.getHealth() != 100){
       player.maxHeal();
-      inventory.getItem(inventory.find("Bandages")).setQuantity();
-      if (inventory.getItem(inventory.find("Bandages")).getQuantity() > 1){
-        gui.println("You have " + inventory.getItem(inventory.find("Bandages")).getQuantity() + " bandages left.");
-      } else if (inventory.getItem(inventory.find("Bandages")).getQuantity() != 0){
+      gui.println("Your wounds have healed. You have been restored to full health.");
+      inventory.getItem("Bandages").decrementQuantity();
+      if (inventory.getItem("Bandages").getQuantity() > 1){
+        gui.println("You have " + inventory.getItem("Bandages").getQuantity() + " bandages left.");
+      } else if (inventory.getItem("Bandages").getQuantity() != 0){
         gui.println("You have 1 bandage left.");
       } else {
         gui.println("You have no more bandages.");
         inventory.removeItem(itemMap.get("bandages"));
       }
-      gui.println("Your wounds have healed. You have been restored to full health.");
-    } else if (inventory.hasItem(itemMap.get("bandages")) && player.getHealth() == 100){
+    } else if (player.getHealth() == 100){
       gui.println("You are already at maximum health!");
-      if (inventory.getItem(inventory.find("Bandages")).getQuantity() > 1){
-        gui.println("You have " + inventory.getItem(inventory.find("Bandages")).getQuantity() + " bandages left.");
-      } else if (inventory.getItem(inventory.find("Bandages")).getQuantity() != 0){
+      if (inventory.getItem("Bandages").getQuantity() > 1){
+        gui.println("You have " + inventory.getItem("Bandages").getQuantity() + " bandages left.");
+      } else if (inventory.getItem("Bandages").getQuantity() != 0){
         gui.println("You have 1 bandage left.");
       }
-    } else {
-      gui.println("You have no healing items!");
     }
     gui.println("Your current health is " + player.getHealth() + ".");
   }
