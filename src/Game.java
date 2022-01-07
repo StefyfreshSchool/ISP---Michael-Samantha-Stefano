@@ -869,11 +869,11 @@ public class Game implements java.io.Serializable {
    */
   private void read(String secondWord){
     if (secondWord != ""){
-      if ((secondWord.toLowerCase().equals("tome") || secondWord.equals("tome of tableland")) && inventory.hasItem(itemMap.get("tome"))){
+      if (itemMap.get("tome").isThisItem(secondWord) && inventory.hasItem(itemMap.get("tome"))){
         readTome();
-      } else if (secondWord.toLowerCase().equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (itemMap.get("diary").isThisItem(secondWord) && currentRoom.getRoomName().equals("Master Bedroom")){
         readDiary();
-      } else if ((secondWord.toLowerCase().equals("scroll") || secondWord.equals("scroll of tableland")) && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (itemMap.get("scroll").isThisItem(secondWord) && currentRoom.getRoomName().equals("Master Bedroom")){
         readScroll();
       } else {
         gui.println("You can't read that!");
@@ -884,6 +884,19 @@ public class Game implements java.io.Serializable {
   }
 
   private void readScroll() {
+    gui.println("Garbled, messy writing is scrawled on the page. It says:");
+    gui.println();
+    gui.println("\"not yet news news: The official newspaper of Tableland\"");
+    gui.println("\"January 3rd, 2022 | Author: Christopher Cha\"");
+    gui.println("\"not yet news news: Balloony has taken down Connie!\"");
+    gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
+    gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
+    gui.println("\"Balloony told the people of Tableland \"");
+    gui.println();
+    gui.println("\"not yet news news: The official newspaper of Tableland\"");
+    gui.println("\"November 10th, 2019\"");
+    gui.println("\"not yet news news: Connie and Balloony Tie Election!\"");
+    gui.println("\"They are both heads of customer service!\"");
   }
 
   /**
