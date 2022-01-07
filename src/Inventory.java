@@ -34,10 +34,10 @@ public class Inventory implements java.io.Serializable {
   }
 
   public boolean addItem(Item item) {
-    if (item.getWeight() + currentWeight <= maxWeight)
+    if (item.getWeight() + currentWeight <= maxWeight){
+      currentWeight += item.getWeight();
       return items.add(item);
-    else {
-      gui.println("There is no room to add the item.");
+    } else {
       return false;
     }
   }
@@ -54,6 +54,7 @@ public class Inventory implements java.io.Serializable {
   }
 
   public boolean removeItem(Item item) {
+    currentWeight -= item.getWeight();
     return items.remove(item);
   }
 

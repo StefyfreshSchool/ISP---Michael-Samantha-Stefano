@@ -271,6 +271,8 @@ public class Game implements java.io.Serializable {
       if (save(command)) endGame();
     } else if (commandWord.equals("take")){
       take(command);
+    } else if (commandWord.equals("drop")){
+      drop(command);
     } else if (commandWord.equals("heal")){
       heal();
     } else if (commandWord.equals("wear")){
@@ -423,24 +425,39 @@ public class Game implements java.io.Serializable {
       return;
     }
     String itemName = command.getStringifiedArgs();
-    if (!command.hasArgs()){
-      gui.println("Take what?");
-      return;
+    if (!Item.isValidItem(itemName)){
+      gui.print("Not a valid item!");
+    } else if (!currentRoom.containsItem(itemName)){
+      gui.print("You can't seem to find that item here.");
     } else {
-      if (!Item.isValidItem(itemName)){
-        gui.print("Not a valid item!");
-      } else if (!currentRoom.containsItem(itemName)){
-        gui.print("You can't seem to find that item here.");
-      } else {
-        if (inventory.addItem(currentRoom.getItem(itemName))){
-          gui.println(currentRoom.getItem(itemName).getName() + " taken!");
-          gui.println(currentRoom.getItem(itemName).getDescription());
-          if (currentRoom.getItem(itemName).getDamage() != 0){
-            gui.println("Deals " + currentRoom.getItem(itemName).getDamage() + " HP to enemies.");
-          }
-          currentRoom.removeItem(itemName);
+      if (inventory.addItem(currentRoom.getItem(itemName))){
+        gui.println(currentRoom.getItem(itemName).getName() + " taken!");
+        gui.println(currentRoom.getItem(itemName).getDescription());
+        if (currentRoom.getItem(itemName).getDamage() != 0){
+          gui.println("Deals " + currentRoom.getItem(itemName).getDamage() + " HP to enemies.");
         }
+        currentRoom.removeItem(itemName);
+      } else {
+        gui.println("You are stuffed! You have no more room to take items.");
       }
+    }
+  }
+
+  private void drop(Command command) {
+    if (!command.hasArgs()){
+      gui.println("Drop what?");
+      return;
+    }
+    String itemName = command.getStringifiedArgs();
+    if (!Item.isValidItem(itemName)){
+      gui.print("Not a valid item!");
+    } else if (!inventory.hasItem(itemMap.get(itemName))){
+      gui.print("You don't seem to have that item.");
+    } else {
+      Item item = itemMap.get(itemName);
+      inventory.removeItem(item);
+      currentRoom.addItem(item);
+      gui.println("You dropped " + item.getName() + ".");
     }
   }
 
