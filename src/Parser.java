@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Parser {
-  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take", "heal", "test", "wear", "read", "pray", "inflate", "info", "cls" };
+  private static final String validCommands[] = { "go", "quit", "help", "eat", "yell", "music", "restart", "hit", "save", "take", "heal", "test", "wear", "read", "pray", "inflate", "info", "cls", "drop", "threaten" };
   private static GUI gui = GUI.getGUI();
 
   public Command getCommand() {
@@ -164,6 +164,12 @@ public class Parser {
       gui.println("Clears the screen.");
       gui.println();
       gui.println("CLS");
+    } else if (commandWord.equalsIgnoreCase("drop")){
+      gui.println("Drops an item from your inventory and puts it in the current room.");
+      gui.println();
+      gui.println("DROP item");
+      gui.println();
+      gui.println("  item     The item to drop.");
     } else if (commandWord.equalsIgnoreCase("test")){
       gui.println("Internal function for testing the game. Do not use.");
     }

@@ -189,6 +189,10 @@ public class GUI {
                     commandIndex++;
                     input.setText("");
                 }
+                else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+                    input.setText("");
+
+                }
             }
 
             @Override

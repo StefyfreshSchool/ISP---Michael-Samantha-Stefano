@@ -953,7 +953,7 @@
         {
           "isLocked": true,
           "direction": "Up",
-          "adjacentRoom": "Temple of the Sky Gods Pavillion",
+          "adjacentRoom": "Sky Temple Pavillion",
           "keyId": "1234"
         },
         {
@@ -1029,9 +1029,9 @@
       ]
     },
     {
-      "id": "Temple of the Sky Gods Pavillion",
-      "name": "Temple of the Sky Gods Pavillion",
-      "description": "You stand at the base of large castle floating on top of the clouds. The spires of the castle turn, twist, and reach into the sky. The frosted glass walls reflect and refract the image of the clouds all around creating milky swirl images on the castle walls.",
+      "id": "Sky Temple Pavillion",
+      "name": "Sky Temple Pavillion",
+      "description": "You look up at the towering castle, perched on the cloudcapt sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
       "exits": [
         {
           "isLocked": false,
@@ -1050,7 +1050,7 @@
     {
       "id": "Temple of the Sky Gods",
       "name": "Temple of the Sky Gods",
-      "description": "You stand in the throne room of the Sky Palace. Three large ornate thrones float on clouds on the back of room. Sitting on the thrones are three people. You realize that they are the Gods of Tableland.",
+      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling. On them sit three humans. Somehow, you know they are the true Gods of Tableland.",
       "exits": [
         {
           "isLocked": false,

@@ -34,37 +34,27 @@ public class Inventory implements java.io.Serializable {
   }
 
   public boolean addItem(Item item) {
-    if (item.getWeight() + currentWeight <= maxWeight)
+    if (item.getWeight() + currentWeight <= maxWeight){
+      currentWeight += item.getWeight();
       return items.add(item);
-    else {
-      gui.println("There is no room to add the item.");
+    } else {
       return false;
     }
   }
 
-  public Item getItem(int index){
-    return items.get(index);
-  }
-
-  public int find(String name){
-    for(int i=0; i<items.size(); i++){
-      if(items.get(i).getName().equals(name)){
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  public String printInventory(){
-    String in = "";
-    for(int i=0; i<items.size(); i++){
-      in += items.get(i).getName()+", ";
-    }
-    return in;
-    
+  /**
+   * Gets an Item object specified by the item name. <p>
+   * If the Item is not in the inventory, it returns null.
+   * @param name - The name of the item to get
+   * @return The Item
+   */
+  public Item getItem(String name){
+    int i = items.indexOf(Game.itemMap.get(name));
+    return i == -1 ? null : items.get(i);
   }
 
   public boolean removeItem(Item item) {
+    currentWeight -= item.getWeight();
     return items.remove(item);
   }
 

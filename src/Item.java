@@ -13,6 +13,8 @@ public class Item extends OpenableObject implements java.io.Serializable {
     private String name;
     private String description;
     private boolean isOpenable;
+    private boolean isWeapon;
+    private int damage = 0;
     private int quantity;
     private ArrayList<String> aliases;
 
@@ -20,6 +22,18 @@ public class Item extends OpenableObject implements java.io.Serializable {
     public static ArrayList<String> validItems;
     private String startingRoom;
   
+    public Item(int weight, String name, String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases, boolean isWeapon, int damage) { // FOR WEAPONS
+      this.weight = weight;
+      this.name = name;
+      this.startingRoom = startingRoom;
+      this.isOpenable = isOpenable;
+      this.description = description;
+      this.aliases = aliases;
+      this.isWeapon = isWeapon;
+      this.damage = damage;
+      this.quantity = 1;
+    }
+
     public Item(int weight, String name, String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases, int quantity) {
       this.weight = weight;
       this.name = name;
@@ -28,6 +42,8 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.description = description;
       this.aliases = aliases;
       this.quantity = quantity;
+      this.isWeapon = false;
+      this.damage = 0;
     }
 
     public Item(int weight, String name,  String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases) {
@@ -38,6 +54,8 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.description = description;
       this.aliases = aliases;
       this.quantity = 1;
+      this.isWeapon = false;
+      this.damage = 0;
     }
 
     public Item(int weight, String name, boolean isOpenable, String description) {
@@ -46,6 +64,8 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.isOpenable = isOpenable;
       this.description = description;
       this.quantity = 1;
+      this.isWeapon = false;
+      this.damage = 0;
     }
 
     public Item(Item item) {
@@ -54,6 +74,8 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.isOpenable = item.isOpenable;
       this.description = item.description;
       this.quantity = 1;
+      this.isWeapon = true;
+      this.damage = item.damage;
     }
     
     /** Set the list of valid items globally for the Item class. */
@@ -111,12 +133,23 @@ public class Item extends OpenableObject implements java.io.Serializable {
     public int getQuantity() {
       return quantity;
     }
+
+    public void setDamage(int damage){
+      this.damage = damage;
+    }
+
+    public int getDamage() {
+      if (this.isWeapon){
+        return this.damage;
+      }
+      return 0;
+    }
   
     public void setQuantity(int quantity) {
       this.quantity = quantity;
     }
 
-    public void setQuantity() {
+    public void decrementQuantity() {
       this.quantity--;
     }
   
@@ -138,6 +171,15 @@ public class Item extends OpenableObject implements java.io.Serializable {
   
     public boolean isOpenable() {
       return isOpenable;
+    }
+
+    public boolean isThisItem(String itemName){
+      boolean out = false;
+      if (itemName.equals(name)) out = true;
+      for (String alias : aliases){
+        if (itemName.equals(alias)) out = true;
+      }
+      return out;
     }
   
     public void setOpenable(boolean isOpenable) {

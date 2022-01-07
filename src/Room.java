@@ -194,4 +194,8 @@ public class Room implements java.io.Serializable {
     }
     throw new IllegalArgumentException("Item not found in this room.");
   }
+
+  public boolean addItem(Item item) {
+    return items.add(item);
+  }
 }

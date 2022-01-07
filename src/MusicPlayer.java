@@ -23,12 +23,12 @@ public class MusicPlayer {
      * It unobtrusively logs errors to {@code System.err} except for the FileNotFound exception.
      * @param filePath - path to playable music file
      */
-    public MusicPlayer(String filePath) throws FileNotFoundException{
+    public MusicPlayer(String filePath, boolean loopsForever) throws FileNotFoundException{
         try {
             audioInput = AudioSystem.getAudioInputStream(new File(filePath));
             clip = AudioSystem.getClip();
             clip.open(audioInput);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            if (loopsForever) clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (FileNotFoundException e){
             throw new FileNotFoundException(filePath);
         } catch (IOException | LineUnavailableException e) {

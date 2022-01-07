@@ -1,24 +1,16 @@
 public class Weapon extends Item{
-    private int damage;
+  private int damage;
 
-  /**
-   * Creates a weapon described "description". 
-   */
-  public Weapon(String description, int weight, String name, int damage) {
+  public Weapon(String name, String description, int damage, int weight) {
     super(weight, name, false, description);
     this.damage = damage;
+    
   }
 
   public Weapon() {
     super(0, "DEFAULT NAME", false, "DEFAULT DESCRIPTION");
     damage = 0;
 
-  }
-
-  public Weapon(String name, String description, int damage, int weight) {
-    super(weight, name, false, description);
-    this.damage = damage;
-    
   }
 
   /**
@@ -36,11 +28,11 @@ public class Weapon extends Item{
     return "Weapon: " + getName() + "\n\n" + getDescription() + "\nDamage:"+damage;
   }
 
-  public Integer getDamage() {
+  public int getDamage() {
     return damage;
   }
 
-  public void setWeaponDamage(int damage) {
+  public void setDamage(int damage) {
     this.damage = damage;
   }
 }
