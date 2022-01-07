@@ -32,18 +32,18 @@ public class Game implements java.io.Serializable {
    * Create the game and initialize its internal map.
    */
   public Game() {
+    //Init GUI and player stuff
+    gui = GUI.getGUI();
+    gui.createWindow();
+    inventory = new Inventory(MAX_WEIGHT);
+    player = new Player(100);
+
     //Check that all dependencies are present
     try {
       existJavaDependencies();
     } catch (Error e) {
       GameError.javaDependenciesNotFound();
     }
-
-    //Init GUI and player stuff
-    gui = GUI.getGUI();
-    gui.createWindow();
-    inventory = new Inventory(MAX_WEIGHT);
-    player = new Player(100);
 
     //Init rooms and game state
     try {
