@@ -333,30 +333,30 @@ public class Game implements java.io.Serializable {
    * FEEL FREE to add stuff for testing things!!
    */
   private void testing(Command command) {
-    gui.println("Don't you dare use this command if you aren't a dev!");
-    return;
-    //In the game, type "test #" to activate one of the following tests.
-    // String c = command.getStringifiedArgs();
-    // if (c.equals("1")){
-    //   inventory.addItem(itemMap.get("pounds"));
-    //   salesman();
-    // } else if (c.equals("2")){
-    //   currentRoom = roomMap.get("Castle Grounds");
-    // } else if (c.equals("3")){
-    //   currentRoom = roomMap.get("North of Crater");
-    // } else if (c.equals("4")){
-    //   inventory.addItem(Game.itemMap.get("balloony"));
-    // } else if (c.equals("5")){
-    //   player.setHealth(90);
-    // } else if (c.equals("6")){
-    //   player.talkedToSkyGods();
-    // } else if (c.equals("7")){
-    //   inventory.addItem(itemMap.get("Bandages"));
-    // } else if (c.equals("crash")){
-    //   GameError.crashGame();
-    // }
-    // gui.println("Test activated.");
-    // gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+    // gui.println("Don't you dare use this command if you aren't a dev!");
+    // return;
+    // In the game, type "test #" to activate one of the following tests.
+    String c = command.getStringifiedArgs();
+    if (c.equals("1")){
+      inventory.addItem(itemMap.get("pounds"));
+      salesman();
+    } else if (c.equals("2")){
+      currentRoom = roomMap.get("Castle Grounds");
+    } else if (c.equals("3")){
+      currentRoom = roomMap.get("North of Crater");
+    } else if (c.equals("4")){
+      inventory.addItem(Game.itemMap.get("balloony"));
+    } else if (c.equals("5")){
+      player.setHealth(90);
+    } else if (c.equals("6")){
+      player.talkedToSkyGods();
+    } else if (c.equals("7")){
+      inventory.addItem(itemMap.get("Bandages"));
+    } else if (c.equals("crash")){
+      GameError.crashGame();
+    }
+    gui.println("Test activated.");
+    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   private Enemy enemyRoomCheck(Room room){
