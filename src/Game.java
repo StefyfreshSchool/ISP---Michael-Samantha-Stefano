@@ -32,11 +32,7 @@ public class Game implements java.io.Serializable {
    * Create the game and initialize its internal map.
    */
   public Game() {
-    //Init GUI and player stuff
     gui = GUI.getGUI();
-    gui.createWindow();
-    inventory = new Inventory(MAX_WEIGHT);
-    player = new Player(100);
 
     //Check that all dependencies are present
     try {
@@ -44,6 +40,10 @@ public class Game implements java.io.Serializable {
     } catch (Error e) {
       GameError.javaDependenciesNotFound();
     }
+
+    // init player stuff
+    inventory = new Inventory(MAX_WEIGHT);
+    player = new Player(100);
 
     //Init rooms and game state
     try {
@@ -61,7 +61,7 @@ public class Game implements java.io.Serializable {
         save = (Save) in.readObject();
         in.close();
         fileIn.close();
-      } catch (InvalidClassException e) {
+      } catch (InvalidClassException | ClassNotFoundException e) {
         gui.printerr("A local class has been altered without resetting the game save! Resetting.");
         gui.println();
         resetSaveState();
@@ -353,6 +353,8 @@ public class Game implements java.io.Serializable {
       player.talkedToSkyGods();
     } else if (c.equals("7")){
       inventory.addItem(itemMap.get("Bandages"));
+    } else if (c.equals("crash")){
+      GameError.crashGame();
     }
 
     gui.println("Test activated.");

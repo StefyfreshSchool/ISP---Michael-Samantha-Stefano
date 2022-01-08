@@ -201,7 +201,7 @@ public class GUI {
 
             @Override
             public void keyReleased(KeyEvent e) {
-    }
+            }
         });
 
 
