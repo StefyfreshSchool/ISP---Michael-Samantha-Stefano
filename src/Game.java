@@ -226,6 +226,7 @@ public class Game implements java.io.Serializable {
 
   /** Print out the opening message for the player. */
   private void printWelcome() {
+    gui.reset();
     gui.println("Welcome to Zork!");
     gui.println("Zork is an amazing text adventure game!");
     gui.println("Type 'help' for more information about the game and the available commands.");
@@ -332,30 +333,30 @@ public class Game implements java.io.Serializable {
    * FEEL FREE to add stuff for testing things!!
    */
   private void testing(Command command) {
-    // gui.println("Don't you dare use this command if you aren't a dev!");
-    // return;
+    gui.println("Don't you dare use this command if you aren't a dev!");
+    return;
     //In the game, type "test #" to activate one of the following tests.
-    String c = command.getStringifiedArgs();
-    if (c.equals("1")){
-      inventory.addItem(itemMap.get("pounds"));
-      salesman();
-    } else if (c.equals("2")){
-      currentRoom = roomMap.get("Castle Grounds");
-    } else if (c.equals("3")){
-      currentRoom = roomMap.get("North of Crater");
-    } else if (c.equals("4")){
-      inventory.addItem(Game.itemMap.get("balloony"));
-    } else if (c.equals("5")){
-      player.setHealth(90);
-    } else if (c.equals("6")){
-      player.talkedToSkyGods();
-    } else if (c.equals("7")){
-      inventory.addItem(itemMap.get("Bandages"));
-    } else if (c.equals("crash")){
-      GameError.crashGame();
-    }
-    gui.println("Test activated.");
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
+    // String c = command.getStringifiedArgs();
+    // if (c.equals("1")){
+    //   inventory.addItem(itemMap.get("pounds"));
+    //   salesman();
+    // } else if (c.equals("2")){
+    //   currentRoom = roomMap.get("Castle Grounds");
+    // } else if (c.equals("3")){
+    //   currentRoom = roomMap.get("North of Crater");
+    // } else if (c.equals("4")){
+    //   inventory.addItem(Game.itemMap.get("balloony"));
+    // } else if (c.equals("5")){
+    //   player.setHealth(90);
+    // } else if (c.equals("6")){
+    //   player.talkedToSkyGods();
+    // } else if (c.equals("7")){
+    //   inventory.addItem(itemMap.get("Bandages"));
+    // } else if (c.equals("crash")){
+    //   GameError.crashGame();
+    // }
+    // gui.println("Test activated.");
+    // gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   private Enemy enemyRoomCheck(Room room){
@@ -1001,7 +1002,7 @@ public class Game implements java.io.Serializable {
       gui.println("You are an adventurer in the marvelous lands of Tableland,");
       gui.println("always in search for things to do and items to collect.");
       gui.println();
-      gui.println("Your command words are:");
+      gui.println("The available commands are:");
       Parser.showCommands();
     }    
   }
