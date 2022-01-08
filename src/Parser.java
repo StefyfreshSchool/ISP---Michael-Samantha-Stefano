@@ -99,9 +99,17 @@ public class Parser {
     } else if (commandWord.equalsIgnoreCase("hit")){
       gui.println("Hits an enemy.");
       gui.println();
-      gui.println("HIT enemy");
+      gui.println("HIT enemy WITH weapon");
       gui.println();
       gui.println("  enemy     The enemy to hit.");
+      gui.println("  weapon    The weapon to hit with.");
+    } else if (commandWord.equalsIgnoreCase("threaten")){
+      gui.println("Threatens an enemy.");
+      gui.println();
+      gui.println("THREATEN enemy WITH item");
+      gui.println();
+      gui.println("  enemy     The enemy to threaten.");
+      gui.println("  item      The item to threaten with.");
     } else if (commandWord.equalsIgnoreCase("save")){
       gui.println("Saves the game or loads from a previously saved state.");
       gui.println();

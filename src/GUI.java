@@ -201,7 +201,7 @@ public class GUI {
 
             @Override
             public void keyReleased(KeyEvent e) {
-    }
+            }
         });
 
 
@@ -227,6 +227,7 @@ public class GUI {
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
+        printInfo("\nStarting...\n");
         if (isErrored){
             GameError.fileNotFound("data/images/icon.png");
         } 

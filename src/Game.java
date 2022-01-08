@@ -32,11 +32,7 @@ public class Game implements java.io.Serializable {
    * Create the game and initialize its internal map.
    */
   public Game() {
-    //Init GUI and player stuff
     gui = GUI.getGUI();
-    gui.createWindow();
-    inventory = new Inventory(MAX_WEIGHT);
-    player = new Player(100);
 
     //Check that all dependencies are present
     try {
@@ -44,6 +40,10 @@ public class Game implements java.io.Serializable {
     } catch (Error e) {
       GameError.javaDependenciesNotFound();
     }
+
+    // init player stuff
+    inventory = new Inventory(MAX_WEIGHT);
+    player = new Player(100);
 
     //Init rooms and game state
     try {
@@ -61,7 +61,7 @@ public class Game implements java.io.Serializable {
         save = (Save) in.readObject();
         in.close();
         fileIn.close();
-      } catch (InvalidClassException e) {
+      } catch (InvalidClassException | ClassNotFoundException e) {
         gui.printerr("A local class has been altered without resetting the game save! Resetting.");
         gui.println();
         resetSaveState();
@@ -210,7 +210,7 @@ public class Game implements java.io.Serializable {
   }
 
   /**Starts the background music. */
-  private void startMusic(){
+  private void startMusic() {
     try {
       music = new MusicPlayer("data/audio/background.wav", true);
     } catch (FileNotFoundException e) {
@@ -226,6 +226,7 @@ public class Game implements java.io.Serializable {
 
   /** Print out the opening message for the player. */
   private void printWelcome() {
+    gui.reset();
     gui.println("Welcome to Zork!");
     gui.println("Zork is an amazing text adventure game!");
     gui.println("Type 'help' for more information about the game and the available commands.");
@@ -334,7 +335,7 @@ public class Game implements java.io.Serializable {
   private void testing(Command command) {
     // gui.println("Don't you dare use this command if you aren't a dev!");
     // return;
-    //In the game, type "test #" to activate one of the following tests.
+    // In the game, type "test #" to activate one of the following tests.
     String c = command.getStringifiedArgs();
     if (c.equals("1")){
       inventory.addItem(itemMap.get("pounds"));
@@ -351,6 +352,8 @@ public class Game implements java.io.Serializable {
       player.talkedToSkyGods();
     } else if (c.equals("7")){
       inventory.addItem(itemMap.get("Bandages"));
+    } else if (c.equals("crash")){
+      GameError.crashGame();
     }
     gui.println("Test activated.");
     gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
@@ -935,11 +938,11 @@ public class Game implements java.io.Serializable {
    */
   private void read(String secondWord){
     if (secondWord != ""){
-      if ((secondWord.toLowerCase().equals("tome") || secondWord.equals("tome of tableland")) && inventory.hasItem(itemMap.get("tome"))){
+      if (itemMap.get("tome").isThisItem(secondWord) && inventory.hasItem(itemMap.get("tome"))){
         readTome();
-      } else if (secondWord.toLowerCase().equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (itemMap.get("diary").isThisItem(secondWord) && currentRoom.getRoomName().equals("Master Bedroom")){
         readDiary();
-      } else if ((secondWord.toLowerCase().equals("scroll") || secondWord.equals("scroll of tableland")) && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (itemMap.get("scroll").isThisItem(secondWord) && currentRoom.getRoomName().equals("Master Bedroom")){
         readScroll();
       } else {
         gui.println("You can't read that!");
@@ -950,6 +953,19 @@ public class Game implements java.io.Serializable {
   }
 
   private void readScroll() {
+    gui.println("Garbled, messy writing is scrawled on the page. It says:");
+    gui.println();
+    gui.println("\"not yet news news: The official newspaper of Tableland\"");
+    gui.println("\"January 3rd, 2022 | Author: Christopher Cha\"");
+    gui.println("\"not yet news news: Balloony has taken down Connie!\"");
+    gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
+    gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
+    gui.println("\"Balloony told the people of Tableland \"");
+    gui.println("Connie wins Election!!!");
+    gui.println("\"not yet news news: The official newspaper of Tableland\"");
+    gui.println("\"November 10th, 2019\"");
+    gui.println("\"not yet news news: Connie and Balloony Tie Election!\"");
+    gui.println("\"They are both heads of customer service!\"");
   }
 
   /**
@@ -1023,7 +1039,7 @@ public class Game implements java.io.Serializable {
       gui.println("You are an adventurer in the marvelous lands of Tableland,");
       gui.println("always in search for things to do and items to collect.");
       gui.println();
-      gui.println("Your command words are:");
+      gui.println("The available commands are:");
       Parser.showCommands();
     }    
   }
