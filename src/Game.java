@@ -155,7 +155,6 @@ public class Game implements java.io.Serializable {
       } else {
         item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, quantity.intValue());
       }
-
       itemMap.put(itemId, item);
 
       for (String alias : aliases) {
