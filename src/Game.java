@@ -16,7 +16,6 @@ public class Game implements java.io.Serializable {
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
-
   public static HashMap<String, Room> roomMap;
   public static HashMap<String, Item> itemMap;
   public static HashMap<String, Enemy> enemyMap;
