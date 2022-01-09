@@ -1,7 +1,6 @@
-import java.io.Serializable;
 import java.util.HashMap;
 
-public class Save implements Serializable {
+public class Save implements java.io.Serializable {
     private HashMap<String, Room> roomMap;
     private HashMap<String, Enemy> enemyMap;
     private Inventory inventory;
