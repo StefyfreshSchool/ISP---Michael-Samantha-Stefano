@@ -32,6 +32,7 @@ public class Game implements java.io.Serializable {
    */
   public Game() {
     gui = GUI.getGUI();
+    gui.sendGameObj(this);
 
     //Check that all dependencies are present
     try {
@@ -194,8 +195,6 @@ public class Game implements java.io.Serializable {
   /** Main play routine. Loops until end of play. */
   public void play() {
     printWelcome();
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
-    
     
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
@@ -204,7 +203,6 @@ public class Game implements java.io.Serializable {
       Command command;
       command = parser.getCommand();
       processCommand(command);
-      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     }
   }
 
@@ -292,7 +290,6 @@ public class Game implements java.io.Serializable {
       gui.println("Inventory: " + inventory.getString());
       gui.println("Health: " + player.getHealth());
       gui.println();
-      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     } else if (commandWord.equals("cls")){
       gui.reset();
     } else {
@@ -316,7 +313,6 @@ public class Game implements java.io.Serializable {
     }
 
     printWelcome();
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   private void endGame() {
@@ -355,7 +351,6 @@ public class Game implements java.io.Serializable {
       GameError.crashGame();
     }
     gui.println("Test activated.");
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   private Enemy enemyRoomCheck(Room room){
@@ -529,7 +524,6 @@ public class Game implements java.io.Serializable {
     } else if (command.getLastArg().equalsIgnoreCase("game") || !command.hasArgs()){ 
     } else if (command.getLastArg().equalsIgnoreCase("load")){
       loadSave();
-      gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       return false;
     } else if (command.getLastArg().equalsIgnoreCase("clear") || command.getLastArg().equalsIgnoreCase("reset")){
       resetSaveState();
@@ -584,7 +578,6 @@ public class Game implements java.io.Serializable {
         gui.reset();
         gui.printInfo("Game reloaded from saved data.\n");
         gui.println(currentRoom.longDescription());
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
       } else {
         gui.println("There is no valid state to load!");
       }
@@ -646,12 +639,10 @@ public class Game implements java.io.Serializable {
       if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         sasquatch();
       } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         vaccuum();
       } else if (!isInTrial){
         currentRoom = nextRoom;
@@ -670,7 +661,6 @@ public class Game implements java.io.Serializable {
         newsNewsScroll();
       }
     }
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
   }
 
   /**
@@ -738,7 +728,6 @@ public class Game implements java.io.Serializable {
       processCommand(command);
       if (!enemy.getIsDead()){
         player.setHealth(tempDamage);
-        gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
         gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
       }
     }
@@ -805,7 +794,6 @@ public class Game implements java.io.Serializable {
    *  Does when you enter the fur store location. IT WORKS GUYSSS
    */
   public void salesman(){
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     if (!inventory.hasItem(itemMap.get("Coonskin Hat"))){
       gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
       gui.println("\"Would you like to buy my furs? Only for a small fee of £500!\" He says.");
@@ -850,7 +838,6 @@ public class Game implements java.io.Serializable {
   }
 
   public void cheeseVault(){
-    gui.setGameInfo(inventory.getString(), player.getHealth(), currentRoom.getExits());
     if(!inventory.hasItem(itemMap.get("cheese"))){
       gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
       gui.println("ENTER CODE:");
@@ -1081,19 +1068,14 @@ public class Game implements java.io.Serializable {
     }
   }
   
-  /**
-   * Resets the game save state.
-   */
-  private void resetSaveState() {
-    try {
-      FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
-      ObjectOutputStream out = new ObjectOutputStream(fileOut);
-      out.writeObject(null);
-      out.close();
-      fileOut.close();
-    } catch (IOException i) {
-      i.printStackTrace();
+  public String getGUIGameString() {
+    String roomExString = "";
+    ArrayList<String> exits = new ArrayList<String>();
+    for (Exit exit : currentRoom.getExits()) {
+        exits.add(exit.getDirection());
     }
+    roomExString = String.join(", ", exits);
+    return "Inventory: " + inventory.getString() + " | Health: " + player.getHealth() + " | Exits: " + roomExString;
   }
 
   //Below are utility functions, serving a purpose only for internal game management.
@@ -1108,6 +1090,21 @@ public class Game implements java.io.Serializable {
     try {
       Thread.sleep(m);
     } catch (InterruptedException e) {
+    }
+  }
+
+  /**
+   * Resets the game save state.
+   */
+  private void resetSaveState() {
+    try {
+      FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
+      out.writeObject(null);
+      out.close();
+      fileOut.close();
+    } catch (IOException i) {
+      i.printStackTrace();
     }
   }
 }

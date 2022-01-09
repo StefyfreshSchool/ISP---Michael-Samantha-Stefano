@@ -37,11 +37,12 @@ public class GUI {
     private JTextField input;
     private JScrollPane scroll;
     private JPanel inputContainer;
-    private JTextArea roomInfo;
+    private JTextArea gameInfo;
     private boolean isErrored;
 
-    //class variable
+    //class variables
     private static GUI gui;
+    private static Game gameObj;
 
     /** The private constructor for the singleton GUI class.*/
     private GUI(){}
@@ -134,19 +135,17 @@ public class GUI {
 
 
         //add game info
-        roomInfo = new JTextArea();
-        roomInfo.setLineWrap(true);
-        roomInfo.setWrapStyleWord(true);
-        roomInfo.setEditable(false);
-        roomInfo.setCaretColor(Color.WHITE);
-        roomInfo.setBackground(Color.BLACK);
-        roomInfo.setHighlighter(null);
-        roomInfo.setMaximumSize(new Dimension(800, 100));
-        roomInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
-        roomInfo.setForeground(Color.LIGHT_GRAY);
-        gameContainer.add(roomInfo);
-
-        
+        gameInfo = new JTextArea();
+        gameInfo.setLineWrap(true);
+        gameInfo.setWrapStyleWord(true);
+        gameInfo.setEditable(false);
+        gameInfo.setCaretColor(Color.WHITE);
+        gameInfo.setBackground(Color.BLACK);
+        gameInfo.setHighlighter(null);
+        gameInfo.setMaximumSize(new Dimension(800, 100));
+        gameInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
+        gameInfo.setForeground(Color.LIGHT_GRAY);
+        gameContainer.add(gameInfo);
 
 
         //add the input text box
@@ -227,7 +226,7 @@ public class GUI {
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
-        printInfo("\nStarting...\n");
+        append("\nStarting...\n\n", stylize(true, false, Color.LIGHT_GRAY));
         if (isErrored){
             GameError.fileNotFound("data/images/icon.png");
         } 
@@ -243,25 +242,6 @@ public class GUI {
         command = inputCommand;
         inputCommand = null;
         return command;
-    }
-    
-    /**
-     * Sets the game info - the info box above the command field.
-     * <p>
-     * <b>IMPORTANT NOTE: This is done very poorly at the current time.</b>
-     * <p>
-     * @param inventory - Player's inventory.
-     * @param roomExits - Player's room exits.
-     */
-    public void setGameInfo(String inventory, int health, ArrayList<Exit> roomExits) {
-        if (roomExits == null || inventory == null) throw new IllegalArgumentException("Parameters must be non-null.");
-        String roomExString = "";
-        ArrayList<String> exits = new ArrayList<String>();
-        for (Exit exit : roomExits) {
-            exits.add(exit.getDirection());
-        }
-        roomExString = String.join(", ", exits);
-        roomInfo.setText("Inventory: " + inventory + " | Health: " + health + " | Exits: " + roomExString);
     }
 
     /**
@@ -284,6 +264,7 @@ public class GUI {
     public void println() {
         append("\n", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -293,6 +274,7 @@ public class GUI {
     public void println(int x) {
         append(x + "\n",  null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -302,6 +284,7 @@ public class GUI {
     public void println(boolean x) {
         append(x + "\n", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -311,6 +294,7 @@ public class GUI {
     public void println(Object x) {
         append(x + "\n", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -320,6 +304,7 @@ public class GUI {
     public void println(double x) {
         append(x + "\n", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -329,6 +314,7 @@ public class GUI {
     public void print(int x) {
         append(x + "", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -338,6 +324,7 @@ public class GUI {
     public void print(boolean x) {
         append(x + "", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -347,6 +334,7 @@ public class GUI {
     public void print(double x) {
         append(x + "", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -356,6 +344,7 @@ public class GUI {
     public void print(Object x) {
         append(x + "", null);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -368,6 +357,7 @@ public class GUI {
     public void printStyled(Object x, Style style) {
         append(x + "", style);
         flush();
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /**
@@ -384,6 +374,7 @@ public class GUI {
      */
     public void printInfo(Object x) {
         append(x + "\n", stylize(true, false, Color.LIGHT_GRAY));
+        gameInfo.setText(gameObj.getGUIGameString());
     }
 
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
@@ -436,4 +427,8 @@ public class GUI {
         StyleConstants.setItalic(style, italics);
         return style;
     }
+
+	public void sendGameObj(Game game) {
+        gameObj = game;
+	}
 }
