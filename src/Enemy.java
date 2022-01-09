@@ -1,13 +1,21 @@
 public class Enemy extends Character{
     private int health;
     private String name;
-    private int damage;
+    private int damageMin;
+    private int damageMax;
+    private String m1; // three messages when the enemy hurts you
+    private String m2;
+    private String m3;
     private boolean isDead;
 
-    public Enemy(String name, String catchphrase, int health, int damage){
+    public Enemy(String name, String catchphrase, int health, int damageMin, int damageMax, String m1, String m2, String m3){
         super(name, catchphrase);
         this.health = health;
-        this.damage = damage;
+        this.damageMin = damageMin;
+        this.damageMax = damageMax;
+        this.m1 = m1;
+        this.m2 = m2;
+        this.m3 = m3;
         this.isDead = false;
     }
 
@@ -40,7 +48,17 @@ public class Enemy extends Character{
     public int getHealth(){
         return health;
     }
+
     public int getDamage() {
-        return damage;
+        return (int) (Math.random() * (damageMax - damageMin)) + damageMin;
+    }
+
+    public String getHurtMessage() {
+        int num = (int) (Math.random() * 3) + 1;
+        if (num == 1){
+            return m1;
+        } else if (num == 2){
+            return m2;
+        } return m3;
     }
 }

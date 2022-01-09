@@ -777,7 +777,7 @@
     {
       "id": "Parliament Entrance Room",
       "name": "Parliament Entrance Room",
-      "description": "In the Parliament of Tableland, no one seems to be here. Every desk and office room is empty. How does anyone do work around here? At the end of the room, there is a door with a sign reading \"Tableland Department of Customer Service\".",
+      "description": "In the Parliament of Tableland, no one seems to be here. Every desk and office room is empty. How does anyone do work around here? At the end of the room, there is a door with a sign reading \"Tableland Dept. of Customer Service\".",
       "exits": [
         {
           "isLocked": false,
@@ -916,7 +916,7 @@
     {
       "id": "News News Vault",
       "name": "News News Vault",
-      "description": "You stand in a large, beautiful vault. Gold coins pool at your feet.",
+      "description": "You stand in a large, beautiful vault. Gold coins pool at your feet. A golden bust of Christopher Cha glows in the centre: \"OUR GLORIOUS LEADER\".",
       "exits": [
         {
           "isLocked": false,
