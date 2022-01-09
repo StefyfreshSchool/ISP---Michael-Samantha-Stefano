@@ -161,6 +161,8 @@ public class GUI {
         input.addKeyListener(new KeyListener(){
             ArrayList<String> commandsEntered = new ArrayList<String>();
             int commandIndex = 0;
+            String inProgressCommand = "";
+            boolean isBrowsing = false;
 
             @Override
             public void keyPressed(KeyEvent e){
@@ -170,6 +172,7 @@ public class GUI {
                     commandIndex = commandsEntered.size();
                     commandsEntered.add(command);
                     commandIndex++;
+                    inProgressCommand = "";
 
                     input.setText("");
                     append("\n> ", null);
@@ -178,7 +181,9 @@ public class GUI {
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
                     commandIndex--; 
+                    if (!isBrowsing) inProgressCommand = input.getText();
                     input.setText(commandsEntered.get(commandIndex));
+                    isBrowsing = true;
                 } 
                 else if (e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex < commandsEntered.size() - 1){
                     commandIndex++;
@@ -186,11 +191,12 @@ public class GUI {
                 }
                 else if(e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex == commandsEntered.size() - 1){
                     commandIndex++;
-                    input.setText("");
+                    input.setText(inProgressCommand);
+                    isBrowsing = false;
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
                     input.setText("");
-
+                    inProgressCommand = "";
                 }
             }
 
