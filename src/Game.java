@@ -123,7 +123,7 @@ public class Game implements java.io.Serializable {
     enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25, 8, 12, "The Sasquatch punches you square in the chest.", "The Sasquatch swipes at you from the side.", "The Sasquatch pelts you with stones."));
     enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VVRRRRRRRRRRR!!!\"", 25, 10, 16, "The Vaccuum whacks you with its handle.", "The Vaccuum slams into your legs.", "The Vaccuum trips you with its cord."));
     enemyMap.put("robot", new Enemy("Friends Robot", "\"yAy. Fr13nD d3teCt3d.\"", 30, 13, 18, "The Friends Robot hugs you too hard.", "The Friends Robot gives you a too-firm handshake.", "The Friends Robot strokes your head too hard."));
-    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 40, 18, 23, "Balloony inflicts psychic damage.", "Balloony forces you to read Tableland propaganda.", "Balloony makes your hair stand on end."));
+    enemyMap.put("balloony", new Enemy("Balloony", "\"Tableland Customer Service is mine and mine alone.\"", 40, 18, 23, "Balloony inflicts psychic damage.", "Balloony forces you to read Tableland propaganda.", "Balloony makes your hair stand on end."));
     enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200, 1, 100, "Mr. DesLauriers swings his aluminum baseball bat.", "Mr. DesLauriers confuses you with programming jargon.", "Mr. DesLauriers marks you absent."));
     isInTrial = false;
   }
@@ -727,7 +727,7 @@ public class Game implements java.io.Serializable {
       processCommand(command);
       if (!enemy.getIsDead()){
         player.setHealth(tempDamage);
-        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
+        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP int the fight!");
       }
     }
   }
@@ -786,6 +786,13 @@ public class Game implements java.io.Serializable {
   }
 
   public void deptCustomerService(){
+    Enemy balloony = enemyMap.get("balloony");
+    if (!player.getTalkedToSkyGods()){
+      gui.println("Floating above the wreckage is a large blue balloon.");
+      gui.println("\"My name is Balloony, I am the head of customer service of Tableland.\"");
+      gui.println("\"Customer Service is mine. You are not allowed to be in here.\"");
+      enemyAttack(balloony);
+    }
 
   }
 
@@ -945,12 +952,8 @@ public class Game implements java.io.Serializable {
     gui.println("\"not yet news news: Balloony has taken down Connie!\"");
     gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
     gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
-    gui.println("\"Balloony told the people of Tableland \"");
-    gui.println("Connie wins Election!!!");
-    gui.println("\"not yet news news: The official newspaper of Tableland\"");
-    gui.println("\"November 10th, 2019\"");
-    gui.println("\"not yet news news: Connie and Balloony Tie Election!\"");
-    gui.println("\"They are both heads of customer service!\"");
+    gui.println("\"Balloony told the people of Tableland this on a press conference on Friday. He has kidnapped his former co-head of customer service.\"");
+    gui.println("\"Where could Balloony be keeping Connie?\" You think.");
   }
 
   /**
