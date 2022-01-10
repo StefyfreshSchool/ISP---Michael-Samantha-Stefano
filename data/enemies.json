@@ -3,6 +3,7 @@
         {
             "id": "sasquatch",
             "name": "Sasquatch",
+            "aliases": [],
             "catchphrase": "\"You have missed a day of school! You are my dinner now!\"",
             "m1": "The Sasquatch punches you square in the chest.",
             "m2": "The Sasquatch swipes at you from the side.",
@@ -14,6 +15,7 @@
         {
             "id": "vaccuum",
             "name": "Vaccuum",
+            "aliases": [],
             "catchphrase": "\"VVRRRRRRRRRRR!!!\"",
             "m1": "The Vaccuum whacks you with its handle.",
             "m2": "The Vaccuum slams into your legs.",
@@ -25,6 +27,7 @@
         {
             "id": "robot",
             "name": "Friends Robot",
+            "aliases": ["robot"],
             "catchphrase": "\"yAy. Fr13nD d3teCt3d.\"",
             "m1": "The Friends Robot hugs you too hard.",
             "m2": "The Friends Robot gives you a too-firm handshake.",
@@ -36,6 +39,7 @@
         {
             "id": "balloony",
             "name": "Balloony",
+            "aliases": [],
             "catchphrase": "\"Tableland customer service is mine and mine alone!\"",
             "m1": "Balloony inflicts psychic damage.",
             "m2": "Balloony forces you to read Tableland propaganda.",
@@ -47,6 +51,7 @@
         {
             "id": "deslauriers",
             "name": "Mr. DesLauriers",
+            "aliases": [],
             "catchphrase": "Hi, I'm Mr. DesLauriers.",
             "m1": "Mr. DesLauriers swings his aluminum baseball bat.",
             "m2": "",
