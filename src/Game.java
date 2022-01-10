@@ -25,8 +25,6 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   private boolean isInTrial;
 
-  private static final int MAX_WEIGHT = 10;
-  
   /**
    * Create the game and initialize its internal map.
    */
@@ -42,7 +40,7 @@ public class Game implements java.io.Serializable {
     }
 
     // init player stuff
-    inventory = new Inventory(MAX_WEIGHT);
+    inventory = new Inventory(50);
     player = new Player(100);
 
     //Init rooms and game state
@@ -306,7 +304,7 @@ public class Game implements java.io.Serializable {
       initRooms("data/rooms.json");
       initEnemies();
       currentRoom = roomMap.get("South of the Cyan House");
-      inventory = new Inventory(MAX_WEIGHT);
+      inventory = new Inventory(50);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -639,6 +637,9 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         sasquatch();
+        if(inventory.hasItem(itemMap.get("1000 British Pounds"))){
+          player.setTrial(0);
+        }
       } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
@@ -677,10 +678,10 @@ public class Game implements java.io.Serializable {
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can see a dark, ominous cave.");
-      if (!inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) {
+      if (!player.getTrial(0) && !inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) {
         gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
-      } else if ((inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("1000 British Pounds")) && player.getTalkedToSkyGods())) {
-        gui.println("Your conscience speaks to you. \"There are more important things to do than explore perilous caves.\"");
+      } else if ((player.getTrial(0) && !player.getTalkedToSkyGods()) || player.getTalkedToSkyGods()) {
+        gui.println("Your conscience speaks to you. \"There are more important things to do than explore perilous caves.\" You know you must leave this place.");
       }
     }
   }
@@ -848,9 +849,8 @@ public class Game implements java.io.Serializable {
       gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
       gui.println("ENTER CODE:");
       if (correctCode()){
-        gui.println("Something clicks and the door swings open! Satisfied, you grab a morsel of pristine Alaskan Cheese.");
-        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer.");
-        inventory.addItem(itemMap.get("cheese")); 
+        gui.println("Something clicks and the door swings open! Satisfied, you know you should grab a morsel of pristine Alaskan Cheese.");
+        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece"); 
       } else {
         gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
         currentRoom = roomMap.get("Upper Atrium");
@@ -932,9 +932,9 @@ public class Game implements java.io.Serializable {
     if (secondWord != ""){
       if (itemMap.get("tome").isThisItem(secondWord) && inventory.hasItem(itemMap.get("tome"))){
         readTome();
-      } else if (itemMap.get("diary").isThisItem(secondWord) && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (secondWord.equals("diary") && currentRoom.getRoomName().equals("Master Bedroom")){
         readDiary();
-      } else if (itemMap.get("scroll").isThisItem(secondWord) && currentRoom.getRoomName().equals("Master Bedroom")){
+      } else if (itemMap.get("scroll").isThisItem(secondWord)){
         readScroll();
       } else {
         gui.println("You can't read that!");
