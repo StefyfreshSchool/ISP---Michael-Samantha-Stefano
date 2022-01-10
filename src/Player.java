@@ -1,9 +1,11 @@
 public class Player implements java.io.Serializable{
     private int health;
     private boolean talkedToSkyGods;
+    private boolean[] trials;
 
     public Player(int health){
         this.health = health;
+        trials = new boolean[8];
         talkedToSkyGods = false;
     }
 
@@ -28,5 +30,17 @@ public class Player implements java.io.Serializable{
 
     public boolean getTalkedToSkyGods(){
         return talkedToSkyGods;
+    }
+
+    public boolean getTrial(int index){
+        return trials[index];
+    }
+
+    public void setTrial(int index){
+        trials[index] = true;
+    }
+
+    public void resetTrials(){
+        trials = new boolean[8];
     }
 }
