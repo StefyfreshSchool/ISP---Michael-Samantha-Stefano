@@ -244,10 +244,10 @@ public class Game implements java.io.Serializable {
    * @param command
    * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
    */
-  private void processCommand(Command command) {
+  private boolean processCommand(Command command) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
-      return;
+      return false;
     } 
     String commandWord = command.getCommandWord();
     if (commandWord.equals("test")) testing(command);
@@ -272,7 +272,10 @@ public class Game implements java.io.Serializable {
     } else if(commandWord.equals("hit")){
       hit(command);
     } else if (commandWord.equals("restart")) {
-      if (quitRestart("restart", command)) restartGame();
+      if (quitRestart("restart", command)){
+        restartGame();
+        return true;
+      } 
     } else if (commandWord.equals("save")){
       if (save(command)) endGame();
     } else if (commandWord.equals("take")){
@@ -303,7 +306,7 @@ public class Game implements java.io.Serializable {
     } else {
       gui.println("That command has no logic...");
     }
-    return;
+    return false;
   }
 
   private void restartGame() {
@@ -314,6 +317,7 @@ public class Game implements java.io.Serializable {
       initItems();
       initRooms();
       initEnemies();
+      isInTrial = false;
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(MAX_WEIGHT);
     } catch (Exception e) {
@@ -324,7 +328,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void endGame() {
-    gui.println("Thank you for playing. Goodbye.");
+    gui.println("Thank you for playing. Goodbye!");
 
     //Nice transition to exit the game
     sleep(1000);
@@ -680,7 +684,7 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Sasquatch steps out of the cave.");
       gui.println(sasquatch.getCatchphrase() + " He screams.");
-      enemyAttack(sasquatch);
+      if (enemyAttack(sasquatch)) return;
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
@@ -703,7 +707,7 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
-      enemyAttack(vaccuum);
+      if (enemyAttack(vaccuum)) return;
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
     } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("")){
@@ -723,22 +727,24 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It is blocking your path. You have no choice but to defeat it.");
-      enemyAttack(robot);
+      if (enemyAttack(robot)) return;
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
     }
   }
 
-  private void enemyAttack(Enemy enemy) {
+  private boolean enemyAttack(Enemy enemy) {
     while(enemy.getHealth() > 0){
       int tempDamage = enemy.getDamage();
       Command command = parser.getCommand();
-      processCommand(command);
+      boolean exit = processCommand(command);
+      if (exit) return true;
       if (!enemy.getIsDead()){
         player.setHealth(tempDamage);
-        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
+        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP int the fight!");
       }
     }
+    return false;
   }
 
   public void newsNewsScroll(){
@@ -795,6 +801,13 @@ public class Game implements java.io.Serializable {
   }
 
   public void deptCustomerService(){
+    Enemy balloony = enemyMap.get("balloony");
+    if (!player.getTalkedToSkyGods()){
+      gui.println("Floating above the wreckage is a large blue balloon.");
+      gui.println("\"My name is Balloony, I am the head of customer service of Tableland.\"");
+      gui.println("\"Customer Service is mine. You are not allowed to be in here.\"");
+      if (enemyAttack(balloony)) return;
+    }
 
   }
 
@@ -954,12 +967,8 @@ public class Game implements java.io.Serializable {
     gui.println("\"not yet news news: Balloony has taken down Connie!\"");
     gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
     gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
-    gui.println("\"Balloony told the people of Tableland \"");
-    gui.println("Connie wins Election!!!");
-    gui.println("\"not yet news news: The official newspaper of Tableland\"");
-    gui.println("\"November 10th, 2019\"");
-    gui.println("\"not yet news news: Connie and Balloony Tie Election!\"");
-    gui.println("\"They are both heads of customer service!\"");
+    gui.println("\"Balloony told the people of Tableland this on a press conference on Friday. He has kidnapped his former co-head of customer service.\"");
+    gui.println("\"Where could Balloony be keeping Connie?\" You think.");
   }
 
   /**
