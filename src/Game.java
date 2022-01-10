@@ -131,8 +131,16 @@ public class Game implements java.io.Serializable {
       String m1 = (String) ((JSONObject) enemyObj).get("m1");
       String m2 = (String) ((JSONObject) enemyObj).get("m2");
       String m3 = (String) ((JSONObject) enemyObj).get("m3");
+      ArrayList<String> aliases = new ArrayList<String>();
+      for (Object alias : (JSONArray) ((JSONObject) enemyObj).get("aliases")) {
+        aliases.add((String) alias);
+      }
 
-      enemyMap.put(id, new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3));
+      Enemy enemy = new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3);
+      enemyMap.put(id, enemy);
+      for (String alias : aliases) {
+        enemyMap.put(alias, enemy);
+      }
     }
     isInTrial = false;
   }
