@@ -47,8 +47,8 @@ public class Game implements java.io.Serializable {
 
     //Init rooms and game state
     try {
-      initItems("data/items.json");
-      initRooms("data/rooms.json");
+      initItems();
+      initRooms();
       initEnemies();
       startMusic();
       currentRoom = roomMap.get("South of the Cyan House");
@@ -118,17 +118,26 @@ public class Game implements java.io.Serializable {
     new Awaitility();
   }
 
-  private void initEnemies() { // now has enemy hurt messages. feel free to change!
+  private void initEnemies() {
+    if (Enemy.getEnemies() == null) GameError.fileNotFound("data/enemies.json");
     enemyMap = new HashMap<String, Enemy>();
-    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25, 8, 12, "The Sasquatch punches you square in the chest.", "The Sasquatch swipes at you from the side.", "The Sasquatch pelts you with stones."));
-    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VVRRRRRRRRRRR!!!\"", 25, 10, 16, "The Vaccuum whacks you with its handle.", "The Vaccuum slams into your legs.", "The Vaccuum trips you with its cord."));
-    enemyMap.put("robot", new Enemy("Robot", "\"yAy. Fr13nD d3teCt3d.\"", 30, 13, 18, "The Friends Robot hugs you too hard.", "The Friends Robot gives you a too-firm handshake.", "The Friends Robot strokes your head too hard."));
-    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 40, 18, 23, "Balloony inflicts psychic damage.", "Balloony forces you to read Tableland propaganda.", "Balloony makes your hair stand on end."));
-    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200, 1, 100, "Mr. DesLauriers swings his aluminum baseball bat.", "Mr. DesLauriers confuses you with programming jargon.", "Mr. DesLauriers marks you absent."));
+    for (Object enemyObj : Enemy.getEnemies()){
+      String id = (String) ((JSONObject) enemyObj).get("id");
+      String name = (String) ((JSONObject) enemyObj).get("name");
+      String catchphrase = (String) ((JSONObject) enemyObj).get("catchphrase");
+      Long health = (Long) ((JSONObject) enemyObj).get("health");
+      Long damageMin = (Long) ((JSONObject) enemyObj).get("damageMin");
+      Long damageMax = (Long) ((JSONObject) enemyObj).get("damageMax");
+      String m1 = (String) ((JSONObject) enemyObj).get("m1");
+      String m2 = (String) ((JSONObject) enemyObj).get("m2");
+      String m3 = (String) ((JSONObject) enemyObj).get("m3");
+
+      enemyMap.put(id, new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3));
+    }
     isInTrial = false;
   }
 
-  private void initItems(String fileName) {
+  private void initItems() {
     if (Item.getItems() == null) GameError.fileNotFound("data/items.json");
     itemMap = new HashMap<String, Item>();
     for (Object itemObj : Item.getItems()){
@@ -163,7 +172,7 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  private void initRooms(String fileName) {
+  private void initRooms() {
     if (Room.getRooms() == null) GameError.fileNotFound("data/rooms.json");
     roomMap = new HashMap<String, Room>();
     for (Object roomObj : Room.getRooms()) {
@@ -235,10 +244,10 @@ public class Game implements java.io.Serializable {
    * @param command
    * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
    */
-  private void processCommand(Command command) {
+  private boolean processCommand(Command command) {
     if (command.isUnknown()) {
       gui.println("I don't know what you mean...");
-      return;
+      return false;
     } 
     String commandWord = command.getCommandWord();
     if (commandWord.equals("test")) testing(command);
@@ -263,7 +272,10 @@ public class Game implements java.io.Serializable {
     } else if(commandWord.equals("hit")){
       hit(command);
     } else if (commandWord.equals("restart")) {
-      if (quitRestart("restart", command)) restartGame();
+      if (quitRestart("restart", command)){
+        restartGame();
+        return true;
+      } 
     } else if (commandWord.equals("save")){
       if (save(command)) endGame();
     } else if (commandWord.equals("take")){
@@ -294,7 +306,7 @@ public class Game implements java.io.Serializable {
     } else {
       gui.println("That command has no logic...");
     }
-    return;
+    return false;
   }
 
   private void restartGame() {
@@ -302,9 +314,10 @@ public class Game implements java.io.Serializable {
     gui.reset();
     gui.printInfo("Game restarted.\n");
     try {
-      initItems("data/items.json");
-      initRooms("data/rooms.json");
+      initItems();
+      initRooms();
       initEnemies();
+      isInTrial = false;
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(MAX_WEIGHT);
     } catch (Exception e) {
@@ -315,7 +328,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void endGame() {
-    gui.println("Thank you for playing. Goodbye.");
+    gui.println("Thank you for playing. Goodbye!");
 
     //Nice transition to exit the game
     sleep(1000);
@@ -683,7 +696,7 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Sasquatch steps out of the cave.");
       gui.println(sasquatch.getCatchphrase() + " He screams.");
-      enemyAttack(sasquatch);
+      if (enemyAttack(sasquatch)) return;
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
@@ -706,7 +719,7 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
-      enemyAttack(vaccuum);
+      if (enemyAttack(vaccuum)) return;
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
     } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("")){
@@ -725,23 +738,25 @@ public class Game implements java.io.Serializable {
     if (!robot.getIsDead()){
       isInTrial = true;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
-      gui.println(robot.getCatchphrase() + " it beeps. It is blocking your path. You have no choice but to defeat it.");
-      enemyAttack(robot);
-      gui.println("The robot stays cowering in the corner.");
+      gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
+      if (enemyAttack(robot)) return;
+      gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
     }
   }
 
-  private void enemyAttack(Enemy enemy) {
+  private boolean enemyAttack(Enemy enemy) {
     while(enemy.getHealth() > 0){
       int tempDamage = enemy.getDamage();
       Command command = parser.getCommand();
-      processCommand(command);
+      boolean exit = processCommand(command);
+      if (exit) return true;
       if (!enemy.getIsDead()){
         player.setHealth(tempDamage);
-        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
+        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP int the fight!");
       }
     }
+    return false;
   }
 
   public void newsNewsScroll(){
@@ -798,6 +813,13 @@ public class Game implements java.io.Serializable {
   }
 
   public void deptCustomerService(){
+    Enemy balloony = enemyMap.get("balloony");
+    if (!player.getTalkedToSkyGods()){
+      gui.println("Floating above the wreckage is a large blue balloon.");
+      gui.println("\"My name is Balloony, I am the head of customer service of Tableland.\"");
+      gui.println("\"Customer Service is mine. You are not allowed to be in here.\"");
+      if (enemyAttack(balloony)) return;
+    }
 
   }
 
@@ -957,12 +979,8 @@ public class Game implements java.io.Serializable {
     gui.println("\"not yet news news: Balloony has taken down Connie!\"");
     gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
     gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
-    gui.println("\"Balloony told the people of Tableland \"");
-    gui.println("Connie wins Election!!!");
-    gui.println("\"not yet news news: The official newspaper of Tableland\"");
-    gui.println("\"November 10th, 2019\"");
-    gui.println("\"not yet news news: Connie and Balloony Tie Election!\"");
-    gui.println("\"They are both heads of customer service!\"");
+    gui.println("\"Balloony told the people of Tableland this on a press conference on Friday. He has kidnapped his former co-head of customer service.\"");
+    gui.println("\"Where could Balloony be keeping Connie?\" You think.");
   }
 
   /**

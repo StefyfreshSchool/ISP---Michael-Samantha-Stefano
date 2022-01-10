@@ -1,3 +1,12 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class Enemy extends Character{
     private int health;
     private String name;
@@ -60,5 +69,14 @@ public class Enemy extends Character{
         } else if (num == 2){
             return m2;
         } return m3;
+    }
+
+    public static JSONArray getEnemies() {
+        try {
+            JSONObject json = (JSONObject) new JSONParser().parse(Files.readString(Path.of("data/enemies.json")));
+            return (JSONArray) json.get("enemies");
+        } catch (ParseException | IOException e) {
+            return null;
+        }
     }
 }

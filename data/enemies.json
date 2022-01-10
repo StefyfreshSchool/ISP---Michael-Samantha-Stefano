@@ -1,0 +1,59 @@
+{
+    "enemies":[
+        {
+            "id": "sasquatch",
+            "name": "Sasquatch",
+            "catchphrase": "\"You have missed a day of school! You are my dinner now!\"",
+            "m1": "The Sasquatch punches you square in the chest.",
+            "m2": "The Sasquatch swipes at you from the side.",
+            "m3": "The Sasquatch pelts you with stones.",
+            "health": 25,
+            "damageMin": 8,
+            "damageMax": 12
+        },
+        {
+            "id": "vaccuum",
+            "name": "Vaccuum",
+            "catchphrase": "\"VVRRRRRRRRRRR!!!\"",
+            "m1": "The Vaccuum whacks you with its handle.",
+            "m2": "The Vaccuum slams into your legs.",
+            "m3": "The Vaccuum trips you with its cord.",
+            "health": 25,
+            "damageMin": 10,
+            "damageMax": 16
+        },
+        {
+            "id": "robot",
+            "name": "Friends Robot",
+            "catchphrase": "\"yAy. Fr13nD d3teCt3d.\"",
+            "m1": "The Friends Robot hugs you too hard.",
+            "m2": "The Friends Robot gives you a too-firm handshake.",
+            "m3": "The Friends Robot strokes your head too hard.",
+            "health": 30,
+            "damageMin": 13,
+            "damageMax": 18
+        },
+        {
+            "id": "balloony",
+            "name": "Balloony",
+            "catchphrase": "\"Tableland customer service is mine and mine alone!\"",
+            "m1": "Balloony inflicts psychic damage.",
+            "m2": "Balloony forces you to read Tableland propaganda.",
+            "m3": "Balloony makes your hair stand on end.",
+            "health": 40,
+            "damageMin": 18,
+            "damageMax": 23
+        },
+        {
+            "id": "deslauriers",
+            "name": "Mr. DesLauriers",
+            "catchphrase": "Hi, I'm Mr. DesLauriers.",
+            "m1": "Mr. DesLauriers swings his aluminum baseball bat.",
+            "m2": "",
+            "m3": "",
+            "health": 200,
+            "damageMin": 1,
+            "damageMax": 100
+        }
+    ]
+}
