@@ -122,7 +122,7 @@ public class Game implements java.io.Serializable {
     enemyMap = new HashMap<String, Enemy>();
     enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25, 8, 12, "The Sasquatch punches you square in the chest.", "The Sasquatch swipes at you from the side.", "The Sasquatch pelts you with stones."));
     enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VVRRRRRRRRRRR!!!\"", 25, 10, 16, "The Vaccuum whacks you with its handle.", "The Vaccuum slams into your legs.", "The Vaccuum trips you with its cord."));
-    enemyMap.put("robot", new Enemy("Friends Robot", "\"yAy. Fr13nD d3teCt3d.\"", 30, 13, 18, "The Friends Robot hugs you too hard.", "The Friends Robot gives you a too-firm handshake.", "The Friends Robot strokes your head too hard."));
+    enemyMap.put("robot", new Enemy("Robot", "\"yAy. Fr13nD d3teCt3d.\"", 30, 13, 18, "The Friends Robot hugs you too hard.", "The Friends Robot gives you a too-firm handshake.", "The Friends Robot strokes your head too hard."));
     enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 40, 18, 23, "Balloony inflicts psychic damage.", "Balloony forces you to read Tableland propaganda.", "Balloony makes your hair stand on end."));
     enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200, 1, 100, "Mr. DesLauriers swings his aluminum baseball bat.", "Mr. DesLauriers confuses you with programming jargon.", "Mr. DesLauriers marks you absent."));
     isInTrial = false;
@@ -346,6 +346,11 @@ public class Game implements java.io.Serializable {
       player.talkedToSkyGods();
     } else if (c.equals("7")){
       inventory.addItem(itemMap.get("Bandages"));
+    } else if (c.equals("8")){
+      inventory.addItem(itemMap.get("sword"));
+      currentRoom = roomMap.get("Mystery Door of Mystery");
+    } else if (c.equals("")){
+      player.maxHeal();
     } else if (c.equals("crash")){
       GameError.crashGame();
     }
@@ -395,11 +400,11 @@ public class Game implements java.io.Serializable {
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName() + " with?");
       } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
-        gui.println(args.get(0) + "is not an enemy in this room.");
-      } else if (enemy.getName().equals("robot")) {
+        gui.println(args.get(0) + " is not an enemy in this room.");
+      } else if (enemy.getName().equalsIgnoreCase("robot")) {
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
-        gui.println("Hitting with the " + weaponName + " doesn't seem to do much.");
-        gui.println("Is there any other way to defeat it?");
+        gui.println("The " + weaponName + " just bounces off its titanium armor. It dealt 0 damage.");
+        gui.println("Maybe there's another way to defeat it?");
       } else { // hit enemy with weapon
         if (enemy.getHealth() > 0){
           Item item = itemMap.get(command.getLastArg());
@@ -450,17 +455,20 @@ public class Game implements java.io.Serializable {
       } else if ((!args.contains("water") && command.getLastArg().equals("with")) || !args.contains("with")){ // threaten with, no weapon
         gui.println("Threaten with what?");
       } else if (!itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // threaten enemy with, invalid weapon
-        gui.println("You can't threaten with that.");
+        gui.println("That doesn't seem to scare the enemy.");
         gui.println("What do you threaten " + enemy.getName() + " with?");
       } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
         gui.println("You can't find " + args.get(0) + " anywhere.");
       } else { // threaten enemy with weapon
-        if (enemy.getName().equals("robot")){
+        if (enemy.getName().equalsIgnoreCase("robot")){
           enemyMap.get("robot").setIsDead(true);
+          enemyMap.get("robot").setHealth(0);
           gui.println("The Friends Robot cowers in fear from your dominance. It seems to be perturbed from the water bottle in your hand.");
           gui.println("\"Please don't hurt me! I have friends!\" it says, with a quaver in its voice.");
           gui.println("Trembling quietly, it moves out of your path, revealing a carefully chiseled inscription in the wall.");
           gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
+        } else {
+          gui.println("That doesn't seem to scare the enemy.");
         }
       }
     }
@@ -639,10 +647,14 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         sasquatch();
-      } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Upper Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         vaccuum();
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Upper Hall of Enemies") || nextRoom.getRoomName().equals("Upper Hall of Enemies"))) {
+        currentRoom = nextRoom;
+        gui.println(currentRoom.shortDescription());
+        robot();
       } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
@@ -710,12 +722,12 @@ public class Game implements java.io.Serializable {
    */
   public void robot(){
     Enemy robot = enemyMap.get("robot");
-    if (robot.getHealth() > 0){
+    if (!robot.getIsDead()){
       isInTrial = true;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
-      gui.println(robot.getCatchphrase() + " It is blocking your path. You have no choice but to defeat it.");
+      gui.println(robot.getCatchphrase() + " it beeps. It is blocking your path. You have no choice but to defeat it.");
       enemyAttack(robot);
-      gui.println("A brass key lies on the floor, dropped by the vaccuum.");
+      gui.println("The robot stays cowering in the corner.");
       isInTrial = false;
     }
   }
