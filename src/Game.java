@@ -47,8 +47,8 @@ public class Game implements java.io.Serializable {
 
     //Init rooms and game state
     try {
-      initItems("data/items.json");
-      initRooms("data/rooms.json");
+      initItems();
+      initRooms();
       initEnemies();
       startMusic();
       currentRoom = roomMap.get("South of the Cyan House");
@@ -118,17 +118,26 @@ public class Game implements java.io.Serializable {
     new Awaitility();
   }
 
-  private void initEnemies() { // now has enemy hurt messages. feel free to change!
+  private void initEnemies() {
+    if (Enemy.getEnemies() == null) GameError.fileNotFound("data/enemies.json");
     enemyMap = new HashMap<String, Enemy>();
-    enemyMap.put("sasquatch", new Enemy("Sasquatch", "\"You have missed a day of school! You are my dinner now!\"", 25, 8, 12, "The Sasquatch punches you square in the chest.", "The Sasquatch swipes at you from the side.", "The Sasquatch pelts you with stones."));
-    enemyMap.put("vaccuum", new Enemy("Vaccuum", "\"VVRRRRRRRRRRR!!!\"", 25, 10, 16, "The Vaccuum whacks you with its handle.", "The Vaccuum slams into your legs.", "The Vaccuum trips you with its cord."));
-    enemyMap.put("robot", new Enemy("Friends Robot", "\"yAy. Fr13nD d3teCt3d.\"", 30, 13, 18, "The Friends Robot hugs you too hard.", "The Friends Robot gives you a too-firm handshake.", "The Friends Robot strokes your head too hard."));
-    enemyMap.put("balloony", new Enemy("Balloony", "DESCRIPTION", 40, 18, 23, "Balloony inflicts psychic damage.", "Balloony forces you to read Tableland propaganda.", "Balloony makes your hair stand on end."));
-    enemyMap.put("deslauriers", new Enemy("Mr. DesLauriers", "Hi, I'm Mr. DesLauriers.", 200, 1, 100, "Mr. DesLauriers swings his aluminum baseball bat.", "Mr. DesLauriers confuses you with programming jargon.", "Mr. DesLauriers marks you absent."));
+    for (Object enemyObj : Enemy.getEnemies()){
+      String id = (String) ((JSONObject) enemyObj).get("id");
+      String name = (String) ((JSONObject) enemyObj).get("name");
+      String catchphrase = (String) ((JSONObject) enemyObj).get("catchphrase");
+      Long health = (Long) ((JSONObject) enemyObj).get("health");
+      Long damageMin = (Long) ((JSONObject) enemyObj).get("damageMin");
+      Long damageMax = (Long) ((JSONObject) enemyObj).get("damageMax");
+      String m1 = (String) ((JSONObject) enemyObj).get("m1");
+      String m2 = (String) ((JSONObject) enemyObj).get("m2");
+      String m3 = (String) ((JSONObject) enemyObj).get("m3");
+
+      enemyMap.put(id, new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3));
+    }
     isInTrial = false;
   }
 
-  private void initItems(String fileName) {
+  private void initItems() {
     if (Item.getItems() == null) GameError.fileNotFound("data/items.json");
     itemMap = new HashMap<String, Item>();
     for (Object itemObj : Item.getItems()){
@@ -163,7 +172,7 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  private void initRooms(String fileName) {
+  private void initRooms() {
     if (Room.getRooms() == null) GameError.fileNotFound("data/rooms.json");
     roomMap = new HashMap<String, Room>();
     for (Object roomObj : Room.getRooms()) {
@@ -302,8 +311,8 @@ public class Game implements java.io.Serializable {
     gui.reset();
     gui.printInfo("Game restarted.\n");
     try {
-      initItems("data/items.json");
-      initRooms("data/rooms.json");
+      initItems();
+      initRooms();
       initEnemies();
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(MAX_WEIGHT);
