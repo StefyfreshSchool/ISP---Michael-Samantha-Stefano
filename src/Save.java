@@ -5,6 +5,7 @@ public class Save implements java.io.Serializable {
     private HashMap<String, Enemy> enemyMap;
     private Inventory inventory;
     private Room currentRoom;
+    private Room pastRoom;
     private boolean inProgress;
     private Player player;
 
@@ -13,10 +14,11 @@ public class Save implements java.io.Serializable {
     }
 
     
-    public Save(HashMap<String, Room> roomMap, Inventory inventory, Room currentRoom, Player player, HashMap<String, Enemy> enemyMap){
+    public Save(HashMap<String, Room> roomMap, Inventory inventory, Room currentRoom, Room pastRoom, Player player, HashMap<String, Enemy> enemyMap){
         this.roomMap = roomMap;
         this.inventory = inventory;
         this.currentRoom = currentRoom;
+        this.pastRoom = pastRoom;
         this.player = player;
         this.enemyMap = enemyMap;
         inProgress = true;
@@ -32,6 +34,10 @@ public class Save implements java.io.Serializable {
 
     public Room getCurrentRoom() {
         return currentRoom;
+    }
+
+    public Room getPastRoom() {
+        return pastRoom;
     }
 
     public boolean getInProgress(){
