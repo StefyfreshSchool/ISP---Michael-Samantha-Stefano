@@ -1,8 +1,8 @@
 //Wildcard imports because there are too many imported classes...
 import javax.swing.text.*;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import static org.awaitility.Awaitility.await;
 import java.awt.Color;
@@ -43,6 +43,7 @@ public class GUI {
     //class variables
     private static GUI gui;
     private static Game gameObj;
+    private JTextPane output;
 
     /** The private constructor for the singleton GUI class.*/
     private GUI(){}
@@ -86,8 +87,7 @@ public class GUI {
         gameContainer.setBackground(Color.BLACK);
 
 
-        //create the output text area
-        JTextPane output = new JTextPane();
+        output = new JTextPane();
         outputDoc = output.getStyledDocument();
         output.setEditable(false);
         output.setBackground(Color.BLACK);
@@ -117,21 +117,29 @@ public class GUI {
             @Override
             protected JButton createIncreaseButton(int orientation) {
                 return createZeroButton();
+            }            
+        });
+        scroll.getHorizontalScrollBar().setBackground(Color.BLACK);
+        scroll.getHorizontalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.DARK_GRAY;
             }
 
-            private JButton createZeroButton() {
-                JButton button = new JButton();
-                button.setPreferredSize(new Dimension(0, 0));
-                button.setMinimumSize(new Dimension(0, 0));
-                button.setMaximumSize(new Dimension(0, 0));
-                return button;
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+               return createZeroButton();
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                return createZeroButton();
             }
         });
+        JPanel corner = new JPanel();
+        corner.setBackground(Color.BLACK);
+        scroll.setCorner(JScrollPane.LOWER_RIGHT_CORNER, corner);
         gameContainer.add(scroll);
-
-
-        //TODO: add image stuff
-        JLabel img = new JLabel();
 
 
         //add game info
@@ -255,13 +263,18 @@ public class GUI {
      * @param height - height of the spacer.
      * @return The new JPanel spacer element.
      */
-    private JPanel spacer(int height) {
-        JPanel spacer = new JPanel();
-        spacer.setPreferredSize(new Dimension(1, height));
-        spacer.setMinimumSize(new Dimension(1, height));
-        spacer.setMaximumSize(new Dimension(1, height));
-        spacer.setBackground(Color.BLACK);
-        return spacer;
+    // private JPanel spacer(int height) {
+    //     JPanel spacer = new JPanel();
+    //     spacer.setPreferredSize(new Dimension(1, height));
+    //     spacer.setMinimumSize(new Dimension(1, height));
+    //     spacer.setMaximumSize(new Dimension(1, height));
+    //     spacer.setBackground(Color.BLACK);
+    //     return spacer;
+    // }
+
+    public void printImg(String src){
+        if (!new File(src).isFile()) GameError.fileNotFound(src);
+        printStyled("\n", iconStyle(src));
     }
 
     //Below are all the print methods
@@ -388,6 +401,7 @@ public class GUI {
         SwingUtilities.invokeLater(new Runnable() {
             public void run(){
                 scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum() - scroll.getVerticalScrollBar().getHeight());
+                scroll.getHorizontalScrollBar().setValue(scroll.getHorizontalScrollBar().getMaximum() - scroll.getHorizontalScrollBar().getHeight());
             }
         });
     } 
@@ -427,11 +441,28 @@ public class GUI {
      */
     public static Style stylize(boolean italics, boolean bold, Color textColour) {
         if (styleContext == null) styleContext = new StyleContext();
-        Style style = styleContext.getStyle("");
+        styleContext.removeStyle("");
+        Style style = styleContext.addStyle("", null);
         StyleConstants.setForeground(style, textColour);
         StyleConstants.setBold(style, bold);
         StyleConstants.setItalic(style, italics);
         return style;
+    }
+
+    private Style iconStyle(String src) {
+        if (styleContext == null) styleContext = new StyleContext();
+        styleContext.removeStyle("");
+        Style style = styleContext.addStyle("", null);
+        StyleConstants.setIcon(style, new ImageIcon(src));
+        return style;
+    }
+
+    private JButton createZeroButton() {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(0, 0));
+        button.setMinimumSize(new Dimension(0, 0));
+        button.setMaximumSize(new Dimension(0, 0));
+        return button;
     }
 
 	public void sendGameObj(Game game) {

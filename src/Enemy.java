@@ -10,7 +10,6 @@ import org.json.simple.parser.ParseException;
 
 public class Enemy extends Character{
     private int health;
-    private String name;
     private int damageMin;
     private int damageMax;
     private String m1; // three messages when the enemy hurts you
@@ -34,11 +33,6 @@ public class Enemy extends Character{
     public Enemy(){
         super("DEFAULT NAME", "DEFAULT CATCHPHRASE");
         this.health = 10;
-    }
-
-    public Enemy(Enemy src){
-        super(src.name, src.getCatchphrase());
-        this.health = src.health;
     }
 
     public void setHealth(int health){
@@ -83,9 +77,14 @@ public class Enemy extends Character{
         }
     }
 
+    /**
+     * Checks if the enemy name inputted is the same as the current enemy ({@code this}).
+     * @param enemyName - The enemy name to check
+     * @return True or false
+     */
     public boolean isThisEnemy(String enemyName){
         boolean out = false;
-        if (enemyName.equalsIgnoreCase(name)) out = true;
+        if (enemyName.equalsIgnoreCase(getName())) out = true;
         for (String alias : aliases){
           if (enemyName.equalsIgnoreCase(alias)) out = true;
         }

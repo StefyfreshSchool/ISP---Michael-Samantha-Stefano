@@ -12,7 +12,7 @@ public class Item extends OpenableObject implements java.io.Serializable {
     private int weight;
     private String name;
     private String description;
-    private boolean isOpenable;
+    private boolean isTakeable;
     private boolean isWeapon;
     private int damage = 0;
     private int quantity;
@@ -22,11 +22,11 @@ public class Item extends OpenableObject implements java.io.Serializable {
     public static ArrayList<String> validItems;
     private String startingRoom;
   
-    public Item(int weight, String name, String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases, boolean isWeapon, int damage) { // FOR WEAPONS
+    public Item(int weight, String name, String startingRoom, boolean isTakeable, String description, ArrayList<String> aliases, boolean isWeapon, int damage) { // FOR WEAPONS
       this.weight = weight;
       this.name = name;
       this.startingRoom = startingRoom;
-      this.isOpenable = isOpenable;
+      this.isTakeable = isTakeable;
       this.description = description;
       this.aliases = aliases;
       this.isWeapon = isWeapon;
@@ -34,11 +34,11 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.quantity = 1;
     }
 
-    public Item(int weight, String name, String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases, int quantity) {
+    public Item(int weight, String name, String startingRoom, boolean isTakeable, String description, ArrayList<String> aliases, int quantity) {
       this.weight = weight;
       this.name = name;
       this.startingRoom = startingRoom;
-      this.isOpenable = isOpenable;
+      this.isTakeable = isTakeable;
       this.description = description;
       this.aliases = aliases;
       this.quantity = quantity;
@@ -46,11 +46,11 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.damage = 0;
     }
 
-    public Item(int weight, String name,  String startingRoom, boolean isOpenable, String description, ArrayList<String> aliases) {
+    public Item(int weight, String name,  String startingRoom, boolean isTakeable, String description, ArrayList<String> aliases) {
       this.weight = weight;
       this.name = name;
       this.startingRoom = startingRoom;
-      this.isOpenable = isOpenable;
+      this.isTakeable = isTakeable;
       this.description = description;
       this.aliases = aliases;
       this.quantity = 1;
@@ -58,10 +58,10 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.damage = 0;
     }
 
-    public Item(int weight, String name, boolean isOpenable, String description) {
+    public Item(int weight, String name, boolean isTakeable, String description) {
       this.weight = weight;
       this.name = name;
-      this.isOpenable = isOpenable;
+      this.isTakeable = isTakeable;
       this.description = description;
       this.quantity = 1;
       this.isWeapon = false;
@@ -71,7 +71,7 @@ public class Item extends OpenableObject implements java.io.Serializable {
     public Item(Item item) {
       this.weight = item.weight;
       this.name = item.name;
-      this.isOpenable = item.isOpenable;
+      this.isTakeable = item.isTakeable;
       this.description = item.description;
       this.quantity = 1;
       this.isWeapon = true;
@@ -96,7 +96,7 @@ public class Item extends OpenableObject implements java.io.Serializable {
     }
 
     public void open() {
-      if (!isOpenable)
+      if (!isTakeable)
         gui.println("The " + name + " cannot be opened.");
   
     }
@@ -169,10 +169,27 @@ public class Item extends OpenableObject implements java.io.Serializable {
       this.description = description;
     }
   
-    public boolean isOpenable() {
-      return isOpenable;
+    /**
+     * Get isTakeable state.
+     * @return
+     */
+    public boolean isTakeable() {
+      return isTakeable;
     }
 
+    /**
+     * Set isTakeable state.
+     * @param state
+     */
+    public void isTakeable(boolean state) {
+      isTakeable = state;
+    }
+
+    /**
+     * Checks if the item name inputted is the same as the current item ({@code this}).
+     * @param itemName - The item name to check
+     * @return True or false
+     */
     public boolean isThisItem(String itemName){
       boolean out = false;
       if (itemName.equalsIgnoreCase(name)) out = true;
@@ -181,10 +198,5 @@ public class Item extends OpenableObject implements java.io.Serializable {
       }
       return out;
     }
-  
-    public void setOpenable(boolean isOpenable) {
-      this.isOpenable = isOpenable;
-    }
-  
   }
   

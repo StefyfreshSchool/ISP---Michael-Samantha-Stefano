@@ -1574,6 +1574,12 @@
           "adjacentRoom": "Gloomy Forest 24"
         }
       ]
+    },
+    {
+      "id": "gameRoom",
+      "name": "gameRoom",
+      "description": "A room for game stuff.",
+      "exits": []
     }
   ]
 }
