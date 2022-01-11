@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,9 +16,10 @@ public class Enemy extends Character{
     private String m1; // three messages when the enemy hurts you
     private String m2;
     private String m3;
+    private ArrayList<String> aliases;
     private boolean isDead;
 
-    public Enemy(String name, String catchphrase, int health, int damageMin, int damageMax, String m1, String m2, String m3){
+    public Enemy(String name, String catchphrase, int health, int damageMin, int damageMax, String m1, String m2, String m3, ArrayList<String> aliases){
         super(name, catchphrase);
         this.health = health;
         this.damageMin = damageMin;
@@ -25,6 +27,7 @@ public class Enemy extends Character{
         this.m1 = m1;
         this.m2 = m2;
         this.m3 = m3;
+        this.aliases = aliases;
         this.isDead = false;
     }
 
@@ -78,5 +81,14 @@ public class Enemy extends Character{
         } catch (ParseException | IOException e) {
             return null;
         }
+    }
+
+    public boolean isThisEnemy(String enemyName){
+        boolean out = false;
+        if (enemyName.equalsIgnoreCase(name)) out = true;
+        for (String alias : aliases){
+          if (enemyName.equalsIgnoreCase(alias)) out = true;
+        }
+        return out;
     }
 }

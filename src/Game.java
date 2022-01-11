@@ -136,7 +136,7 @@ public class Game implements java.io.Serializable {
         aliases.add((String) alias);
       }
 
-      Enemy enemy = new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3);
+      Enemy enemy = new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3, aliases);
       enemyMap.put(id, enemy);
       for (String alias : aliases) {
         enemyMap.put(alias, enemy);
@@ -367,6 +367,12 @@ public class Game implements java.io.Serializable {
       player.talkedToSkyGods();
     } else if (c.equals("7")){
       inventory.addItem(itemMap.get("Bandages"));
+    } else if (c.equals("8")){
+      inventory.addItem(itemMap.get("sword"));
+      inventory.addItem(itemMap.get("bottle"));
+      currentRoom = roomMap.get("Mystery Door of Mystery");
+    } else if (c.equals("")){
+      player.maxHeal();
     } else if (c.equals("crash")){
       GameError.crashGame();
     }
@@ -415,12 +421,12 @@ public class Game implements java.io.Serializable {
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName() + " with?");
-      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
-        gui.println(args.get(0) + "is not an enemy in this room.");
-      } else if (enemy.getName().equals("robot")) {
+      } else if (!enemyMap.get(args.get(0)).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
+        gui.println(args.get(0) + " is not an enemy in this room.");
+      } else if (enemyMap.get("robot").isThisEnemy(enemy.getName())) {
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
-        gui.println("Hitting with the " + weaponName + " doesn't seem to do much.");
-        gui.println("Is there any other way to defeat it?");
+        gui.println("The " + weaponName + " just bounces off its titanium armor. It dealt 0 damage.");
+        gui.println("Maybe there's another way to defeat it?");
       } else { // hit enemy with weapon
         if (enemy.getHealth() > 0){
           Item item = itemMap.get(command.getLastArg());
@@ -471,17 +477,19 @@ public class Game implements java.io.Serializable {
       } else if ((!args.contains("water") && command.getLastArg().equals("with")) || !args.contains("with")){ // threaten with, no weapon
         gui.println("Threaten with what?");
       } else if (!itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // threaten enemy with, invalid weapon
-        gui.println("You can't threaten with that.");
-        gui.println("What do you threaten " + enemy.getName() + " with?");
-      } else if (!args.get(0).equalsIgnoreCase(enemy.getName())){ // valid enemy, invalid room
+        gui.println("That doesn't seem to scare the enemy.");
+      } else if (!enemyMap.get(args.get(0)).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
         gui.println("You can't find " + args.get(0) + " anywhere.");
       } else { // threaten enemy with weapon
-        if (enemy.getName().equals("robot")){
+        if (enemyMap.get("robot").isThisEnemy(enemy.getName())){
           enemyMap.get("robot").setIsDead(true);
+          enemyMap.get("robot").setHealth(0);
           gui.println("The Friends Robot cowers in fear from your dominance. It seems to be perturbed from the water bottle in your hand.");
           gui.println("\"Please don't hurt me! I have friends!\" it says, with a quaver in its voice.");
           gui.println("Trembling quietly, it moves out of your path, revealing a carefully chiseled inscription in the wall.");
           gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
+        } else {
+          gui.println("That doesn't seem to scare the enemy.");
         }
       }
     }
@@ -665,6 +673,10 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         vaccuum();
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Upper Hall of Enemies") || nextRoom.getRoomName().equals("Upper Hall of Enemies"))) {
+        currentRoom = nextRoom;
+        gui.println(currentRoom.shortDescription());
+        robot();
       } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
@@ -740,12 +752,11 @@ public class Game implements java.io.Serializable {
    */
   public void robot(){
     Enemy robot = enemyMap.get("robot");
-    if (robot.getHealth() > 0){
+    if (!robot.getIsDead()){
       isInTrial = true;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
-      gui.println(robot.getCatchphrase() + " It is blocking your path. You have no choice but to defeat it.");
+      gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       if (enemyAttack(robot)) return;
-      gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
     }
   }
@@ -758,7 +769,7 @@ public class Game implements java.io.Serializable {
       if (exit) return true;
       if (!enemy.getIsDead()){
         player.setHealth(tempDamage);
-        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP int the fight!");
+        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
       }
     }
     return false;
