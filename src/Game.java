@@ -694,8 +694,6 @@ public class Game implements java.io.Serializable {
         newsNewsScroll();
       }
     }
-    gui.println(pastRoom.getRoomName());
-    gui.println(currentRoom.getRoomName());
     if(pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if(inventory.hasItem(itemMap.get("1000 British Pounds"))){
         player.setTrial(0);
