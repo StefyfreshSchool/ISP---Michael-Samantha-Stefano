@@ -85,9 +85,10 @@ public class Enemy extends Character{
 
     public boolean isThisEnemy(String enemyName){
         boolean out = false;
+        if (enemyName.equalsIgnoreCase(name)) out = true;
         for (String alias : aliases){
           if (enemyName.equalsIgnoreCase(alias)) out = true;
         }
         return out;
-      }
+    }
 }
