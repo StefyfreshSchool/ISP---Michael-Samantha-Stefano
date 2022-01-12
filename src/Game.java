@@ -26,6 +26,7 @@ public class Game implements java.io.Serializable {
   private Room pastRoom;
   private boolean isInTrial;
   private boolean hasAnsweredNewsQuestions = false;
+  private boolean hasOpenedVault = false;
 
   /**
    * Create the game and initialize its internal map.
@@ -715,6 +716,10 @@ public class Game implements java.io.Serializable {
       if (inventory.hasItem(itemMap.get("scroll"))){
         player.setTrial(1);
       }
+    }else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
+      if (inventory.hasItem(itemMap.get("cheese"))){
+        player.setTrial(2);
+      }
     }
   }
 
@@ -752,10 +757,14 @@ public class Game implements java.io.Serializable {
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
       if (enemyAttack(vaccuum)) return;
+      gui.println("Past its lifeless body, you can see an aluminum ladder.");
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
-    } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("")){
+    } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
       gui.println("The vaccuum sits on the concrete floor, out of battery.");
+      if(!player.getTrial(4)){
+        gui.println("A brass key lies on the floor, dropped by the vaccuum.");
+      }
       if (!enemyMap.get("robot").getIsDead()){
         gui.println("Past its lifeless body, you can see an aluminum ladder.");
       }
@@ -773,6 +782,7 @@ public class Game implements java.io.Serializable {
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       if (enemyAttack(robot)) return;
       isInTrial = false;
+      player.setTrial(5);
     }
   }
 
@@ -912,12 +922,13 @@ public class Game implements java.io.Serializable {
   }
 
   public void cheeseVault(){
-    if(!inventory.hasItem(itemMap.get("cheese"))){
+    if(!hasOpenedVault){
       gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
       gui.println("ENTER CODE:");
       if (correctCode()){
         gui.println("Something clicks and the door swings open! Satisfied, you know you should grab a morsel of pristine Alaskan Cheese.");
         gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece"); 
+        hasOpenedVault = true;
       } else {
         gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
         currentRoom = roomMap.get("Upper Atrium");
@@ -925,6 +936,9 @@ public class Game implements java.io.Serializable {
       }
     } else {
       gui.println("The vault door still hangs wide open, just as you left it.");
+      if(!player.getTrial(2)){
+        gui.println("You see small morsels of pristine Alaskan Cheese. You know you shoild grab one.");
+      }
     }
   }
 
