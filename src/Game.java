@@ -902,10 +902,10 @@ public class Game implements java.io.Serializable {
       gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
       if (buyFurs()){
         if (inventory.hasItem(itemMap.get("pounds"))){
-          gui.println("\"Pleasure doing business with you, good sir.\"");
           inventory.removeItem(itemMap.get("pounds"));
           inventory.addItem(itemMap.get("hat")); 
           inventory.addItem(itemMap.get("euros"));
+          gui.println("\"Pleasure doing business with you, good sir.\"");
           player.setTrial(3);
         } else if (inventory.hasItem(itemMap.get("pounds")) && inventory.getCurrentWeight() - itemMap.get("pounds").getWeight() + itemMap.get("hat").getWeight() + itemMap.get("euros").getWeight() > inventory.getMaxWeight()){
           gui.println("\"Hmm... I can sense your pockets are too heavy. What a shame.");
