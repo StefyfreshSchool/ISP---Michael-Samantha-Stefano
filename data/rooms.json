@@ -361,7 +361,7 @@
     {
       "id": "Gates of Hell",
       "name": "Gates of Hell",
-      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Inexplicably, the door to the underground tunnel seems to be locked with an arcane incantation.",
+      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Past the gates you can see miles and miles of gloomy forest. You feel a chill run down your spine.",
       "exits": [
         {
           "isLocked": false,

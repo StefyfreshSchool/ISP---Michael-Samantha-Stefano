@@ -25,8 +25,8 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   private Room pastRoom;
   private boolean isInTrial;
-  private boolean hasAnsweredNewsQuestions = false;
-  private boolean hasOpenedVault = false;
+  private boolean hasAnsweredNewsQuestions;
+  private boolean hasOpenedVault;
 
   /**
    * Create the game and initialize its internal map.
@@ -53,6 +53,8 @@ public class Game implements java.io.Serializable {
       initEnemies();
       startMusic();
       currentRoom = roomMap.get("South of the Cyan House");
+      hasAnsweredNewsQuestions = false;
+      hasOpenedVault = false;
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -707,6 +709,9 @@ public class Game implements java.io.Serializable {
       if (currentRoom.getRoomName().equals("News News Vault")){
         newsNewsScroll();
       }
+      if (currentRoom.getRoomName().equals("Mysterious Entrance")){
+        frogsMadleneandJorge();
+      }
     }
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("pounds"))){
@@ -723,6 +728,10 @@ public class Game implements java.io.Serializable {
     }else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
       if (inventory.hasItem(itemMap.get("cheese"))){
         player.setTrial(2);
+      }
+    }else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room")){
+      if (inventory.hasItem(itemMap.get("corpse"))){
+        player.setTrial(6);
       }
     }
   }
@@ -881,13 +890,23 @@ public class Game implements java.io.Serializable {
 
   public void deptCustomerService(){
     Enemy balloony = enemyMap.get("balloony");
-    if (!player.getTalkedToSkyGods()){
+    if (!player.getTrial(6) && balloony.getHealth()>0){
       isInTrial = true;
       gui.println("Floating above the wreckage is a large blue balloon.");
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland.\"");
       gui.println(balloony.getCatchphrase());
       if (enemyAttack(balloony)) return;
       isInTrial = false;
+      currentRoom.getItem("balloony's corpse").isTakeable(true);
+      gui.println("Balloony's corpse lays crumpled on the ground.");
+      gui.println("You here a little voice inside you saying \"Take the balloon\"");
+      gui.println("You never know when you'll need a balloon.");
+    }else if(balloony.getHealth()<1 && !player.getTrial(6)){
+      gui.println("Balloony's corpse lays crumpled on the ground.");
+      gui.println("You here a little voice inside you saying \"Take the balloon\"");
+      gui.println("You never know when you'll need a balloon.");
+    }else{
+      gui.println("There is nothing for you here.");
     }
 
   }
@@ -956,7 +975,7 @@ public class Game implements java.io.Serializable {
     } else {
       gui.println("The vault door still hangs wide open, just as you left it.");
       if(!player.getTrial(2)){
-        gui.println("You see small morsels of pristine Alaskan Cheese. You know you shoild grab one.");
+        gui.println("You see small morsels of pristine Alaskan Cheese. You know you should grab one.");
       }
     }
   }
@@ -981,6 +1000,22 @@ public class Game implements java.io.Serializable {
       gui.println("What would you like to inflate?");
     }
   }
+
+  public void frogsMadleneandJorge(){
+    if(player.getTalkedToSkyGods()){
+      gui.print("You see a pair of frogs at the entrance.");
+      if(!player.getTrial(9)){
+        gui.println("More words here");
+      }else{
+        gui.println();
+        gui.println("\"You should go on future Whisperer, Connie must be saved!\" Madlene says.");
+      }
+    }else{
+      gui.println("The tunnel is boarded up, so you cannot go through it.");
+      gui.println("You feel a strong pull from this place. You cannot go through the tunnel. However, somehow you know it's very important.");
+    }
+  }
+  //Mysterious Entrance
 
   /** 
    * @param secondWord

@@ -5,7 +5,7 @@ public class Player implements java.io.Serializable{
 
     public Player(int health){
         this.health = health;
-        trials = new boolean[8];
+        trials = new boolean[11];
         talkedToSkyGods = false;
     }
 
