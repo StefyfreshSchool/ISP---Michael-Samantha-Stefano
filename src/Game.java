@@ -23,7 +23,9 @@ public class Game implements java.io.Serializable {
   private Player player;
   private Parser parser;
   private Room currentRoom;
+  private Room pastRoom;
   private boolean isInTrial;
+  private boolean hasAnsweredNewsQuestions = false;
 
   /**
    * Create the game and initialize its internal map.
@@ -87,6 +89,7 @@ public class Game implements java.io.Serializable {
 
             roomMap = save.getRoomMap();
             inventory = save.getInventory();
+            pastRoom = save.getPastRoom();
             currentRoom = save.getCurrentRoom();
             player = save.getPlayer();
             enemyMap = save.getEnemyMap();
@@ -152,7 +155,7 @@ public class Game implements java.io.Serializable {
 
       Long quantity = (Long) ((JSONObject) itemObj).get("quantity");
       Object weight = ((JSONObject) itemObj).get("weight");
-      boolean isOpenable = (boolean) ((JSONObject) itemObj).get("isOpenable");
+      boolean isTakeable = (boolean) ((JSONObject) itemObj).get("isTakeable");
       boolean isWeapon = (boolean) ((JSONObject) itemObj).get("isWeapon");
       String description = (String) ((JSONObject) itemObj).get("description");
       String startingRoom = (String) ((JSONObject) itemObj).get("startingRoom");
@@ -164,11 +167,11 @@ public class Game implements java.io.Serializable {
 
       Item item;
       if (quantity == null && !isWeapon){
-        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases);
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isTakeable, description, aliases);
       } else if (isWeapon) {
-        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, isWeapon, damage.intValue());
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isTakeable, description, aliases, isWeapon, damage.intValue());
       } else {
-        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isOpenable, description, aliases, quantity.intValue());
+        item = new Item(Integer.parseInt(weight + ""), name, startingRoom, isTakeable, description, aliases, quantity.intValue());
       }
       itemMap.put(itemId, item);
 
@@ -334,6 +337,7 @@ public class Game implements java.io.Serializable {
   }
 
   private void endGame() {
+    music.stop();
     gui.println("Thank you for playing. Goodbye!");
 
     //Nice transition to exit the game
@@ -373,6 +377,8 @@ public class Game implements java.io.Serializable {
       player.maxHeal();
     } else if (c.equals("crash")){
       GameError.crashGame();
+    } else if (c.equals("img")){
+      gui.printImg("data/images/img.png");
     }
     gui.println("Test activated.");
   }
@@ -403,13 +409,13 @@ public class Game implements java.io.Serializable {
         gui.println("There is no enemy here. You cannot hit anything.");
     } else {
       ArrayList<String> args = command.getArgs();
-      String argsStr = command.getStringifiedArgs();
+      String argsStr = command.getStringifiedArgs().toLowerCase(); 
       if (!command.hasArgs() || argsStr.indexOf("with") == 0) { // hit, no args
         gui.println("Hit what enemy?");
-      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
+      } else if (!args.contains("with") && enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
+      } else if (!args.contains("with") && enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("Who would you like to hit?");
       } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
@@ -418,8 +424,8 @@ public class Game implements java.io.Serializable {
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName() + " with?");
-      } else if (!enemyMap.get(args.get(0)).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
-        gui.println(args.get(0) + " is not an enemy in this room.");
+      } else if (!enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
+        gui.println(enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) + " is not an enemy in this room.");
       } else if (enemyMap.get("robot").isThisEnemy(enemy.getName())) {
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println("The " + weaponName + " just bounces off its titanium armor. It dealt 0 damage.");
@@ -503,9 +509,11 @@ public class Game implements java.io.Serializable {
     }
     String itemName = command.getStringifiedArgs();
     if (!Item.isValidItem(itemName)){
-      gui.println("Not a valid item!");
+      gui.println("I don't know what you mean.");
     } else if (!currentRoom.containsItem(itemName)){
       gui.println("You can't seem to find that item here.");
+    } else if (!currentRoom.getItem(itemName).isTakeable()) {
+      gui.println("You can't take that item.");
     } else {
       if (inventory.addItem(currentRoom.getItem(itemName))){
         gui.println(currentRoom.getItem(itemName).getName() + " taken!");
@@ -525,7 +533,7 @@ public class Game implements java.io.Serializable {
       gui.println("Drop what?");
       return;
     }
-    String itemName = command.getStringifiedArgs();
+    String itemName = command.getStringifiedArgs().toLowerCase();
     if (!Item.isValidItem(itemName)){
       gui.print("Not a valid item!");
     } else if (!inventory.hasItem(itemMap.get(itemName))){
@@ -563,7 +571,7 @@ public class Game implements java.io.Serializable {
     data.put("inProgress", true);
     data.put("room", currentRoom.getRoomName());
 
-    Save game = new Save(roomMap, inventory, currentRoom, player, enemyMap);
+    Save game = new Save(roomMap, inventory, currentRoom, pastRoom, player, enemyMap);
     try {
       FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -596,6 +604,7 @@ public class Game implements java.io.Serializable {
       if (save != null){
         roomMap = save.getRoomMap();
         inventory = save.getInventory();
+        pastRoom = save.getPastRoom();
         currentRoom = save.getCurrentRoom();
         player = save.getPlayer();
         enemyMap = save.getEnemyMap();
@@ -654,6 +663,7 @@ public class Game implements java.io.Serializable {
     String direction = command.getStringifiedArgs();
 
     // Try to leave current room.
+    Room pastRoom = currentRoom;
     Room nextRoom = currentRoom.nextRoom(direction);
     
     if (nextRoom == null)
@@ -665,7 +675,7 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         sasquatch();
-        if(inventory.hasItem(itemMap.get("1000 British Pounds"))){
+        if(inventory.hasItem(itemMap.get("pounds"))){
           player.setTrial(0);
         }
       } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
@@ -697,6 +707,19 @@ public class Game implements java.io.Serializable {
         newsNewsScroll();
       }
     }
+    if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
+      if (inventory.hasItem(itemMap.get("pounds"))){
+        player.setTrial(0);
+      }
+    }else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies"))||(pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
+      if (inventory.hasItem(itemMap.get("key"))){
+        player.setTrial(4);
+      }
+    }else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
+      if (inventory.hasItem(itemMap.get("scroll"))){
+        player.setTrial(1);
+      }
+    }
   }
 
   /**
@@ -711,12 +734,13 @@ public class Game implements java.io.Serializable {
       if (enemyAttack(sasquatch)) return;
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
+      currentRoom.getItem("pounds").isTakeable(true);
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can see a dark, ominous cave.");
-      if (!player.getTrial(0) && !inventory.hasItem(itemMap.get("1000 British Pounds")) && !player.getTalkedToSkyGods()) {
+      if (!player.getTrial(0)) {
         gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
-      } else if ((player.getTrial(0) && !player.getTalkedToSkyGods()) || player.getTalkedToSkyGods()) {
+      } else if (player.getTrial(0)) {
         gui.println("Your conscience speaks to you. \"There are more important things to do than explore perilous caves.\" You know you must leave this place.");
       }
     }
@@ -786,7 +810,7 @@ public class Game implements java.io.Serializable {
   }
 
   public void newsNewsScroll(){
-    if (!inventory.hasItem(itemMap.get("Scroll of News News")) && !player.getTalkedToSkyGods()){
+    if (!hasAnsweredNewsQuestions){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
       gui.println("Question 1: How many Whisperer articles have there been?");
@@ -799,14 +823,20 @@ public class Game implements java.io.Serializable {
       gui.println("\"What is the code?\"");
       if (newsNewsAnswers()){
         gui.println("\"Wow. I'm truly impressed. Those are the right numbers! Traveller, you have proved yourself more than worthy of the scroll.\"");
+        gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       } else {
         gui.println("\"I'm afraid, traveller, that those aren't the right numbers. You clearly are not worthy to be in this temple! Good riddance!\"");
         currentRoom = roomMap.get("Temple Pavillion");
         gui.println(currentRoom.shortDescription());
+        gui.println("You were teleported back to the entrance of the News News Temple.");
       }
+      itemMap.get("scroll").isTakeable(true);
+      hasAnsweredNewsQuestions = true;
     } else {
-      if((inventory.hasItem(itemMap.get("Scroll of News News") ) && !player.getTalkedToSkyGods()) || (!inventory.hasItem(itemMap.get("Scroll of News News"))&&player.getTalkedToSkyGods())){
+      if(player.getTrial(1)){
         gui.println("On the other side of the room is an empty glass case.");
+      }else{
+        gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       }
     }
   }
@@ -820,11 +850,11 @@ public class Game implements java.io.Serializable {
   }
 
   public void dogParadise(){
-    if (!inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+    if (!player.getTrial(7)){
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
       gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
-      inventory.addItem(currentRoom.getItem("Moral Support"));
+      inventory.addItem(currentRoom.getItem("moral support"));
       gui.println("\"We have added the glowing orb of moral support to your inventory.\"");
       gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the sky, and fill your head with the most encouraging thoughts.\"");
       gui.println("The dog named Maggie speaks to you. \"No being, mortal or deity, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
@@ -833,7 +863,8 @@ public class Game implements java.io.Serializable {
       gui.println("Luna speaks. \"You are the Whisperer's successor. You must save our world.\"");
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
-    } else if (inventory.hasItem(itemMap.get("Moral Support")) && !player.getTalkedToSkyGods()){
+      player.setTrial(7);
+    } else{
       gui.println("There is nothing for you here.");
     }
   }
@@ -841,10 +872,12 @@ public class Game implements java.io.Serializable {
   public void deptCustomerService(){
     Enemy balloony = enemyMap.get("balloony");
     if (!player.getTalkedToSkyGods()){
+      isInTrial = true;
       gui.println("Floating above the wreckage is a large blue balloon.");
-      gui.println("\"My name is Balloony, I am the head of customer service of Tableland.\"");
-      gui.println("\"Customer Service is mine. You are not allowed to be in here.\"");
+      gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland.\"");
+      gui.println(balloony.getCatchphrase());
       if (enemyAttack(balloony)) return;
+      isInTrial = false;
     }
 
   }
@@ -853,7 +886,7 @@ public class Game implements java.io.Serializable {
    *  Does when you enter the fur store location. IT WORKS GUYSSS
    */
   public void salesman(){
-    if (!inventory.hasItem(itemMap.get("Coonskin Hat"))){
+    if (!player.getTrial(3)){
       gui.println("A man dressed in a puffy fur coat approaches you, with a fur hat in hand.");
       gui.println("\"Would you like to buy my furs? Only for a small fee of £500!\" He says.");
       gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
@@ -863,6 +896,7 @@ public class Game implements java.io.Serializable {
           inventory.removeItem(itemMap.get("pounds"));
           inventory.addItem(itemMap.get("hat")); 
           inventory.addItem(itemMap.get("euros"));
+          player.setTrial(3);
         } else if (inventory.hasItem(itemMap.get("pounds")) && inventory.getCurrentWeight() - itemMap.get("pounds").getWeight() + itemMap.get("hat").getWeight() + itemMap.get("euros").getWeight() > inventory.getMaxWeight()){
           gui.println("\"Hmm... I can sense your pockets are too heavy. What a shame.");
         } else {

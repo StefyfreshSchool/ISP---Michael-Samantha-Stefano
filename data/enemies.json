@@ -15,7 +15,7 @@
         {
             "id": "vaccuum",
             "name": "Vaccuum",
-            "aliases": ["vacuum", "vaccuum"],
+            "aliases": ["vacuum"],
             "catchphrase": "\"VVRRRRRRRRRRR!!!\"",
             "m1": "The Vaccuum whacks you with its handle.",
             "m2": "The Vaccuum slams into your legs.",
@@ -25,9 +25,9 @@
             "damageMax": 16
         },
         {
-            "id": "robot",
+            "id": "friends robot",
             "name": "Friends Robot",
-            "aliases": ["robot", "friend's robot", "friends robot"],
+            "aliases": ["robot", "friend's robot"],
             "catchphrase": "\"yAy. Fr13nD d3teCt3d.\"",
             "m1": "The Friends Robot hugs you too hard.",
             "m2": "The Friends Robot gives you a too-firm handshake.",
@@ -39,7 +39,7 @@
         {
             "id": "balloony",
             "name": "Balloony",
-            "aliases": ["balloon", "balloony"],
+            "aliases": ["balloon"],
             "catchphrase": "\"Tableland customer service is mine and mine alone!\"",
             "m1": "Balloony inflicts psychic damage.",
             "m2": "Balloony forces you to read Tableland propaganda.",
@@ -51,7 +51,7 @@
         {
             "id": "deslauriers",
             "name": "Mr. DesLauriers",
-            "aliases": ["deslauriers", "mr deslauriers", "Mr. DesLauriers", "Mr. Deslauriers", "Mr Deslauriers"],
+            "aliases": ["deslauriers", "mr deslauriers", "mr. deslauriers"],
             "catchphrase": "\"LATE FOR CLASS AGAIN, ARE YOU?\"",
             "m1": "Mr. DesLauriers swings his aluminum baseball bat.",
             "m2": "Mr. DesLauriers confuses you with programming jargon.",

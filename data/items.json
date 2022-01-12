@@ -1,44 +1,48 @@
 {
   "items": [
     {
-      "id": "Geraldo",
+      "id": "geraldo",
       "name": "Geraldo",
-      "aliases": ["geraldo", "rocks"],
+      "aliases": ["rocks"],
       "description": "A series of small oval-shaped rocks. They appear to be sleeping. You can throw them at enemies.",
       "isOpenable": false,
+      "isTakeable": true,
       "isWeapon": true,
       "damage": 10,
       "weight": 5,
       "startingRoom": "The Lair"
     },
     {
-      "id": "Scroll of News News",
+      "id": "scroll of news news",
       "name": "Scroll of News News",
-      "aliases": ["scroll", "scroll of news news", "news news scroll"],
+      "aliases": ["scroll", "news news scroll"],
       "description": "A beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but it seems too stupid to read.",
       "isOpenable": true,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "weight": 2,
       "startingRoom": "News News Vault"
     },
     {
-      "id": "Five Hundred Euros",
+      "id": "five hundred euros",
       "name": "Five Hundred Euros",
-      "aliases": ["euros", "500 euros", "five hundred euros"],
+      "aliases": ["euros", "500 euros"],
       "description": "500 Euros",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "weight": 2,
-      "startingRoom": "The Lair"
+      "startingRoom": "gameRoom"
     },
     {
-      "id": "Balloony's Corpse",
+      "id": "balloony's corpse",
       "name": "Balloony's Corpse",
       "aliases": ["balloony", "balloony's corpse", "balloon", "corpse"],
       "description": "A shriveled, deflated balloon. Can be inflated and used as a hot air balloon.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "keyId": "1234",
@@ -46,33 +50,36 @@
       "startingRoom": "Department Of Customer Service"
     },
     {
-      "id": "Moral Support",
+      "id": "moral support",
       "name": "Moral Support",
       "aliases": ["moral support", "orb", "glowing orb"],
       "description": "A small box. You can hear encouraging words coming from it.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "weight": 0,
-      "startingRoom": "Dog Paradise"
+      "startingRoom": "gameRoom"
     },
     {
-      "id": "Bottle of Water",
+      "id": "bottle of water",
       "name": "Bottle of Water",
-      "aliases": ["water", "bottle", "bottle of water", "water bottle"],
+      "aliases": ["water", "bottle", "water bottle"],
       "description": "A small flask, containing a sizeable amount of water. Your lips feel dry just looking at it.",
       "isOpenable": true,
+      "isTakeable": true,
       "isWeapon": true,
       "damage": 2,
       "weight": 2,
       "startingRoom": "East Room"
     },
     {
-      "id": "Bandages",
+      "id": "bandages",
       "name": "Bandages",
-      "aliases": ["bandages"],
+      "aliases": [],
       "description": "Clean white patches of gauze. Can be used to improve health conditions in dire circumstances.",
       "isOpenable": false,
+      "isTakeable": true,
       "isWeapon": false,
       "damage": 0,
       "weight": 1,
@@ -80,83 +87,88 @@
       "startingRoom": "East Room"
     },
     {
-      "id": "1000 British Pounds",
+      "id": "1000 british pounds",
       "name": "1000 British Pounds",
-      "aliases": ["1000 pounds", "1000 british pounds", "pounds", "paper"],
+      "aliases": ["1000 pounds", "pounds", "paper"],
       "description": "A crisp thousand-pound bill, straight from England. You have no idea how it got here.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "weight": 1,
       "startingRoom": "The Lair"
     },
     {
-      "id": "Coonskin Hat",
+      "id": "coonskin hat",
       "name": "Coonskin Hat",
-      "aliases": ["hat", "fur hat", "coonskin hat", "furs", "fur cap"],
+      "aliases": ["hat", "fur hat", "furs", "fur cap"],
       "description": "A designer cap made from the pelt and tail of a raccoon. Poor raccoon.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "weight": 4,
-      "startingRoom": "Fur Store"
+      "startingRoom": "gameRoom"
     },
     {
-      "id": "The Tome of Tabeland",
-      "name": "The Tome of Tabeland",
+      "id": "the tome of tableland",
+      "name": "The Tome of Tableland",
       "aliases": ["tome", "ancient tome", "book"],
       "description": "An antique, leather-bound logbook. There seems to be something written inside.",
       "isOpenable": true,
+      "isTakeable": true,
       "isWeapon": false,
       "damage": 0,
-      "keyId": "0000",
       "weight": 7,
       "startingRoom": "East Room"
     },
     {
-      "id": "Alaskan Cheese",
+      "id": "alaskan cheese",
       "name": "Alaskan Cheese",
-      "aliases": ["cheese", "alaskan cheese"],
+      "aliases": ["cheese"],
       "description": "A morsel of the famed cheese native to Alaska. You can smell its fragrance; somehow, it smells loud and confusing.",
       "isOpenable": true,
+      "isTakeable": true,
       "isWeapon": false,
       "damage": 0,
       "weight": 7,
       "startingRoom": "Cheese Vault"
     },
     {
-      "id": "Key of Friendship",
+      "id": "key of friendship",
       "name": "Key of Friendship",
       "aliases": ["key", "key of friendship", "friendship key"],
       "description": "A powerful, brass key. It almost looks too pristine to use.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "keyId": "9999",
       "weight": 1,
       "startingRoom": "Lower Hall of Enemies"
     },
     {
-      "id": "The Sword of Tableland",
+      "id": "the sword of tableland",
       "name": "The Sword of Tableland",
-      "aliases": ["sword", "sword of tableland", "tableland sword"],
+      "aliases": ["sword","tableland sword"],
       "description": "A noble longsword, forged with the strength of the gods. The handle is infused with ancient runes. Your soul feels nourished by its strength.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": true,
       "damage": 50,
       "weight": 5,
-      "startingRoom": "Underground Tunnel"
+      "startingRoom": "gameRoom"
     },
     {
-      "id": "The Shield of Tableland",
+      "id": "the shield of tableland",
       "name": "The Shield of Tableland",
       "aliases": ["shield", "shield of tableland", "tableland shield"],
       "description": "An elegant shield, forged by the will of the gods. An ancient motif adorns the front. Your soul feels satisfied by its protection.",
       "isOpenable": false,
+      "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
       "weight": 5,
-      "startingRoom": "Underground Tunnel"
+      "startingRoom": "gameRoom"
     }
   ]
 }
