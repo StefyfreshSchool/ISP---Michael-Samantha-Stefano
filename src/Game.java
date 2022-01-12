@@ -946,12 +946,8 @@ public class Game implements java.io.Serializable {
       gui.println("ENTER CODE:");
       if (correctCode()){
         gui.println("Something clicks and the door swings open! Satisfied, you know you should grab a morsel of pristine Alaskan Cheese.");
-<<<<<<< HEAD
         gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece"); 
         hasOpenedVault = true;
-=======
-        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer."); 
->>>>>>> 8445705419ff47131ead7dc785de509afdd944f0
       } else {
         gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
         currentRoom = roomMap.get("Upper Atrium");
