@@ -987,14 +987,19 @@ public class Game implements java.io.Serializable {
   }
 
   private void inflate(String secondWord) {
-    if (secondWord != ""){
-      if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
-        gui.println("You inflated Balloony's corpse.");
-        gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
-        currentRoom = roomMap.get("Temple of the Sky Gods");
-        gui.println(currentRoom.shortDescription());
-      } else {
-        gui.println("That doesn't seem like a good idea. It could explode.");
+    if (!secondWord.equals("")){
+      if(player.skyGodsCheck()){
+        if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
+          gui.println("You inflated Balloony's corpse.");
+          gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
+          currentRoom = roomMap.get("Sky Temple Pavillion");
+          gui.println(currentRoom.shortDescription());
+        } else {
+          gui.println("That doesn't seem like a good idea.");
+        }
+      }else{
+        gui.println("You're not ready. You need to complete the 8 trials listed in the Tome of Tableland before you inflate Balloony's corpse.");
+        gui.println("Try reading the Tome of Tableland.");
       }
     } else {
       gui.println("What would you like to inflate?");
@@ -1015,7 +1020,55 @@ public class Game implements java.io.Serializable {
       gui.println("You feel a strong pull from this place. You cannot go through the tunnel. However, somehow you know it's very important.");
     }
   }
-  //Mysterious Entrance
+  
+  public void skyGods(){
+    gui.println("You hear the most calming sound in the world. You are so calm, it feels like your brain is being massaged by a baby deer.");
+    gui.println("You look up from your prayer and see the three gorgeous thrones. Now, on them sit three humans. Somehow, you know they are the true Gods of Tableland.");
+    gui.println("\"Welcome to the Temple of the Sky Gods,\" the first figure says.");
+    gui.println("\"You have made it past the first eight challenges,\" the second figure says.");
+    gui.println("\"Now all you need to do to prove you are the true Whisperer succesor is go into hell and rescue the previous co-head of customer service of Tableland from the monster that resides there,\" says the third god.");
+    gui.println("\"To defeat this monster you need these,\" the first figure says.");
+    removeItems();
+    inventory.addItem(itemMap.get("the sword of tableland"));
+    inventory.addItem(itemMap.get("the shield of tableland"));
+    gui.println("\"We have added the Sword and Shield of Tableland to your inventory and have removed everything unnessacary for the defeat of the monster,\" says the second god.");
+    gui.println("\"Now go defeat the monster future Whisperer!\" says the third god.");
+    player.talkedToSkyGods();
+    gui.println("With that, the gods dissapear.");
+    gui.println();
+    gui.println("You now know what you must do.");
+    gui.println("Go to hell and defeat the monster to save your friend.");
+  }
+
+  public void removeItems(){
+    if(inventory.hasItem(itemMap.get("rocks"))){
+      inventory.removeItem(itemMap.get("rocks"));
+    }
+    if(inventory.hasItem(itemMap.get("scroll"))){
+      inventory.removeItem(itemMap.get("scroll"));
+    }
+    if(inventory.hasItem(itemMap.get("euros"))){
+      inventory.removeItem(itemMap.get("euros"));
+    }
+    if(inventory.hasItem(itemMap.get("balloony's corpse"))){
+      inventory.removeItem(itemMap.get("balloony's corpse"));
+    }
+    if(inventory.hasItem(itemMap.get("bottle"))){
+      inventory.removeItem(itemMap.get("bottle"));
+    }
+    if(inventory.hasItem(itemMap.get("bandages"))){
+      inventory.removeItem(itemMap.get("bandages"));
+    }
+    if(inventory.hasItem(itemMap.get("fur hat"))){
+      inventory.removeItem(itemMap.get("fur hat"));
+    }
+    if(inventory.hasItem(itemMap.get("cheese"))){
+      inventory.removeItem(itemMap.get("cheese"));
+    }
+    if(inventory.hasItem(itemMap.get("key of friendship"))){
+      inventory.removeItem(itemMap.get("key of friendship"));
+    }
+  }
 
   /** 
    * @param secondWord
@@ -1055,7 +1108,7 @@ public class Game implements java.io.Serializable {
       gui.println("Suddenly, you feel a quite compelling message from deep within your psyche.");
       gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
     } else if (currentRoom.getRoomName().equals("Temple of the Sky Gods")){
-      //skyGods();
+      skyGods();
     } else {
       gui.println("You cannot pray here. You can only pray at temples.");
     }

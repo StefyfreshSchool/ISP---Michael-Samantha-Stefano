@@ -64,7 +64,7 @@
     {
       "id": "bottle of water",
       "name": "Bottle of Water",
-      "aliases": ["water", "bottle", "water bottle"],
+      "aliases": ["water", "bottle", "water bottle", "bottle of water"],
       "description": "A small flask, containing a sizeable amount of water. Your lips feel dry just looking at it.",
       "isOpenable": true,
       "isTakeable": true,
