@@ -363,17 +363,17 @@ public class Game implements java.io.Serializable {
     } else if (c.equals("3")){
       currentRoom = roomMap.get("North of Crater");
     } else if (c.equals("4")){
-      inventory.addItem(Game.itemMap.get("balloony"));
-    } else if (c.equals("5")){
-      player.setHealth(90);
-    } else if (c.equals("6")){
-      player.talkedToSkyGods();
-    } else if (c.equals("7")){
-      inventory.addItem(itemMap.get("Bandages"));
-    } else if (c.equals("8")){
       inventory.addItem(itemMap.get("sword"));
       inventory.addItem(itemMap.get("bottle"));
       currentRoom = roomMap.get("Mystery Door of Mystery");
+    } else if (c.equals("5")){
+      inventory.addItem(itemMap.get("sword"));
+      inventory.addItem(itemMap.get("bottle"));
+      currentRoom = roomMap.get("Caldera Bridge");
+    } else if (c.equals("6")){
+      player.talkedToSkyGods();
+    } else if (c.equals("7")){
+    } else if (c.equals("8")){
     } else if (c.equals("")){
       player.maxHeal();
     } else if (c.equals("crash")){
@@ -687,6 +687,10 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         robot();
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Hall of the Volcano King") || nextRoom.getRoomName().equals("Hall of the Volcano King"))) {
+        currentRoom = nextRoom;
+        gui.println(currentRoom.shortDescription());
+        deslauriers();
       } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
@@ -783,6 +787,21 @@ public class Game implements java.io.Serializable {
       if (enemyAttack(robot)) return;
       isInTrial = false;
       player.setTrial(5);
+    }
+  }
+
+  public void deslauriers(){
+    Enemy deslauriers = enemyMap.get("deslauriers");
+    if (!deslauriers.getIsDead()){
+      isInTrial = true;
+      gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall.");
+      gui.println(deslauriers.getCatchphrase() + " He yells.");
+      if (enemyAttack(deslauriers)) return;
+      gui.println("Mr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
+      gui.println("The world seems a little more vibrant.");
+      isInTrial = false;
+    } else if (deslauriers.getIsDead() && currentRoom.getRoomName().equals("Hall of the Volcano King")) {
+      gui.println("The world seems a little more vibrant.");
     }
   }
 
@@ -927,8 +946,12 @@ public class Game implements java.io.Serializable {
       gui.println("ENTER CODE:");
       if (correctCode()){
         gui.println("Something clicks and the door swings open! Satisfied, you know you should grab a morsel of pristine Alaskan Cheese.");
+<<<<<<< HEAD
         gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece"); 
         hasOpenedVault = true;
+=======
+        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer."); 
+>>>>>>> 8445705419ff47131ead7dc785de509afdd944f0
       } else {
         gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
         currentRoom = roomMap.get("Upper Atrium");
@@ -1000,6 +1023,8 @@ public class Game implements java.io.Serializable {
       gui.println("For you know they can never be satisfied. \n");
       gui.println("Suddenly, you feel a quite compelling message from deep within your psyche.");
       gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
+    } else if (currentRoom.getRoomName().equals("Temple of the Sky Gods")){
+      //skyGods();
     } else {
       gui.println("You cannot pray here. You can only pray at temples.");
     }
@@ -1026,13 +1051,13 @@ public class Game implements java.io.Serializable {
   }
 
   private void readScroll() {
-    gui.println("Garbled, messy writing is scrawled on the page. It says:");
+    gui.println("Garbled, messy writing is scrawled onto the page. It reads:");
     gui.println();
-    gui.println("\"not yet news news: The official newspaper of Tableland\"");
-    gui.println("\"January 3rd, 2022 | Author: Christopher Cha\"");
-    gui.println("\"not yet news news: Balloony has taken down Connie!\"");
-    gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Connie from office.\"");
-    gui.println("\"Connie was working in his office when Balloony entered with armed guards. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
+    gui.println("\"The DAILY news table land™: The official news channel of Tableland\"");
+    gui.println("\"January 3 2022 | Balloony has taken down Connie!\"");
+    gui.println("\"by Christopher Cha \"");
+    gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Constantine from office.\"");
+    gui.println("\"Connie was working in his office when Balloony entered with an armed sasquatch. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
     gui.println("\"Balloony told the people of Tableland this on a press conference on Friday. He has kidnapped his former co-head of customer service.\"");
     gui.println("\"Where could Balloony be keeping Connie?\" You think.");
   }
@@ -1056,11 +1081,11 @@ public class Game implements java.io.Serializable {
     gui.println("\"2. Procure thee News News scroll, doth of antiquity.\"");
     gui.println("\"3. Practice larceny upon morsels of Alaskan cheese.\"");
     gui.println("\"4. Secure ye fabulous furs in all Canadian lands.\"");
-    gui.println("\"5. Upheave a vaccuum.  \"");
-    gui.println("\"6. Threaten friends bot with the most deadliest liquid.\"");
-    gui.println("\"7. Usurp the head of Customer Service.\"");
-    gui.println("\"8. Visit dog paradise.\"");
-    gui.println("\"Then thou will be granted access to the Trial in the Sky.\"");
+    gui.println("\"5. Upheave Vaccuum, a foe of many Cs.  \"");
+    gui.println("\"6. Threaten the most deadliest liquid upon the Robot.\"");
+    gui.println("\"7. Usurp the meddling head of Customer Service.\"");
+    gui.println("\"8. Take a jaunt over to Dog Paradise.\"");
+    gui.println("\"Only then thou will be granted access to the Trial in the Sky.\"");
   }
 
   /**

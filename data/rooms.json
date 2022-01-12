@@ -986,7 +986,7 @@
     {
       "id": "Table Caldera Platform",
       "name": "Table Caldera Platform",
-      "description": "The air around tightens its grip around your throat. But you've come too far to give up now. At least the view is nice from up here.",
+      "description": "You feel your soul tremble as you climb the volcano. The air around tightens its grip around your throat. But you've come too far to give up now. At least the view is nice from up here.",
       "exits": [
         {
           "isLocked": false,
@@ -1005,7 +1005,7 @@
     {
       "id": "Volcano Peak",
       "name": "Volcano Peak",
-      "description": "You feel your soul tremble as you gaze into the volcano. You know you have no choice.",
+      "description": "...",
       "exits": [
         {
           "isLocked": false,
@@ -1018,7 +1018,7 @@
     {
       "id": "Hall of the Volcano King",
       "name": "Hall of the Volcano King",
-      "description": "...",
+      "description": "Mr. DesLauriers sits on his throne of baseball bats.",
       "exits": [
         {
           "isLocked": true,
@@ -1055,7 +1055,7 @@
         {
           "isLocked": false,
           "direction": "South",
-          "adjacentRoom": "Temple of the Sky Gods Pavillion",
+          "adjacentRoom": "Sky Temple Pavillion",
           "keyId": "0000"
         }
       ]
