@@ -1014,7 +1014,7 @@ public class Game implements java.io.Serializable {
       gui.println("ENTER CODE:");
       if (correctCode()){
         gui.println("Something clicks and the door swings open! Satisfied, you know you should grab a morsel of pristine Alaskan Cheese.");
-        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece"); 
+        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece!"); 
         hasOpenedVault = true;
       } else {
         gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
@@ -1024,7 +1024,7 @@ public class Game implements java.io.Serializable {
     } else {
       gui.println("The vault door still hangs wide open, just as you left it.");
       if(!player.getTrial(2)){
-        gui.println("You see small morsels of pristine Alaskan Cheese. You know you should grab one.");
+        gui.println("You see small morsels of pristine Alaskan Cheese inside the princess' vault.");
       }
     }
   }
@@ -1047,7 +1047,7 @@ public class Game implements java.io.Serializable {
           gui.println("That doesn't seem like a good idea.");
         }
       }else{
-        gui.println("You're not ready. You need to complete the 8 trials listed in the Tome of Tableland before you inflate Balloony's corpse.");
+        gui.println("Your soul is not ready. Complete the 8 trials detailed in the Tome of Tableland before you attempting.");
         gui.println("Try reading the Tome of Tableland.");
       }
     } else {
@@ -1065,28 +1065,28 @@ public class Game implements java.io.Serializable {
         gui.println("\"You should go on future Whisperer, Connie must be saved!\" Madlene says.");
       }
     }else{
-      gui.println("The tunnel is boarded up, so you cannot go through it.");
+      gui.println("The tunnel is boarded up. You cannot pass through.");
       gui.println("You feel a strong pull from this place. You cannot go through the tunnel. However, somehow you know it's very important.");
     }
   }
   
   public void skyGods(){
-    gui.println("You hear the most calming sound in the world. You are so calm, it feels like your brain is being massaged by a baby deer.");
-    gui.println("You look up from your prayer and see the three gorgeous thrones. Now, on them sit three humans. Somehow, you know they are the true Gods of Tableland.");
-    gui.println("\"Welcome to the Temple of the Sky Gods,\" the first figure says.");
-    gui.println("\"You have made it past the first eight challenges,\" the second figure says.");
-    gui.println("\"Now all you need to do to prove you are the true Whisperer succesor is go into hell and rescue the previous co-head of customer service of Tableland from the monster that resides there,\" says the third god.");
-    gui.println("\"To defeat this monster you need these,\" the first figure says.");
+    gui.println("Soothing ambience of the gods fill your ears. It feels like your brain is being massaged by a baby deer.");
+    gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.");
+    gui.println("\"Welcome to the Temple of the Sky Gods, traveller.\" the first figure says.");
+    gui.println("\"You have made it past the first eight trials, traveller.\" the second figure says.");
+    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture towards the west and rescue the missing co-head of customer service from the monster that resides there.\" says the third god.");
+    gui.println("\"To defeat this monster, we bestow upon you these divine artifacts.\" the first figure says.");
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
     inventory.addItem(itemMap.get("the shield of tableland"));
-    gui.println("\"We have added the Sword and Shield of Tableland to your inventory and have removed everything unnessacary for the defeat of the monster,\" says the second god.");
-    gui.println("\"Now go defeat the monster future Whisperer!\" says the third god.");
+    gui.println("\"We have graced you with the Sword and Shield of Tableland. We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
+    gui.println("\"Now go! Defeat the monster that awaits you! Reclaim your destiny, future Whisperer!\" says the third god.");
     player.talkedToSkyGods();
-    gui.println("With that, the gods dissapear.");
+    gui.println("With that, the gods vanish, and the peaceful ambience returns.");
     gui.println();
-    gui.println("You now know what you must do.");
-    gui.println("Go to hell and defeat the monster to save your friend.");
+    gui.println("You know what you must do.");
+    gui.println("Go to Hell and defeat the monster to save your friend.");
   }
 
   public void removeItems(){
