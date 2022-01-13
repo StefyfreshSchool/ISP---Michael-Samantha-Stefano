@@ -7,12 +7,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Northeast",
           "adjacentRoom": "East of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Northwest",
           "adjacentRoom": "West of the Cyan House"
         }
       ]
@@ -24,12 +24,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northwest",
           "adjacentRoom": "North of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Southwest",
           "adjacentRoom": "South of the Cyan House"
         },
         {
@@ -47,12 +47,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Southeast",
           "adjacentRoom": "East of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Southwest",
           "adjacentRoom": "West of the Cyan House"
         },
         {
@@ -106,12 +106,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northeast",
           "adjacentRoom": "North of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Southeast",
           "adjacentRoom": "South of the Cyan House"
         },
         {
@@ -129,12 +129,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northwest",
           "adjacentRoom": "Tarnished Fountain"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "West",
           "adjacentRoom": "Plaza Outskirts"
         },
         {
@@ -156,12 +156,12 @@
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Southeast",
           "adjacentRoom": "Town Plaza"
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Southwest",
           "adjacentRoom": "Plaza Outskirts"
         }
       ]
@@ -173,12 +173,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northeast",
           "adjacentRoom": "Tarnished Fountain"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "East",
           "adjacentRoom": "Town Plaza"
         }
       ]
@@ -217,7 +217,7 @@
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Northeast",
           "adjacentRoom": "Overgrown Path"
         },
         {
@@ -234,12 +234,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "East",
           "adjacentRoom": "Frostbitten Tundra"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Southwest",
           "adjacentRoom": "Castle Grounds"
         }
       ]
@@ -268,7 +268,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "West",
           "adjacentRoom": "Overgrown Path"
         },
         {
@@ -508,12 +508,12 @@
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Northeast",
           "adjacentRoom": "East of Crater"
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Northwest",
           "adjacentRoom": "West of Crater"
         }
       ]
@@ -530,13 +530,13 @@
         },
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northeast",
           "adjacentRoom": "North of Crater",
           "keyId": "1234"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Southeast",
           "adjacentRoom": "South of Crater"
         }
       ]
@@ -582,12 +582,12 @@
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Southwest",
           "adjacentRoom": "West of Crater"
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Southeast",
           "adjacentRoom": "East of Crater"
         }
       ]
@@ -599,17 +599,17 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Northwest",
           "adjacentRoom": "North of Crater"
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Southwest",
           "adjacentRoom": "South of Crater"
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Northeast",
           "adjacentRoom": "Forest Tripoint"
         }
       ]
@@ -679,17 +679,17 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Southwest",
           "adjacentRoom": "Campsite Ruins"
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Southeast",
           "adjacentRoom": "Great Cliff Lookout"
         },
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northwest",
           "adjacentRoom": "Forest Tripoint"
         }
       ]
@@ -701,7 +701,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Northeast",
           "adjacentRoom": "Small Clearing"
         }
       ]
@@ -713,7 +713,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Northwest",
           "adjacentRoom": "Small Clearing"
         }
       ]

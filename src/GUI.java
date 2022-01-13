@@ -389,6 +389,7 @@ public class GUI {
      */
     public void printerr(Object x) {
         append(x + "\n", stylize(false, true, new Color(200, 50, 20)));
+        flush();
     }
 
     /**
