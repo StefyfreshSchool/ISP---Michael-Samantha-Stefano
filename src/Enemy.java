@@ -12,20 +12,16 @@ public class Enemy extends Character{
     private int health;
     private int damageMin;
     private int damageMax;
-    private String m1; // three messages when the enemy hurts you
-    private String m2;
-    private String m3;
+    private ArrayList<String> messages;
     private ArrayList<String> aliases;
     private boolean isDead;
 
-    public Enemy(String name, String catchphrase, int health, int damageMin, int damageMax, String m1, String m2, String m3, ArrayList<String> aliases){
+    public Enemy(String name, String catchphrase, int health, int damageMin, int damageMax, ArrayList<String> messages, ArrayList<String> aliases){
         super(name, catchphrase);
         this.health = health;
         this.damageMin = damageMin;
         this.damageMax = damageMax;
-        this.m1 = m1;
-        this.m2 = m2;
-        this.m3 = m3;
+        this.messages = messages;
         this.aliases = aliases;
         this.isDead = false;
     }
@@ -60,12 +56,8 @@ public class Enemy extends Character{
     }
 
     public String getHurtMessage() {
-        int num = (int) (Math.random() * 3) + 1;
-        if (num == 1){
-            return m1;
-        } else if (num == 2){
-            return m2;
-        } return m3;
+        int num = (int) (Math.floor(Math.random() * messages.size()));
+        return messages.get(num);
     }
 
     public static JSONArray getEnemies() {

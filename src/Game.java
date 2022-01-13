@@ -26,6 +26,7 @@ public class Game implements java.io.Serializable {
   private Room pastRoom;
   private boolean isInTrial;
   private boolean hasAnsweredNewsQuestions = false;
+  private boolean supportCheck = false;;
 
   /**
    * Create the game and initialize its internal map.
@@ -129,15 +130,16 @@ public class Game implements java.io.Serializable {
       Long health = (Long) ((JSONObject) enemyObj).get("health");
       Long damageMin = (Long) ((JSONObject) enemyObj).get("damageMin");
       Long damageMax = (Long) ((JSONObject) enemyObj).get("damageMax");
-      String m1 = (String) ((JSONObject) enemyObj).get("m1");
-      String m2 = (String) ((JSONObject) enemyObj).get("m2");
-      String m3 = (String) ((JSONObject) enemyObj).get("m3");
+      ArrayList<String> messages = new ArrayList<String>();
+      for (Object message : (JSONArray) ((JSONObject) enemyObj).get("messages")) {
+        messages.add((String) message);
+      }
       ArrayList<String> aliases = new ArrayList<String>();
       for (Object alias : (JSONArray) ((JSONObject) enemyObj).get("aliases")) {
         aliases.add((String) alias);
       }
 
-      Enemy enemy = new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), m1, m2, m3, aliases);
+      Enemy enemy = new Enemy(name, catchphrase, health.intValue(), damageMin.intValue(), damageMax.intValue(), messages, aliases);
       enemyMap.put(id, enemy);
       for (String alias : aliases) {
         enemyMap.put(alias, enemy);
@@ -430,6 +432,10 @@ public class Game implements java.io.Serializable {
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println("The " + weaponName + " just bounces off its titanium armor. It dealt 0 damage.");
         gui.println("Maybe there's another way to defeat it?");
+      } else if (enemyMap.get("deslauriers").isThisEnemy(enemy.getName()) && enemy.getHealth() <= 25 && !supportCheck) {
+        String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
+        gui.println("Mr. DesLauriers eyes start to glow.");
+        gui.println("The enemy has become too strong! The " + weaponName + " isn't doing any damage to it!");
       } else { // hit enemy with weapon
         if (enemy.getHealth() > 0){
           Item item = itemMap.get(command.getLastArg());
@@ -443,8 +449,10 @@ public class Game implements java.io.Serializable {
             gui.print("You aim a rock at the enemy. ");
           } else if (item.getName().equals("Bottle of Water")){
             gui.print("You whack the enemy in the head. ");
-          } else {
+          } else if (item.getDamage() == 25){
             gui.print("You valiantly slice the enemy. ");
+          } else {
+            gui.print("Through the power of moral support, you valiantly slice the enemy. ");
           }
           gui.println("The " + enemy.getName() + " loses " + item.getDamage() + " HP. It has " + enemyHealth + " HP left.");
           if (enemyHealth == 0) {
@@ -802,11 +810,35 @@ public class Game implements java.io.Serializable {
       boolean exit = processCommand(command);
       if (exit) return true;
       if (!enemy.getIsDead()){
-        player.setHealth(tempDamage);
-        gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
+        if (enemy.isThisEnemy("deslauriers") && player.getHealth() - tempDamage < 1){
+          tempDamage = player.getHealth() - 1;
+          moralSupport();
+        }
+        if (!supportCheck){
+          player.setHealth(tempDamage);
+          gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
+        } else {
+          gui.println("Mr. DesLauriers tried to attack, but you blocked with The Shield of Tableland!");
+        }
       }
     }
     return false;
+  }
+
+  private void moralSupport() {
+    supportCheck = true;
+    gui.println("Mr. DesLauriers' slashes you down to 1 HP!");
+    gui.println("You can feel your surroundings grow fainter... \n");
+    gui.println("Suddenly, you feel a warmth in your pocket. The moral support has started to glow!");
+    gui.println("Picking it up, it imbues with your soul. Voices of those who support you echo in your ears. \n");
+    gui.println("You can do it!");
+    gui.println("Add more messages!");
+    gui.println("I can't think of anything!\n");
+    gui.println("Your health has been completely restored!");
+    gui.println("Your sword starts shining with the power of the gods. It now deals 100 damage!\n");
+    gui.println("You face the enemy with a newfound confidence! You can do this!");
+    player.maxHeal();
+    itemMap.get("sword").setDamage(50);
   }
 
   public void newsNewsScroll(){

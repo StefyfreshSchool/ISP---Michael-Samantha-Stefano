@@ -154,7 +154,7 @@
       "isOpenable": false,
       "isTakeable": false,
       "isWeapon": true,
-      "damage": 50,
+      "damage": 25,
       "weight": 5,
       "startingRoom": "gameRoom"
     },
