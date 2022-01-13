@@ -56,11 +56,11 @@ public class MusicPlayer {
      * Sets the current music volume, in decibels, between 0 and -80 dB.
      * @param vol - A {@code float} of the new volume.
      */
-    public void setVolume(float vol){
+    public void setVolume(double vol){
         if (vol > 0 || vol < -80.0f) throw new IllegalArgumentException("Value must be between 0 and -80");
         FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         // vol = (float) Math.log10(vol) * 20;
-        volume.setValue(vol);
+        volume.setValue((float) vol);
 
     }
 
@@ -68,9 +68,9 @@ public class MusicPlayer {
      * Gets the current music volume, in decibels, between 0 and -80 dB.
      * @return A {@code float} of the current volume.
      */
-    public float getVolume() {
+    public double getVolume() {
         FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         // return (float) Math.pow(10, volume.getValue() / 20);
-        return volume.getValue();
+        return (double) volume.getValue();
     }
 }
