@@ -713,6 +713,10 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         vaccuum();
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
+        currentRoom = nextRoom;
+        gui.println(currentRoom.shortDescription());
+        balloony();
       } else if (!isInTrial && (currentRoom.getRoomName().equals("Hall of the Volcano King") || nextRoom.getRoomName().equals("Hall of the Volcano King"))) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
@@ -738,23 +742,23 @@ public class Game implements java.io.Serializable {
       }
     }
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
-      if (inventory.hasItem(itemMap.get("pounds"))){
+      if (inventory.hasItem(itemMap.get("1000 british pounds"))){
         player.setTrial(0);
       }
     }else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies"))||(pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
-      if (inventory.hasItem(itemMap.get("key"))){
+      if (inventory.hasItem(itemMap.get("key of friendship"))){
         player.setTrial(4);
       }
     }else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
-      if (inventory.hasItem(itemMap.get("scroll"))){
+      if (inventory.hasItem(itemMap.get("scroll of news news"))){
         player.setTrial(1);
       }
     }else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
-      if (inventory.hasItem(itemMap.get("cheese"))){
+      if (inventory.hasItem(itemMap.get("alaskan cheese"))){
         player.setTrial(2);
       }
     }else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room")){
-      if (inventory.hasItem(itemMap.get("corpse"))){
+      if (inventory.hasItem(itemMap.get("balloony's corpse"))){
         player.setTrial(6);
       }
     }
@@ -831,7 +835,9 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       if (enemyAttack(deslauriers)) return;
-      gui.println("Mr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
+      sleep(1000);
+      sleep(1000);
+      gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
       gui.println("The world seems a little more vibrant.");
       isInTrial = false;
     } else if (deslauriers.getIsDead() && currentRoom.getRoomName().equals("Hall of the Volcano King")) {
@@ -854,6 +860,7 @@ public class Game implements java.io.Serializable {
           player.setHealth(tempDamage);
           gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
         } else {
+          sleep(1000);
           gui.println("Mr. DesLauriers tried to attack, but you blocked with The Shield of Tableland!");
         }
       }
@@ -932,12 +939,12 @@ public class Game implements java.io.Serializable {
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
-    } else{
+    } else {
       gui.println("There is nothing for you here.");
     }
   }
 
-  public void deptCustomerService(){
+  public void balloony(){
     Enemy balloony = enemyMap.get("balloony");
     if (!player.getTrial(6) && balloony.getHealth()>0){
       isInTrial = true;
@@ -1075,18 +1082,18 @@ public class Game implements java.io.Serializable {
     gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.");
     gui.println("\"Welcome to the Temple of the Sky Gods, traveller.\" the first figure says.");
     gui.println("\"You have made it past the first eight trials, traveller.\" the second figure says.");
-    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth the west and rescue the missing Customer Serviceman, from the monster that resides there.\" says the third god.");
+    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth the west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
     gui.println("\"To aid you on your journey, we bestow upon you these divine artifacts.\" the first figure says.");
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
     inventory.addItem(itemMap.get("the shield of tableland"));
     gui.println("\"We have graced you with the Sword and Shield of Tableland. We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
-    gui.println("\"Now go! Defeat the monster that awaits you! Reclaim your destiny, future Whisperer!\" says the third god.");
+    gui.println("\"Now go! Defeat what thou awaits you! Reclaim your destiny, future Whisperer!\" says the third god.");
     player.talkedToSkyGods();
     gui.println("With that, the gods vanish, and the peaceful ambience returns.");
     gui.println();
     gui.println("You know what you must do.");
-    gui.println("Go to Hell and defeat the monster to save your friend.");
+    gui.println("Go to Hell to save your friend, once and for all.");
   }
 
   public void removeItems(){

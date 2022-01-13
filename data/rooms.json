@@ -20,7 +20,7 @@
     {
       "id": "East of the Cyan House",
       "name": "East of the Cyan House",
-      "description": "You are east of the Cyan House, surrounded by plains.",
+      "description": "You are east of the Cyan House, surrounded by plains. A flag soars majestically atop a flagpole, the national flag of Tableland.",
       "exits": [
         {
           "isLocked": false,
@@ -57,7 +57,7 @@
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "In",
           "adjacentRoom": "West Room",
           "keyId": "0000"
         },
@@ -76,7 +76,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Out",
           "adjacentRoom": "North of the Cyan House",
           "keyId": "0000"
         },
