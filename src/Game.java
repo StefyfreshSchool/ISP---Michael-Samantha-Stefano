@@ -13,7 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.awaitility.Awaitility;
 
-public class Game implements java.io.Serializable {
+public class Game implements java.io.Serializable { 
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
