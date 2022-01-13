@@ -43,7 +43,7 @@ public class Player implements java.io.Serializable{
     }
 
     public void resetTrials(){
-        trials = new boolean[8];
+        trials = new boolean[11];
     }
 
     public boolean skyGodsCheck(){
