@@ -1031,7 +1031,7 @@
     {
       "id": "Sky Temple Pavillion",
       "name": "Sky Temple Pavillion",
-      "description": "You look up at the towering castle, perched on the cloudcapt sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
+      "description": "You look up at the towering temple, perched on the cloudcapt sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
       "exits": [
         {
           "isLocked": false,
