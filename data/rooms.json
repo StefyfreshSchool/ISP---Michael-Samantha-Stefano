@@ -361,7 +361,7 @@
     {
       "id": "Gates of Hell",
       "name": "Gates of Hell",
-      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Inexplicably, the door to the underground tunnel seems to be locked with an arcane incantation.",
+      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Past the gates you can see miles and miles of gloomy forest. You feel a chill run down your spine.",
       "exits": [
         {
           "isLocked": false,
@@ -1050,7 +1050,7 @@
     {
       "id": "Temple of the Sky Gods",
       "name": "Temple of the Sky Gods",
-      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling. On them sit three humans. Somehow, you know they are the true Gods of Tableland.",
+      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling, but they are eerily absent of inhabitants.",
       "exits": [
         {
           "isLocked": false,

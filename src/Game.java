@@ -25,8 +25,9 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   private Room pastRoom;
   private boolean isInTrial;
-  private boolean hasAnsweredNewsQuestions = false;
-  private boolean supportCheck = false;;
+  private boolean hasAnsweredNewsQuestions;
+  private boolean supportCheck;
+  private boolean hasOpenedVault;
 
   /**
    * Create the game and initialize its internal map.
@@ -53,6 +54,9 @@ public class Game implements java.io.Serializable {
       initEnemies();
       startMusic();
       currentRoom = roomMap.get("South of the Cyan House");
+      hasAnsweredNewsQuestions = false;
+      supportCheck = false;
+      hasOpenedVault = false;
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -714,6 +718,9 @@ public class Game implements java.io.Serializable {
       if (currentRoom.getRoomName().equals("News News Vault")){
         newsNewsScroll();
       }
+      if (currentRoom.getRoomName().equals("Mysterious Entrance")){
+        frogsMadleneandJorge();
+      }
     }
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("pounds"))){
@@ -726,6 +733,14 @@ public class Game implements java.io.Serializable {
     }else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
       if (inventory.hasItem(itemMap.get("scroll"))){
         player.setTrial(1);
+      }
+    }else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
+      if (inventory.hasItem(itemMap.get("cheese"))){
+        player.setTrial(2);
+      }
+    }else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room")){
+      if (inventory.hasItem(itemMap.get("corpse"))){
+        player.setTrial(6);
       }
     }
   }
@@ -764,10 +779,14 @@ public class Game implements java.io.Serializable {
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
       if (enemyAttack(vaccuum)) return;
+      gui.println("Past its lifeless body, you can see an aluminum ladder.");
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       isInTrial = false;
-    } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("")){
+    } else if(vaccuum.getHealth() < 1 && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
       gui.println("The vaccuum sits on the concrete floor, out of battery.");
+      if(!player.getTrial(4)){
+        gui.println("A brass key lies on the floor, dropped by the vaccuum.");
+      }
       if (!enemyMap.get("robot").getIsDead()){
         gui.println("Past its lifeless body, you can see an aluminum ladder.");
       }
@@ -785,6 +804,7 @@ public class Game implements java.io.Serializable {
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       if (enemyAttack(robot)) return;
       isInTrial = false;
+      player.setTrial(5);
     }
   }
 
@@ -903,13 +923,23 @@ public class Game implements java.io.Serializable {
 
   public void deptCustomerService(){
     Enemy balloony = enemyMap.get("balloony");
-    if (!player.getTalkedToSkyGods()){
+    if (!player.getTrial(6) && balloony.getHealth()>0){
       isInTrial = true;
       gui.println("Floating above the wreckage is a large blue balloon.");
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland.\"");
       gui.println(balloony.getCatchphrase());
       if (enemyAttack(balloony)) return;
       isInTrial = false;
+      currentRoom.getItem("balloony's corpse").isTakeable(true);
+      gui.println("Balloony's corpse lays crumpled on the ground.");
+      gui.println("You here a little voice inside you saying \"Take the balloon\"");
+      gui.println("You never know when you'll need a balloon.");
+    }else if(balloony.getHealth()<1 && !player.getTrial(6)){
+      gui.println("Balloony's corpse lays crumpled on the ground.");
+      gui.println("You here a little voice inside you saying \"Take the balloon\"");
+      gui.println("You never know when you'll need a balloon.");
+    }else{
+      gui.println("There is nothing for you here.");
     }
 
   }
@@ -924,10 +954,10 @@ public class Game implements java.io.Serializable {
       gui.println("Will you buy the fur hat? (\"yes\"/\"no\")");
       if (buyFurs()){
         if (inventory.hasItem(itemMap.get("pounds"))){
-          gui.println("\"Pleasure doing business with you, good sir.\"");
           inventory.removeItem(itemMap.get("pounds"));
           inventory.addItem(itemMap.get("hat")); 
           inventory.addItem(itemMap.get("euros"));
+          gui.println("\"Pleasure doing business with you, good sir.\"");
           player.setTrial(3);
         } else if (inventory.hasItem(itemMap.get("pounds")) && inventory.getCurrentWeight() - itemMap.get("pounds").getWeight() + itemMap.get("hat").getWeight() + itemMap.get("euros").getWeight() > inventory.getMaxWeight()){
           gui.println("\"Hmm... I can sense your pockets are too heavy. What a shame.");
@@ -963,12 +993,13 @@ public class Game implements java.io.Serializable {
   }
 
   public void cheeseVault(){
-    if(!inventory.hasItem(itemMap.get("cheese"))){
+    if(!hasOpenedVault){
       gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
       gui.println("ENTER CODE:");
       if (correctCode()){
         gui.println("Something clicks and the door swings open! Satisfied, you know you should grab a morsel of pristine Alaskan Cheese.");
-        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer."); 
+        gui.println("Obviously, taking too much cheese is unbecoming of a future Whisperer. Only take one piece"); 
+        hasOpenedVault = true;
       } else {
         gui.println("...Nothing happens. I guess that was the wrong code. You walk out of the room, feeling unsatisfied.");
         currentRoom = roomMap.get("Upper Atrium");
@@ -976,6 +1007,9 @@ public class Game implements java.io.Serializable {
       }
     } else {
       gui.println("The vault door still hangs wide open, just as you left it.");
+      if(!player.getTrial(2)){
+        gui.println("You see small morsels of pristine Alaskan Cheese. You know you should grab one.");
+      }
     }
   }
 
@@ -986,17 +1020,86 @@ public class Game implements java.io.Serializable {
   }
 
   private void inflate(String secondWord) {
-    if (secondWord != ""){
-      if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
-        gui.println("You inflated Balloony's corpse.");
-        gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
-        currentRoom = roomMap.get("Temple of the Sky Gods");
-        gui.println(currentRoom.shortDescription());
-      } else {
-        gui.println("That doesn't seem like a good idea. It could explode.");
+    if (!secondWord.equals("")){
+      if(player.skyGodsCheck()){
+        if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
+          gui.println("You inflated Balloony's corpse.");
+          gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
+          currentRoom = roomMap.get("Sky Temple Pavillion");
+          gui.println(currentRoom.shortDescription());
+        } else {
+          gui.println("That doesn't seem like a good idea.");
+        }
+      }else{
+        gui.println("You're not ready. You need to complete the 8 trials listed in the Tome of Tableland before you inflate Balloony's corpse.");
+        gui.println("Try reading the Tome of Tableland.");
       }
     } else {
       gui.println("What would you like to inflate?");
+    }
+  }
+
+  public void frogsMadleneandJorge(){
+    if(player.getTalkedToSkyGods()){
+      gui.print("You see a pair of frogs at the entrance.");
+      if(!player.getTrial(9)){
+        gui.println("More words here");
+      }else{
+        gui.println();
+        gui.println("\"You should go on future Whisperer, Connie must be saved!\" Madlene says.");
+      }
+    }else{
+      gui.println("The tunnel is boarded up, so you cannot go through it.");
+      gui.println("You feel a strong pull from this place. You cannot go through the tunnel. However, somehow you know it's very important.");
+    }
+  }
+  
+  public void skyGods(){
+    gui.println("You hear the most calming sound in the world. You are so calm, it feels like your brain is being massaged by a baby deer.");
+    gui.println("You look up from your prayer and see the three gorgeous thrones. Now, on them sit three humans. Somehow, you know they are the true Gods of Tableland.");
+    gui.println("\"Welcome to the Temple of the Sky Gods,\" the first figure says.");
+    gui.println("\"You have made it past the first eight challenges,\" the second figure says.");
+    gui.println("\"Now all you need to do to prove you are the true Whisperer succesor is go into hell and rescue the previous co-head of customer service of Tableland from the monster that resides there,\" says the third god.");
+    gui.println("\"To defeat this monster you need these,\" the first figure says.");
+    removeItems();
+    inventory.addItem(itemMap.get("the sword of tableland"));
+    inventory.addItem(itemMap.get("the shield of tableland"));
+    gui.println("\"We have added the Sword and Shield of Tableland to your inventory and have removed everything unnessacary for the defeat of the monster,\" says the second god.");
+    gui.println("\"Now go defeat the monster future Whisperer!\" says the third god.");
+    player.talkedToSkyGods();
+    gui.println("With that, the gods dissapear.");
+    gui.println();
+    gui.println("You now know what you must do.");
+    gui.println("Go to hell and defeat the monster to save your friend.");
+  }
+
+  public void removeItems(){
+    if(inventory.hasItem(itemMap.get("rocks"))){
+      inventory.removeItem(itemMap.get("rocks"));
+    }
+    if(inventory.hasItem(itemMap.get("scroll"))){
+      inventory.removeItem(itemMap.get("scroll"));
+    }
+    if(inventory.hasItem(itemMap.get("euros"))){
+      inventory.removeItem(itemMap.get("euros"));
+    }
+    if(inventory.hasItem(itemMap.get("balloony's corpse"))){
+      inventory.removeItem(itemMap.get("balloony's corpse"));
+    }
+    if(inventory.hasItem(itemMap.get("bottle"))){
+      inventory.removeItem(itemMap.get("bottle"));
+    }
+    if(inventory.hasItem(itemMap.get("bandages"))){
+      inventory.removeItem(itemMap.get("bandages"));
+    }
+    if(inventory.hasItem(itemMap.get("fur hat"))){
+      inventory.removeItem(itemMap.get("fur hat"));
+    }
+    if(inventory.hasItem(itemMap.get("cheese"))){
+      inventory.removeItem(itemMap.get("cheese"));
+    }
+    if(inventory.hasItem(itemMap.get("key of friendship"))){
+      inventory.removeItem(itemMap.get("key of friendship"));
     }
   }
 
@@ -1038,7 +1141,7 @@ public class Game implements java.io.Serializable {
       gui.println("Suddenly, you feel a quite compelling message from deep within your psyche.");
       gui.println("\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!\"");
     } else if (currentRoom.getRoomName().equals("Temple of the Sky Gods")){
-      //skyGods();
+      skyGods();
     } else {
       gui.println("You cannot pray here. You can only pray at temples.");
     }
