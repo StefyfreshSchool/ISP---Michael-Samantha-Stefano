@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,9 +27,11 @@ public class Game implements java.io.Serializable {
   private boolean isInTrial;
   private boolean hasAnsweredNewsQuestions;
   private boolean gameEnded;
-  private float DEFAULT_BACKGROUND_MUSIC_VOL = -25f;
+  private final float DEFAULT_BACKGROUND_MUSIC_VOL = -25f;
   private boolean supportCheck;
   private boolean hasOpenedVault;
+  private final int PLAYER_HEALTH = 100;
+  private final int INVENTORY_WEIGHT = 50;
 
   /**
    * Create the game and initialize its internal map.
@@ -47,8 +48,8 @@ public class Game implements java.io.Serializable {
     }
 
     // init player stuff
-    inventory = new Inventory(50);
-    player = new Player(100);
+    inventory = new Inventory(INVENTORY_WEIGHT);
+    player = new Player(PLAYER_HEALTH);
 
     //Init rooms and game state
     try {
@@ -340,7 +341,8 @@ public class Game implements java.io.Serializable {
       initEnemies();
       isInTrial = false;
       currentRoom = roomMap.get("South of the Cyan House");
-      inventory = new Inventory(50);
+      inventory = new Inventory(INVENTORY_WEIGHT);
+      player = new Player(PLAYER_HEALTH);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -682,13 +684,11 @@ public class Game implements java.io.Serializable {
    */
   private void goRoom(Command command) {
     if (!command.hasArgs()) {
-      // if there is no second word, we don't know where to go...
       gui.println("Go where?");
       return;
     }
-
-    String direction = command.getStringifiedArgs();
-
+    String direction = command.getStringifiedArgs().trim();
+    
     // Try to leave current room.
     Room pastRoom = currentRoom;
     Room nextRoom = currentRoom.nextRoom(direction);
@@ -698,7 +698,13 @@ public class Game implements java.io.Serializable {
     else if (!currentRoom.canGoDirection(direction, inventory, player)){
       gui.println("You can't go this way yet. Try looking around.");
     } else {
-      if(!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
+       //print images
+       if (nextRoom.getRoomName().equals("East of the Cyan House")) gui.printImg("data/images/cyan_house_east.png");
+       if (nextRoom.getRoomName().equals("Parliament Entrance Room")) gui.printImg("data/images/parliament.png");
+       if (nextRoom.getRoomName().equals("News News Temple")) gui.printImg("data/images/temple_room.png");
+       if (nextRoom.getRoomName().equals("Campsite Ruins")) gui.printImg("data/images/laser_frog.png");
+      // Tests for going into trials
+      if (!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         sasquatch();
@@ -724,7 +730,7 @@ public class Game implements java.io.Serializable {
       } else {
         gui.println("You cannot leave while the enemy is still at large!");
       }
-      if(currentRoom.getRoomName().equals("Fur Store")){
+      if (currentRoom.getRoomName().equals("Fur Store")){
         gui.println(currentRoom.shortDescription());
         salesman();
       }
@@ -735,26 +741,27 @@ public class Game implements java.io.Serializable {
         newsNewsScroll();
       }
       if (currentRoom.getRoomName().equals("Mysterious Entrance")){
-        frogsMadleneandJorge();
+        frogsMadleneAndJorge();
       }
     }
+    // Set trial stuff 
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("pounds"))){
         player.setTrial(0);
       }
-    }else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies"))||(pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
+    } else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies"))||(pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
       if (inventory.hasItem(itemMap.get("key"))){
         player.setTrial(4);
       }
-    }else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
+    } else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
       if (inventory.hasItem(itemMap.get("scroll"))){
         player.setTrial(1);
       }
-    }else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
+    } else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
       if (inventory.hasItem(itemMap.get("cheese"))){
         player.setTrial(2);
       }
-    }else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room")){
+    } else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room")){
       if (inventory.hasItem(itemMap.get("corpse"))){
         player.setTrial(6);
       }
@@ -852,7 +859,22 @@ public class Game implements java.io.Serializable {
           moralSupport();
         }
         if (!supportCheck){
-          player.setHealth(tempDamage);
+          if (!player.setHealth(tempDamage)){
+            gui.commandsPrinted(false);
+            gui.println();
+            gui.println("You have died!");
+            gui.println("You are not future Whisperer material.");
+            gui.println("Press [y] to play again, [n] to quit.\n");
+            boolean validInput = false;
+            while(!validInput){
+              String in = gui.readCommand();
+              if (in.equals("y")){
+                restartGame();
+                validInput = true;
+              } else if (in.equals("n")) endGame();
+            }
+            gui.commandsPrinted(true);
+          }
           gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
         } else {
           gui.println("Mr. DesLauriers tried to attack, but you blocked with The Shield of Tableland!");
@@ -1056,7 +1078,7 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  public void frogsMadleneandJorge(){
+  public void frogsMadleneAndJorge(){
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
       if(!player.getTrial(9)){
