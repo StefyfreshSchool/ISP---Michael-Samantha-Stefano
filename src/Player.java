@@ -45,8 +45,8 @@ public class Player implements java.io.Serializable{
     }
 
     public boolean skyGodsCheck(){
-        for(int i = 0; i<8; i++){
-            if(!trials[i]){
+        for (int i = 0; i < 8; i++){
+            if (!trials[i]){
                 return false;
             }
         }

@@ -39,6 +39,7 @@ public class GUI {
     private JPanel inputContainer;
     private JTextArea gameInfo;
     private boolean isErrored;
+    private boolean commandsPrinted;
 
     //class variables
     private static GUI gui;
@@ -65,7 +66,7 @@ public class GUI {
         //Set up window
         System.setProperty("awt.useSystemAAFontSettings","on");
         System.setProperty("swing.aatext", "true");
-        frame = new JFrame("ZORK - Adventure Into Tableland");
+        frame = new JFrame("Adventure Into Tableland - Trials of The Whisperer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 450);
         try {
@@ -78,6 +79,7 @@ public class GUI {
         pane.setBackground(Color.BLACK);
         styleContext = new StyleContext();
         styleContext.addStyle("", null);
+        commandsPrinted = true;
 
 
         //add the main "container" that holds all the elements
@@ -183,9 +185,11 @@ public class GUI {
                     inProgressCommand = "";
 
                     input.setText("");
-                    append("\n> ", null);
-                    append(command + "\n", stylize(false, false, Color.YELLOW));
-                    flush();
+                    if (commandsPrinted){
+                        append("\n> ", null);
+                        append(command + "\n", stylize(false, false, Color.YELLOW));
+                        flush();
+                    }
                 }
                 if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
                     commandIndex--; 
@@ -396,6 +400,25 @@ public class GUI {
         gameInfo.setText(gameObj.getGUIGameString());
     }
 
+    /**
+     * Prints a stream to the output JTextArea without scrolling down.
+     * @param x - to be printed
+     */
+    public void printlnNoScroll(Object x) {
+        append(x + "\n", null);
+        gameInfo.setText(gameObj.getGUIGameString());
+    }
+
+    /**
+     * Prints a stream to the output JTextArea without scrolling down.
+     */
+    public void printlnNoScroll() {
+        append("\n", null);
+        gameInfo.setText(gameObj.getGUIGameString());
+    }
+
+
+
     /** FLushes the output JTextArea by resetting the scrollbar position.*/
     private void flush() {
         SwingUtilities.invokeLater(new Runnable() {
@@ -457,6 +480,13 @@ public class GUI {
         return style;
     }
 
+    public void centerText(boolean state){
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        if (state) StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        else StyleConstants.setAlignment(center, StyleConstants.ALIGN_LEFT);
+        outputDoc.setParagraphAttributes(0, outputDoc.getLength(), center, false);
+    }
+
     private JButton createZeroButton() {
         JButton button = new JButton();
         button.setPreferredSize(new Dimension(0, 0));
@@ -468,4 +498,25 @@ public class GUI {
 	public void sendGameObj(Game game) {
         gameObj = game;
 	}
+   
+    public void scrollSmooth(int milisSteps) {
+        int end = scroll.getVerticalScrollBar().getMaximum();
+        int i = 0;
+        while(i < end - scroll.getVerticalScrollBar().getHeight()){
+            scroll.getVerticalScrollBar().setValue(i);
+            end = scroll.getVerticalScrollBar().getMaximum();
+            try {
+                Thread.sleep(milisSteps);
+            } catch (InterruptedException e) {}
+            i++;
+        }
+    }
+
+    /**
+     * Specifies whether or not to allow commands.
+     * @param state
+     */
+    public void commandsPrinted(boolean state) {
+        commandsPrinted = state;
+    }
 }

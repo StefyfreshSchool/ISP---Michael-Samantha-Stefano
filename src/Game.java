@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,7 +13,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.awaitility.Awaitility;
 
-public class Game implements java.io.Serializable {
+public class Game implements java.io.Serializable { 
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
@@ -26,6 +27,8 @@ public class Game implements java.io.Serializable {
   private Room pastRoom;
   private boolean isInTrial;
   private boolean hasAnsweredNewsQuestions;
+  private boolean gameEnded;
+  private float DEFAULT_BACKGROUND_MUSIC_VOL = -25f;
   private boolean supportCheck;
   private boolean hasOpenedVault;
 
@@ -236,7 +239,7 @@ public class Game implements java.io.Serializable {
     } catch (FileNotFoundException e) {
       GameError.fileNotFound("data/audio/background.wav");
     }
-    music.setVolume(-25f);
+    music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
     music.play();
   }
 
@@ -247,11 +250,13 @@ public class Game implements java.io.Serializable {
   /** Print out the opening message for the player. */
   private void printWelcome() {
     gui.reset();
-    gui.println("Welcome to Zork!");
-    gui.println("Zork is an amazing text adventure game!");
-    gui.println("Type 'help' for more information about the game and the available commands.");
+    gui.println("Welcome to Tableland!\n");
+    gui.println("You are here to prove your worth, conquering all the trials on your way. Now be off.");
+    gui.println("Type 'help' for more information about the game and the available commands.\n");
+    gui.centerText(true);
     gui.println();
     gui.println(currentRoom.longDescription());
+    
   }
 
   /**
@@ -327,6 +332,7 @@ public class Game implements java.io.Serializable {
   private void restartGame() {
     resetSaveState();
     gui.reset();
+    gui.centerText(false);
     gui.printInfo("Game restarted.\n");
     try {
       initItems();
@@ -385,8 +391,9 @@ public class Game implements java.io.Serializable {
       GameError.crashGame();
     } else if (c.equals("img")){
       gui.printImg("data/images/img.png");
+    } else if (c.equals("credits")){
+      endOfGame();
     }
-    gui.println("Test activated.");
   }
 
   private Enemy enemyRoomCheck(Room room){
@@ -1181,7 +1188,7 @@ public class Game implements java.io.Serializable {
     gui.println();
     gui.println("\"The DAILY news table land™: The official news channel of Tableland\"");
     gui.println("\"January 3 2022 | Balloony has taken down Connie!\"");
-    gui.println("\"by Christopher Cha \"");
+    gui.println("\"by Christopher Cha\"");
     gui.println("\"After serving harmoniously as co-heads of customer service for over two years, Balloony has forcibly removed Constantine from office.\"");
     gui.println("\"Connie was working in his office when Balloony entered with an armed sasquatch. The guards threw a bag over Connie's head, bound his hands and dragged him out of the room.\"");
     gui.println("\"Balloony told the people of Tableland this on a press conference on Friday. He has kidnapped his former co-head of customer service.\"");
@@ -1207,11 +1214,11 @@ public class Game implements java.io.Serializable {
     gui.println("\"2. Procure thee News News scroll, doth of antiquity.\"");
     gui.println("\"3. Practice larceny upon morsels of Alaskan cheese.\"");
     gui.println("\"4. Secure ye fabulous furs in all Canadian lands.\"");
-    gui.println("\"5. Upheave Vaccuum, a foe of many Cs.  \"");
+    gui.println("\"5. Upheave Vaccuum, a foe of many C's.\"");
     gui.println("\"6. Threaten the most deadliest liquid upon the Robot.\"");
     gui.println("\"7. Usurp the meddling head of Customer Service.\"");
     gui.println("\"8. Take a jaunt over to Dog Paradise.\"");
-    gui.println("\"Only then thou will be granted access to the Trial in the Sky.\"");
+    gui.println("\"Only then thou will be granted access to the Trial in the Sky...\"");
   }
 
   /**
@@ -1244,7 +1251,7 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-   *  If you try to 'go up' with balloony in ur inventory
+   *  If you try to 'go up' with balloony in your inventory
    */
   public static void printBalloonHelp() {
     gui.println("The clouds are too high in the sky. Maybe try inflating Balloony?");
@@ -1301,15 +1308,73 @@ public class Game implements java.io.Serializable {
       gui.println("Invalid music operation!");
     }
   }
-  
-  public String getGUIGameString() {
-    String roomExString = "";
-    ArrayList<String> exits = new ArrayList<String>();
-    for (Exit exit : currentRoom.getExits()) {
-        exits.add(exit.getDirection());
+
+  private void endOfGame() {
+    gameEnded = true;
+    gui.reset();
+    gui.centerText(true);
+    gui.commandsPrinted(false);
+    while(music.getVolume() > -64){
+      music.setVolume(music.getVolume() - 0.000002);
+      if (music.getVolume() % 5 == 0) sleep(40);
     }
-    roomExString = String.join(", ", exits);
-    return "Inventory: " + inventory.getString() + " | Health: " + player.getHealth() + " | Exits: " + roomExString;
+    gui.println("\n");
+    music.stop();
+    MusicPlayer credits = null;
+    try {
+      credits = new MusicPlayer("data/audio/credits.wav", false);
+    } catch (FileNotFoundException e) {
+      GameError.fileNotFound("data/audio/credits.wav");
+    }
+    credits.setVolume(0);
+    credits.play();
+    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    gui.printlnNoScroll("Credits");
+    gui.printlnNoScroll("\n\n\n\n");
+    gui.printlnNoScroll("Developers");
+    gui.printlnNoScroll();
+    gui.printlnNoScroll("Gods of Tableland Studios");
+    gui.printlnNoScroll("Stefano Esposto        Michael Gee        Samantha Sedran");
+    gui.printlnNoScroll("\n\n\n");
+    gui.printlnNoScroll("Characters");
+    gui.printlnNoScroll("\n");
+    gui.printlnNoScroll("Mr. DesLauriers        Himself        ");
+    gui.printlnNoScroll(" Constantine Vrachas Matthaios        Himself, Customer Service Rep.");
+    gui.printlnNoScroll("           Christopher Cha        Himself, Head of News News");
+    gui.printlnNoScroll("                Ms. Dybala        Princess of Alaskan Cheese");
+    gui.printlnNoScroll();
+    gui.printlnNoScroll("Jorge and Madlene        Pair of Frogs    ");
+    gui.printlnNoScroll("                Sasquatch        Connie's Former Bodyguard");
+    gui.printlnNoScroll("     Geraldo        Abused Rocks");
+    gui.printlnNoScroll("  Lucky        Herself");
+    gui.printlnNoScroll("   Luna        Herself");
+    gui.printlnNoScroll(" Maggie        Herself");
+    gui.printlnNoScroll("\n");
+    gui.printInfo("Disclaimer: Any similarities to actual people,");
+    gui.printInfo("living or dead, is purely coincidental.");
+    gui.printlnNoScroll("\n\n\n\n");
+    gui.printlnNoScroll("Rest in Peace");
+    gui.printlnNoScroll();
+    gui.printlnNoScroll("Balloony");
+    gui.printlnNoScroll("2018-2019");
+    gui.printlnNoScroll();
+    gui.printlnNoScroll("Forever in our hearts");    
+    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpecial Thanks: You the player!\n\n\n\n\n\n\n\n\n\n");
+    gui.printlnNoScroll("Thanks for playing! Would you like to play again?");
+    gui.printlnNoScroll("Press [y] to play again, [n] to quit.\n");
+    gui.scrollSmooth(50);
+    boolean validInput = false;
+    while(!validInput){
+      String in = gui.readCommand();
+      if (in.equals("y")){
+        credits.stop();
+        music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
+        music.play();
+        restartGame();
+        validInput = true;
+      } else if (in.equals("n")) endGame();
+    }
+    gui.commandsPrinted(true);
   }
 
   //Below are utility functions, serving a purpose only for internal game management.
@@ -1340,5 +1405,16 @@ public class Game implements java.io.Serializable {
     } catch (IOException i) {
       i.printStackTrace();
     }
+  }
+
+  public String getGUIGameString() {
+    String roomExString = "";
+    ArrayList<String> exits = new ArrayList<String>();
+    for (Exit exit : currentRoom.getExits()) {
+        exits.add(exit.getDirection());
+    }
+    roomExString = String.join(", ", exits);
+    if (!gameEnded) return "Inventory: " + inventory.getString() + " | Health: " + player.getHealth() + " | Exits: " + roomExString;
+    else return "";
   }
 }
