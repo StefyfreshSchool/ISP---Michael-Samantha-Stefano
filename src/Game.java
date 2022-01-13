@@ -694,9 +694,6 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         sasquatch();
-        if(inventory.hasItem(itemMap.get("pounds"))){
-          player.setTrial(0);
-        }
       } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
@@ -709,6 +706,10 @@ public class Game implements java.io.Serializable {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         deslauriers();
+      } else if (!isInTrial && (currentRoom.getRoomName().equals("Dept. of Customer Service") || nextRoom.getRoomName().equals("Dept. of Customer Service"))){
+        currentRoom = nextRoom;
+        gui.println(currentRoom.shortDescription());
+        deptCustomerService();
       } else if (!isInTrial){
         currentRoom = nextRoom;
         gui.println(currentRoom.longDescription());
@@ -1050,14 +1051,14 @@ public class Game implements java.io.Serializable {
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
       if(!player.getTrial(9)){
-        gui.println("More words here");
+        gui.println("\"Hello future Whisperer\"");
       }else{
         gui.println();
         gui.println("\"You should go on future Whisperer, Connie must be saved!\" Madlene says.");
       }
     }else{
       gui.println("The tunnel is boarded up, so you cannot go through it.");
-      gui.println("You feel a strong pull from this place. You cannot go through the tunnel. However, somehow you know it's very important.");
+      gui.println("You feel a strong pull from this place. You cannot go through the tunnel. However, somehow you know it's very important. Maybe you should come back here later, after finishing the tome.");
     }
   }
   
