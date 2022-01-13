@@ -1359,7 +1359,8 @@ public class Game implements java.io.Serializable {
     gui.printlnNoScroll("2018-2019");
     gui.printlnNoScroll();
     gui.printlnNoScroll("Forever in our hearts");    
-    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpecial Thanks: You the player!\n\n\n\n\n\n\n\n\n\n");
+    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpecial Thanks\n");
+    gui.printlnNoScroll("You\n\n\n\n\n\n\n\n\n");
     gui.printlnNoScroll("Thanks for playing! Would you like to play again?");
     gui.printlnNoScroll("Press [y] to play again, [n] to quit.\n");
     gui.scrollSmooth(50);
