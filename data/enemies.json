@@ -5,9 +5,12 @@
             "name": "Sasquatch",
             "aliases": [],
             "catchphrase": "\"You have missed a day of school! You are my dinner now!\"",
-            "m1": "The Sasquatch punches you square in the chest.",
-            "m2": "The Sasquatch swipes at you from the side.",
-            "m3": "The Sasquatch pelts you with stones.",
+            "messages": [
+                "The Sasquatch punches you square in the chest.",
+                "The Sasquatch swipes at you from the side.",
+                "The Sasquatch pelts you with stones.",
+                "The Sasquatch give you a derisive look."
+            ],
             "health": 25,
             "damageMin": 8,
             "damageMax": 12
@@ -17,9 +20,12 @@
             "name": "Vaccuum",
             "aliases": ["vacuum"],
             "catchphrase": "\"VVRRRRRRRRRRR!!!\"",
-            "m1": "The Vaccuum whacks you with its handle.",
-            "m2": "The Vaccuum slams into your legs.",
-            "m3": "The Vaccuum trips you with its cord.",
+            "messages": [
+                "The Vaccuum whacks you with its handle.",
+                "The Vaccuum slams into your legs.",
+                "The Vaccuum trips you with its cord.",
+                "The Vaccuum makes a horrible grinding noise."
+            ],
             "health": 25,
             "damageMin": 10,
             "damageMax": 16
@@ -29,9 +35,12 @@
             "name": "Friends Robot",
             "aliases": ["robot", "friend's robot"],
             "catchphrase": "\"yAy. Fr13nD d3teCt3d.\"",
-            "m1": "The Friends Robot hugs you too hard.",
-            "m2": "The Friends Robot gives you a too-firm handshake.",
-            "m3": "The Friends Robot strokes your head too hard.",
+            "messages": [
+                "The Friends Robot hugs you too hard.",
+                "The Friends Robot gives you a too-firm handshake.",
+                "The Friends Robot strokes your head too hard.",
+                "The Friends Robot \"pats\" you on the back."
+            ],
             "health": 30,
             "damageMin": 13,
             "damageMax": 18
@@ -41,9 +50,12 @@
             "name": "Balloony",
             "aliases": ["balloon"],
             "catchphrase": "\"Tableland customer service is mine and mine alone!\"",
-            "m1": "Balloony inflicts psychic damage.",
-            "m2": "Balloony forces you to read Tableland propaganda.",
-            "m3": "Balloony makes your hair stand on end.",
+            "messages": [
+                "Balloony inflicts psychic damage.",
+                "Balloony forces you to read Tableland propaganda.",
+                "Balloony makes your hair stand on end.",
+                "Balloony preaches gospel about Christ and his disciples."
+            ],
             "health": 40,
             "damageMin": 18,
             "damageMax": 23
@@ -53,12 +65,15 @@
             "name": "Mr. DesLauriers",
             "aliases": ["deslauriers", "mr deslauriers", "mr. deslauriers"],
             "catchphrase": "\"LATE FOR CLASS AGAIN, ARE YOU?\"",
-            "m1": "Mr. DesLauriers swings his aluminum baseball bat.",
-            "m2": "Mr. DesLauriers confuses you with programming jargon.",
-            "m3": "Mr. DesLauriers marks you absent.",
+            "messages": [
+                "Mr. DesLauriers swings his aluminum baseball bat.",
+                "Mr. DesLauriers confuses you with programming jargon.",
+                "Mr. DesLauriers marks you absent.",
+                "Mr. DesLauriers asks you what you had for breakfast."
+            ],
             "health": 200,
             "damageMin": 1,
-            "damageMax": 100
+            "damageMax": 50
         }
     ]
 }

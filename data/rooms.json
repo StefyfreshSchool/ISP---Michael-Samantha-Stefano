@@ -1050,7 +1050,7 @@
     {
       "id": "Temple of the Sky Gods",
       "name": "Temple of the Sky Gods",
-      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling, but no one is sitting in them.",
+      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling, but they are eerily absent of inhabitants.",
       "exits": [
         {
           "isLocked": false,
