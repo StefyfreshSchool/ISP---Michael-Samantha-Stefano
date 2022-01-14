@@ -9,7 +9,9 @@
                 "The Sasquatch punches you square in the chest.",
                 "The Sasquatch swipes at you from the side.",
                 "The Sasquatch pelts you with stones.",
-                "The Sasquatch give you a derisive look."
+                "The Sasquatch give you a derisive look.",
+                "The Sasquatch skips lunch again.",
+                "The Sasquatch splashes you with a bucket of cleaning liquid."
             ],
             "health": 25,
             "damageMin": 8,
@@ -39,7 +41,9 @@
                 "The Friends Robot hugs you too hard.",
                 "The Friends Robot gives you a too-firm handshake.",
                 "The Friends Robot strokes your head too hard.",
-                "The Friends Robot \"pats\" you on the back."
+                "The Friends Robot \"pats\" you on the back.",
+                "The Friends Robot pronounces your name wrong, but apologizes.",
+                "The Friends Robot spills salsa all over your shirt."
             ],
             "health": 30,
             "damageMin": 13,
@@ -54,7 +58,10 @@
                 "Balloony inflicts psychic damage.",
                 "Balloony forces you to read Tableland propaganda.",
                 "Balloony makes your hair stand on end.",
-                "Balloony preaches gospel about Christ and his disciples."
+                "Balloony preaches gospel about Christ and his disciples.",
+                "Balloony longs for the good old days of Tableland.",
+                "Balloony puffs his cheeks out a little more.",
+                "Balloony makes you a little more lightheaded."
             ],
             "health": 40,
             "damageMin": 18,
@@ -69,7 +76,8 @@
                 "Mr. DesLauriers swings his aluminum baseball bat.",
                 "Mr. DesLauriers confuses you with programming jargon.",
                 "Mr. DesLauriers marks you absent.",
-                "Mr. DesLauriers asks you what you had for breakfast."
+                "Mr. DesLauriers asks you what you had for breakfast.",
+                "Mr. DesLauriers wants you to share with the class."
             ],
             "health": 200,
             "damageMin": 1,

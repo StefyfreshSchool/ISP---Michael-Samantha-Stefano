@@ -20,7 +20,7 @@
     {
       "id": "East of the Cyan House",
       "name": "East of the Cyan House",
-      "description": "You are east of the Cyan House, surrounded by plains.",
+      "description": "You are east of the Cyan House. A flag soars majestically atop a flagpole, the national flag of Tableland.",
       "exits": [
         {
           "isLocked": false,
@@ -57,7 +57,7 @@
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "In",
           "adjacentRoom": "West Room",
           "keyId": "0000"
         },
@@ -72,11 +72,11 @@
     {
       "id": "West Room",
       "name": "West Room",
-      "description": "You climb through the open window, into the sad-looking house. A doorframe, but no door, is to the east.",
+      "description": "You enter a the sad-looking house. A doorframe, but no door, is to the east.",
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Out",
           "adjacentRoom": "North of the Cyan House",
           "keyId": "0000"
         },
@@ -90,7 +90,7 @@
     {
       "id": "East Room",
       "name": "East Room",
-      "description": "In the east room sits a magnificent table adorned with a bottle of water, some bandages, and an ancient tome.",
+      "description": "In the room sits a magnificent table adorned with a bottle of water, some bandages, and an ancient tome.",
       "exits": [
         {
           "isLocked": false,
@@ -102,7 +102,7 @@
     {
       "id": "West of the Cyan House",
       "name": "West of the Cyan House",
-      "description": "You are west of the Cyan House where a cobbled trail leads toward an abandoned city plaza.",
+      "description": "You are west of the house, where a cobbled trail leads toward an abandoned city plaza.",
       "exits": [
         {
           "isLocked": false,
@@ -230,7 +230,7 @@
     {
       "id": "Overgrown Path",
       "name": "Overgrown Path",
-      "description": "You follow the winding path along the boreal forest. The path continues from the south to the northeast, but you stop at a weathered sign. 'WELCOME to YUKON TERRITORY'",
+      "description": "You follow the winding path along the boreal forest. Suddenly, you stop at a weathered sign. 'WELCOME to YUKON TERRITORY'",
       "exits": [
         {
           "isLocked": false,
@@ -251,7 +251,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "In",
           "adjacentRoom": "Alaskan Castle Foyer"
         },
         {
@@ -264,7 +264,7 @@
     {
       "id": "Frostbitten Tundra",
       "name": "Frostbitten Tundra",
-      "description": "You stand alone in an icy tundra, tickled by a layer of fresh snowflakes. The path continues from the northwest to the east, where you can see the faint glow of a log cabin.",
+      "description": "You stand alone in an icy tundra, tickled by a layer of fresh snowflakes. The path continues eastward, where you can see the faint glow of a log cabin.",
       "exits": [
         {
           "isLocked": false,
@@ -290,7 +290,7 @@
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "In",
           "adjacentRoom": "Fur Store"
         }
       ]
@@ -310,7 +310,7 @@
     {
       "id": "Border Gate",
       "name": "Border Gate",
-      "description": "You stand between the thick pearled gates leading to the Castle. There is a small patrol booth, but it seems to be deserted. You can see a lake to the south.",
+      "description": "You stand between the thick pearled gates leading to the Castle. There is a small patrol booth, but it seems to be deserted.",
       "exits": [
         {
           "isLocked": false,
@@ -327,7 +327,7 @@
     {
       "id": "Clock Lake Lookout",
       "name": "Clock Lake Lookout",
-      "description": "You stand on the shoreline of an enormous lake. An oaken dock, to the southeast, extends further upon the water.",
+      "description": "You stand on the shoreline of an enormous lake. A weathered oak dock, to the southeast, extends further upon the water.",
       "exits": [
         {
           "isLocked": false,
@@ -361,7 +361,7 @@
     {
       "id": "Gates of Hell",
       "name": "Gates of Hell",
-      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Past the gates you can see miles and miles of gloomy forest. You feel a chill run down your spine.",
+      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Past the gates you see endless gloomy forests. A chill runs down your spine.",
       "exits": [
         {
           "isLocked": false,
@@ -373,7 +373,7 @@
     {
       "id": "Door Sanctuary",
       "name": "Door Sanctuary",
-      "description": "You stand upon a crossroads of doors, in every cardinal direction. One catches your eye, to the north.",
+      "description": "You stand upon a plethora of doors, each decorated in a unique aesthetic. One catches your eye, decorated with jewels, to the north.",
       "exits": [
         {
           "isLocked": false,
@@ -617,7 +617,7 @@
     {
       "id": "Mysterious Entrance",
       "name": "Mysterious Entrance",
-      "description": "A boarded-up tunnel blocks the way before you. It seems to lead further westward, towards the base of the Table Caldera.",
+      "description": "A boarded-up tunnel blocks the way before you. It seems to lead further westward, towards the base of a giant volcano.",
       "exits": [
         {
           "isLocked": true,
@@ -635,7 +635,7 @@
     {
       "id": "Underground Tunnel",
       "name": "Underground Tunnel",
-      "description": "You find yourself in a dank, moss-covered tunnel. Why are you doing this again?",
+      "description": "You find yourself in a dank, moss-covered tunnel. The stench of stagnant water fills your nostrils. 'What am I doing here?' You say, to no one in particular.",
       "exits": [
         {
           "isLocked": false,
@@ -697,7 +697,7 @@
     {
       "id": "Campsite Ruins",
       "name": "Campsite Ruins",
-      "description": "The forest opens up into a desolate, looted campsite. The charred remains of fire start to gnaw at your resolve. ",
+      "description": "The forest opens up into a desolate, looted campsite. The charred remains of fire start to gnaw at your resolve.",
       "exits": [
         {
           "isLocked": false,
@@ -777,7 +777,7 @@
     {
       "id": "Parliament Entrance Room",
       "name": "Parliament Entrance Room",
-      "description": "In the Parliament of Tableland, no one seems to be here. Every desk and office room is empty. How does anyone do work around here? At the end of the room, there is a door with a sign reading \"Tableland Dept. of Customer Service\".",
+      "description": "In the Parliament of Tableland, no one seems to be here. A lone, energizing motivational poster sits on the wall. At the end of the room, there is a door with a sign reading \"Tableland Dept. of Customer Service\".",
       "exits": [
         {
           "isLocked": false,
@@ -796,7 +796,7 @@
     {
       "id": "Dept. of Customer Service",
       "name": "Dept. of Customer Service",
-      "description": "The rooms looks like it with a hurricane. Paper shreds are littered all over the room. You talk, and hear your voice has gotten higher. You sound like a chipmunk. What could have caused this?",
+      "description": "The room has a hurricane-ravaged appearance. Paper shreds are littered all around. You talk, and hear your voice has gotten higher. What could have caused this?",
       "exits": [
         {
           "isLocked": false,
@@ -834,7 +834,7 @@
     {
       "id": "Dog Paradise",
       "name": "Dog Paradise",
-      "description": "You feel your body being pulled and taken through time and space to land on a cloud. Living on the cloud and hundreds and hundreds of dogs.",
+      "description": "You feel your body being pulled and taken through time and space to land on a cloud. Living on the cloud are hundreds upon hundreds of dogs.",
       "exits": [
         {
           "isLocked": false,
@@ -897,7 +897,7 @@
     {
       "id": "News News Temple",
       "name": "News News Temple",
-      "description": "You stand in a spacious temple entryway padded by praying mats. Books line every shelf and sunlight beams through the skylight. An ornate, gold door faces you from the other side of the room.",
+      "description": "You stand in a spacious temple entryway. Books line every shelf and sunlight beams through the skylight. An ornate, gold door faces you from the other side of the room.",
       "exits": [
         {
           "isLocked": false,
@@ -1031,7 +1031,7 @@
     {
       "id": "Sky Temple Pavillion",
       "name": "Sky Temple Pavillion",
-      "description": "You look up at the towering temple, perched on the cloudcapt sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
+      "description": "You look up at the towering temple, perched on the cloud-capped sky. Its cathedral-like spires lurch toward the heavens, yearning for a taste. Several large stained-glass panes reveal your reflection. Despite everything, it's you.",
       "exits": [
         {
           "isLocked": false,
@@ -1050,7 +1050,7 @@
     {
       "id": "Temple of the Sky Gods",
       "name": "Temple of the Sky Gods",
-      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldy thrones sit immaculate on the pristine marble tiling, but they are eerily absent of inhabitants.",
+      "description": "You stand as small as a mouse in the Sky Temple's celestial throne room. A triad of towering, otherworldly thrones sit immaculate on the pristine marble tiling, but they are eerily absent of inhabitants.",
       "exits": [
         {
           "isLocked": false,
