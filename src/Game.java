@@ -843,8 +843,7 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       if (enemyAttack(deslauriers)) return;
-      sleep(1000);
-      sleep(1000);
+      sleep(5000);
       gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
       gui.println("The world seems a little more vibrant.");
       isInTrial = false;
@@ -1109,10 +1108,11 @@ public class Game implements java.io.Serializable {
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
     inventory.addItem(itemMap.get("the shield of tableland"));
-    gui.println("\"We have graced you with the Sword and Shield of Tableland. We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
+    gui.println("\"We have graced you with the sacred Sword and Shield of Tableland. These are the vices you must use.\" says the first god.");
+    gui.println("\"We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
     gui.println("\"Now go! Defeat what thou awaits you! Reclaim your destiny, future Whisperer!\" says the third god.");
     player.talkedToSkyGods();
-    gui.println("With that, the gods vanish, and the peaceful ambience returns.");
+    gui.println("With that, the gods vanish before your eyes, and the peaceful ambience returns.");
     gui.println();
     gui.println("You know what you must do.");
     gui.println("Go to Hell to save your friend, once and for all.");
@@ -1155,7 +1155,7 @@ public class Game implements java.io.Serializable {
     if (secondWord != ""){
         gui.println(secondWord.toUpperCase() + "!!!!!!");
         gui.println("Feel better?");
-      }else{
+      } else {
         gui.println("ARGHHHHH!!!!!!");
         gui.println("Feel better?");
       }

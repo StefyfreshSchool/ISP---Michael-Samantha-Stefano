@@ -7,12 +7,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "East",
           "adjacentRoom": "East of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "West",
           "adjacentRoom": "West of the Cyan House"
         }
       ]
@@ -24,12 +24,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "North",
           "adjacentRoom": "North of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "Southwest",
+          "direction": "South",
           "adjacentRoom": "South of the Cyan House"
         },
         {
@@ -47,12 +47,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Southeast",
+          "direction": "East",
           "adjacentRoom": "East of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "Southwest",
+          "direction": "West",
           "adjacentRoom": "West of the Cyan House"
         },
         {
@@ -72,7 +72,7 @@
     {
       "id": "West Room",
       "name": "West Room",
-      "description": "You enter a the sad-looking house. A doorframe, but no door, is to the east.",
+      "description": "You enter the sad-looking house. A doorframe, but no door, is to the east.",
       "exits": [
         {
           "isLocked": false,
@@ -106,12 +106,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "North",
           "adjacentRoom": "North of the Cyan House"
         },
         {
           "isLocked": false,
-          "direction": "Southeast",
+          "direction": "South",
           "adjacentRoom": "South of the Cyan House"
         },
         {
@@ -129,12 +129,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "North",
           "adjacentRoom": "Tarnished Fountain"
         },
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "South",
           "adjacentRoom": "Plaza Outskirts"
         },
         {
@@ -156,12 +156,12 @@
         },
         {
           "isLocked": false,
-          "direction": "Southeast",
+          "direction": "East",
           "adjacentRoom": "Town Plaza"
         },
         {
           "isLocked": false,
-          "direction": "Southwest",
+          "direction": "West",
           "adjacentRoom": "Plaza Outskirts"
         }
       ]
@@ -173,12 +173,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "North",
           "adjacentRoom": "Tarnished Fountain"
         },
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "South",
           "adjacentRoom": "Town Plaza"
         }
       ]
@@ -217,7 +217,7 @@
         },
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "East",
           "adjacentRoom": "Overgrown Path"
         },
         {
@@ -234,12 +234,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "East",
+          "direction": "Northeast",
           "adjacentRoom": "Frostbitten Tundra"
         },
         {
           "isLocked": false,
-          "direction": "Southwest",
+          "direction": "South",
           "adjacentRoom": "Castle Grounds"
         }
       ]
@@ -268,7 +268,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Northwest",
           "adjacentRoom": "Overgrown Path"
         },
         {
@@ -302,7 +302,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "Out",
           "adjacentRoom": "Snowy Cabin"
         }
       ]
@@ -365,7 +365,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "West",
+          "direction": "South",
           "adjacentRoom": "Gloomy Forest 1"
         }
       ]
@@ -394,7 +394,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "In",
           "adjacentRoom": "Lower Hall of Enemies"
         },
         {
@@ -416,7 +416,7 @@
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Out",
           "adjacentRoom": "Mystery Door of Mystery"
         }
       ]
@@ -440,7 +440,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Out",
           "adjacentRoom": "Castle of Alaskan Cheese"
         },
         {
@@ -508,12 +508,12 @@
         },
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "East",
           "adjacentRoom": "East of Crater"
         },
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "West",
           "adjacentRoom": "West of Crater"
         }
       ]
@@ -530,13 +530,13 @@
         },
         {
           "isLocked": false,
-          "direction": "Northeast",
+          "direction": "North",
           "adjacentRoom": "North of Crater",
           "keyId": "1234"
         },
         {
           "isLocked": false,
-          "direction": "Southeast",
+          "direction": "South",
           "adjacentRoom": "South of Crater"
         }
       ]
@@ -582,12 +582,12 @@
         },
         {
           "isLocked": false,
-          "direction": "Southwest",
+          "direction": "West",
           "adjacentRoom": "West of Crater"
         },
         {
           "isLocked": false,
-          "direction": "Southeast",
+          "direction": "East",
           "adjacentRoom": "East of Crater"
         }
       ]
@@ -599,12 +599,12 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "North",
           "adjacentRoom": "North of Crater"
         },
         {
           "isLocked": false,
-          "direction": "Southwest",
+          "direction": "South",
           "adjacentRoom": "South of Crater"
         },
         {
@@ -742,7 +742,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "In",
           "adjacentRoom": "Parliament Entrance Room"
         },
         {
@@ -781,7 +781,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Out",
           "adjacentRoom": "Parliament Steps",
           "keyId": "1234"
         },
@@ -888,7 +888,7 @@
         },
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "In",
           "adjacentRoom": "News News Temple",
           "keyId": "1234"
         }
@@ -907,7 +907,7 @@
         },
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Out",
           "adjacentRoom": "Temple Pavillion",
           "keyId": "1234"
         }
@@ -996,7 +996,7 @@
         },
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "Up",
           "adjacentRoom": "Volcano Peak",
           "keyId": "0000"
         }
@@ -1005,7 +1005,7 @@
     {
       "id": "Volcano Peak",
       "name": "Volcano Peak",
-      "description": "...",
+      "description": "You can't do this. Your body is exhausted. You look at the view. You can do this.",
       "exits": [
         {
           "isLocked": false,
@@ -1041,7 +1041,7 @@
         },
         {
           "isLocked": false,
-          "direction": "North",
+          "direction": "In",
           "adjacentRoom": "Temple of the Sky Gods",
           "keyId": "0000"
         }
@@ -1054,7 +1054,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "South",
+          "direction": "Out",
           "adjacentRoom": "Sky Temple Pavillion",
           "keyId": "0000"
         }
