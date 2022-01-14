@@ -1087,7 +1087,7 @@ public class Game implements java.io.Serializable {
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
       if(!player.getTrial(9)){
-        gui.println("\"Hello, future Whisperer.\"");
+        gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\"");
       }else{
         gui.println();
         gui.println("\"I urge you forward, future Whisperer! Connie must be saved!\" Madlene says.");
@@ -1103,7 +1103,7 @@ public class Game implements java.io.Serializable {
     gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.");
     gui.println("\"Welcome to the Temple of the Sky Gods, traveller.\" the first figure says.");
     gui.println("\"You have made it past the first eight trials, traveller.\" the second figure says.");
-    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth the west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
+    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
     gui.println("\"To aid you on your journey, we bestow upon you these divine artifacts.\" the first figure says.");
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
