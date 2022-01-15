@@ -264,6 +264,7 @@ public class Game implements java.io.Serializable {
    * Given a command, process (that is: execute) the command.
    * @param command
    * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
+   * @author Everyone added commands to this
    */
   private boolean processCommand(Command command) {
     if (command.isUnknown()) {
@@ -420,7 +421,10 @@ public class Game implements java.io.Serializable {
 
   /**
    * Allows the player to hit an enemy.
-   * @param command - 
+   * @param command - string of enemy you want to hit and the weapon you want to hit that enemy with
+   * @author Samantha - code
+   * @author Stefano - code
+   * @author Michael - code
    */
   private void hit(Command command) {
     int enemyHealth;
@@ -697,6 +701,7 @@ public class Game implements java.io.Serializable {
   /**
    * Try to go to one direction. If there is an exit, enter the new room,
    * otherwise print an error message.
+   * @param command - direction the player wants to go
    */
   private void goRoom(Command command) {
     if (!command.hasArgs()) {
@@ -789,7 +794,8 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-   * Does things when you encounter the Sasquatch.
+   * The player's encounter with the sasquatch
+   * @author Samantha
    */
   public void sasquatch(){
     Enemy sasquatch = enemyMap.get("sasquatch");
@@ -876,6 +882,13 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * The code for when the enemy and the player are in battle.
+   * @param enemy - the enemy that is attacking the player
+   * @return boolean value which represents whether or not the player has died
+   * @author Stefano - code
+   * @author Michael - code
+   */
   private boolean enemyAttack(Enemy enemy) {
     while(enemy.getHealth() > 0){
       int tempDamage = enemy.getDamage();
@@ -915,6 +928,7 @@ public class Game implements java.io.Serializable {
     return false;
   }
 
+
   private void moralSupport() {
     supportCheck = true;
     gui.commandsPrinted(false);
@@ -935,6 +949,11 @@ public class Game implements java.io.Serializable {
     itemMap.get("sword").setDamage(100);
   }
 
+/**
+   * The code for the News News Trial.
+   * @author Samantha - code and dialogue
+   * @author Michael - dialogue
+   */
   public void newsNewsScroll(){
     if (!hasAnsweredNewsQuestions){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
@@ -969,7 +988,11 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  // answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
+  /**
+   * Checks if the answer to the News News Trial's riddles are correct.
+   * Answer is: 4 8 15 16 23 42 (the numbers from Lost)
+   * @author Samantha - everything
+   */
   private boolean newsNewsAnswers() {
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
@@ -977,6 +1000,11 @@ public class Game implements java.io.Serializable {
     } return false;
   }
 
+  /**
+   * The code for Dog Paradise
+   * @author Samantha - code and dialogue
+   * @author Michael - dialogue
+   */
   public void dogParadise(){
     if (!player.getTrial(7)){
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
