@@ -3,7 +3,7 @@
     {
       "id": "geraldo",
       "name": "Geraldo",
-      "aliases": ["rocks"],
+      "aliases": ["rocks, rock"],
       "description": "A series of small oval-shaped rocks named Geraldo. They appear to be sleeping. You can throw them at enemies.",
       "isOpenable": false,
       "isTakeable": true,
