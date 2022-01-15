@@ -361,7 +361,7 @@
     {
       "id": "Gates of Hell",
       "name": "Gates of Hell",
-      "description": "You stand before the gnarled, towering gates, with dread imbued within your soul. Past the gates you see endless gloomy forests. A chill runs down your spine.",
+      "description": "You stand before the gnarled, wrought iron gates. Endless gloomy forests surround you. You stand in purgatory, locked between those of being and not. Suddenly, a large boulder falls in front of the sewer door. You are stuck!",
       "exits": [
         {
           "isLocked": false,
@@ -573,7 +573,7 @@
     {
       "id": "North of Crater",
       "name": "North of Crater",
-      "description": "You are standing north of the crater, in front of a large cavern. A terrifying, animalistic roar emanates from within.",
+      "description": "You are standing north of the crater, in front of a large cavern. A terrifying, animalistic roar echoes from within.",
       "exits": [
         {
           "isLocked": false,
@@ -595,7 +595,7 @@
     {
       "id": "East of Crater",
       "name": "East of Crater",
-      "description": "You stand within the boundaries of the cavernous and forested lands. To your west is a large cavern. To your east is the endless forest.",
+      "description": "You stand within the boundaries of the cavernous and forested lands. To your north is a large cavern. Northeast is the endless forest.",
       "exits": [
         {
           "isLocked": false,
@@ -796,7 +796,7 @@
     {
       "id": "Dept. of Customer Service",
       "name": "Dept. of Customer Service",
-      "description": "The room has a hurricane-ravaged appearance. Paper shreds are littered all around. You talk, and hear your voice has gotten higher. What could have caused this?",
+      "description": "The room has a hurricane-ravaged appearance. Paper shreds are littered all around. You talk, and hear your voice has gotten higher.",
       "exits": [
         {
           "isLocked": false,
@@ -897,7 +897,7 @@
     {
       "id": "News News Temple",
       "name": "News News Temple",
-      "description": "You stand in a spacious temple entryway. Books line every shelf and sunlight beams through the skylight. An ornate, gold door faces you from the other side of the room.",
+      "description": "You stand in a spacious temple entryway. Books line every shelf and sunlight beams through the skylight. A golden bust of Christopher Cha glows in the centre: \"OUR GLORIOUS LEADER\". An ornate, gold door faces you from the other side of the room.",
       "exits": [
         {
           "isLocked": false,
@@ -916,7 +916,7 @@
     {
       "id": "News News Vault",
       "name": "News News Vault",
-      "description": "You stand in a large, beautiful vault. Gold coins pool at your feet. A golden bust of Christopher Cha glows in the centre: \"OUR GLORIOUS LEADER\".",
+      "description": "You stand in a large, beautiful vault. Gold coins pool at your feet.",
       "exits": [
         {
           "isLocked": false,
