@@ -426,7 +426,9 @@ public class Game implements java.io.Serializable {
     int enemyHealth;
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
-        gui.println("There is no enemy here. You cannot hit anything.");
+      gui.println("There is no enemy here. You cannot hit anything.");
+    } else if(enemy.getIsDead()){
+      gui.println("The threat has been neutralized. There is no longer an enemy here. You cannot hit anything.");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs().toLowerCase(); 
@@ -502,9 +504,12 @@ public class Game implements java.io.Serializable {
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
         gui.println("You are imposing. You are powerful. You stand a little bit straighter.");
+        gui.println("There is no enemy here to threaten.");
+    } else if(enemy.getIsDead()){
+      gui.println("The threat has been neutralized. There is no longer an enemy here to threaten.");
     } else {
-      ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
+      ArrayList<String> args = command.getArgs();
       if (!command.hasArgs() || argsStr.indexOf("with") == 0) { // hit, no args
         gui.println("Threaten what enemy?");
       } else if (!args.contains("with") && enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
@@ -755,6 +760,9 @@ public class Game implements java.io.Serializable {
       if (currentRoom.getRoomName().equals("Mysterious Entrance")){
         frogsMadleneAndJorge();
       }
+      if (currentRoom.getRoomName().equals("Dog Paradise")){
+        dogParadise();
+      }
     }
     // Set trial stuff 
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
@@ -789,6 +797,8 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Sasquatch steps out of the cave.");
       gui.println(sasquatch.getCatchphrase() + " He screams.");
+      gui.println("Realizing you have no weapon, you panic.");
+      gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
       if (enemyAttack(sasquatch)) return;
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
