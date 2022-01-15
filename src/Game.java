@@ -910,7 +910,9 @@ public class Game implements java.io.Serializable {
   public void newsNewsScroll(){
     if (!hasAnsweredNewsQuestions){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
+      sleep(3000);
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
+      sleep(7000);
       gui.println("Question 1: How many Whisperer articles have there been?");
       gui.println("Question 2: How many planets are in our solar system?");
       gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
@@ -950,8 +952,10 @@ public class Game implements java.io.Serializable {
   public void dogParadise(){
     if (!player.getTrial(7)){
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
+      sleep(7000);
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
       gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
+      sleep(7000);
       inventory.addItem(currentRoom.getItem("moral support"));
       gui.println("\"We have bestowed the glowing orb of moral support upon you.\"");
       gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the god's realm, and fill your head with the most encouraging of thoughts.\"");
@@ -1088,7 +1092,12 @@ public class Game implements java.io.Serializable {
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
       if(!player.getTrial(9)){
-        gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\"");
+        gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\" says one of the frogs.");
+        gui.println("\"My name is Madlene,\" the first frog says, \"and this is Jorge,\" she gestures to the other frog.");
+        gui.println("\"You must venture forth into the plains of Hell in West Tableland and save your friend from the being that resides in the Volcano!\" Jorge says. ");
+        gui.println("Madlene hopped up to the tunnel and removed the boards from the tunnel.");
+        gui.println("You can peer into the tunnel, but all you see is darkness.");
+        gui.println("\"Go forward and save your friend!\" Jorge says. ");
       }else{
         gui.println();
         gui.println("\"I urge you forward, future Whisperer! Connie must be saved!\" Madlene says.");
