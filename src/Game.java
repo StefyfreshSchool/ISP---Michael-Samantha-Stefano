@@ -380,6 +380,7 @@ public class Game implements java.io.Serializable {
     } else if (c.equals("4")){
       inventory.addItem(itemMap.get("sword"));
       inventory.addItem(itemMap.get("bottle"));
+      inventory.addItem(itemMap.get("rocks"));
       currentRoom = roomMap.get("Mystery Door of Mystery");
     } else if (c.equals("5")){
       inventory.addItem(itemMap.get("sword"));
@@ -425,7 +426,9 @@ public class Game implements java.io.Serializable {
     int enemyHealth;
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
-        gui.println("There is no enemy here. You cannot hit anything.");
+      gui.println("There is no enemy here. You cannot hit anything.");
+    } else if(enemy.getIsDead()){
+      gui.println("The threat has been neutralized. There is no longer an enemy here. You cannot hit anything.");
     } else {
       ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs().toLowerCase(); 
@@ -434,17 +437,19 @@ public class Game implements java.io.Serializable {
       } else if (!args.contains("with") && enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (!args.contains("with") && enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
-        gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
-        gui.println("Who would you like to hit?");
       } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
         gui.println("Hit with what weapon?");
+      } else if (enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
+        gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
+        gui.println("Who would you like to hit?");
       } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("sword").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to hit " + enemy.getName() + " with?");
       } else if (!enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
-        gui.println(enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) + " is not an enemy in this room.");
+        gui.println(enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).getName() + " is not an enemy in this room.");
+      } else if (!inventory.hasItem(itemMap.get(argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length())))) {
+        gui.println("You do not have that item.");
       } else if (enemyMap.get("friends robot").isThisEnemy(enemy.getName()) && !enemyMap.get("friends robot").getIsDead()) {
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println("The " + weaponName + " just bounces off its titanium armor. It dealt 0 damage.");
@@ -499,19 +504,30 @@ public class Game implements java.io.Serializable {
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
         gui.println("You are imposing. You are powerful. You stand a little bit straighter.");
+        gui.println("There is no enemy here to threaten.");
+    } else if(enemy.getIsDead()){
+      gui.println("The threat has been neutralized. There is no longer an enemy here to threaten.");
     } else {
-      ArrayList<String> args = command.getArgs();
       String argsStr = command.getStringifiedArgs();
-      if (!command.hasArgs() || argsStr.indexOf("with") == 0){ // threaten, no args
+      ArrayList<String> args = command.getArgs();
+      if (!command.hasArgs() || argsStr.indexOf("with") == 0) { // hit, no args
         gui.println("Threaten what enemy?");
-      } else if (!args.contains("with") && Game.enemyMap.get(argsStr.trim()) == null){ // threaten, invalid enemy
+      } else if (!args.contains("with") && enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to threaten?");
-      } else if (args.contains("with") && Game.enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null){ // threaten with, invalid enemy
+      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
+        gui.println("Threaten with what weapon?");
+      } else if (enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
-        gui.println("What would you like to threaten?");
-      } else if ((!args.contains("water") && command.getLastArg().equals("with")) || !args.contains("with")){ // threaten with, no weapon
-        gui.println("Threaten with what?");
+        gui.println("Who would you like to threaten?");
+      } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("sword").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
+        String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
+        gui.println(weirdItemName + " is not a weapon.");
+        gui.println("What would you like to threaten " + enemy.getName() + " with?");
+      } else if (!enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
+        gui.println(enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).getName() + " is not an enemy in this room.");
+      } else if (!inventory.hasItem(itemMap.get(argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length())))) {
+        gui.println("You do not have that item.");
       } else if (!itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // threaten enemy with, invalid weapon
         gui.println("That doesn't seem to scare the enemy.");
       } else if (!enemyMap.get(args.get(0)).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
@@ -781,6 +797,8 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Sasquatch steps out of the cave.");
       gui.println(sasquatch.getCatchphrase() + " He screams.");
+      gui.println("Realizing you have no weapon, you panic.");
+      gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
       if (enemyAttack(sasquatch)) return;
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
@@ -833,6 +851,8 @@ public class Game implements java.io.Serializable {
       if (enemyAttack(robot)) return;
       isInTrial = false;
       player.setTrial(5);
+    }else{
+      gui.println("The Friends Robot still cowers in the corner.");
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
       gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
@@ -918,7 +938,9 @@ public class Game implements java.io.Serializable {
   public void newsNewsScroll(){
     if (!hasAnsweredNewsQuestions){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
+      sleep(3000);
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
+      sleep(7000);
       gui.println("Question 1: How many Whisperer articles have there been?");
       gui.println("Question 2: How many planets are in our solar system?");
       gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
@@ -958,6 +980,7 @@ public class Game implements java.io.Serializable {
   public void dogParadise(){
     if (!player.getTrial(7)){
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
+      sleep(7000);
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
       gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
       inventory.addItem(itemMap.get("moral support"));
@@ -1114,7 +1137,12 @@ public class Game implements java.io.Serializable {
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
       if(!player.getTrial(9)){
-        gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\"");
+        gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\" says one of the frogs.");
+        gui.println("\"My name is Madlene,\" the first frog says, \"and this is Jorge,\" she gestures to the other frog.");
+        gui.println("\"You must venture forth into the plains of Hell in West Tableland and save your friend from the being that resides in the Volcano!\" Jorge says. ");
+        gui.println("Madlene hopped up to the tunnel and removed the boards from the tunnel.");
+        gui.println("You can peer into the tunnel, but all you see is darkness.");
+        gui.println("\"Go forward and save your friend!\" Jorge says. ");
       }else{
         gui.println();
         gui.println("\"I urge you forward, future Whisperer! Connie must be saved!\" Madlene says.");

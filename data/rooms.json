@@ -595,7 +595,7 @@
     {
       "id": "East of Crater",
       "name": "East of Crater",
-      "description": "You stand within the boundaries of the cavernous and forested lands. To your west is a large cavern. To your east is the endless forest.",
+      "description": "You stand within the boundaries of the cavernous and forested lands. To your north is a large cavern. Northeast is the endless forest.",
       "exits": [
         {
           "isLocked": false,
