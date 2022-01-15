@@ -94,6 +94,7 @@ public class GUI {
         output = new JTextPane();
         outputDoc = output.getStyledDocument();
         output.setEditable(false);
+        output.setHighlighter(null);
         output.setBackground(Color.BLACK);
         output.setSelectionColor(Color.WHITE);
         output.setMargin(new Insets(5,5,5,5));

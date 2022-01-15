@@ -842,7 +842,7 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       if (enemyAttack(deslauriers)) return;
-      sleep(2000);
+      sleep(5000);
       gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
       gui.println("The world seems a little more vibrant.");
       endOfGame();
@@ -896,13 +896,13 @@ public class Game implements java.io.Serializable {
     gui.commandsPrinted(false);
     gui.println("Mr. DesLauriers' slashes you down to 1 HP!");
     gui.println("You can feel your surroundings grow fainter... \n");
-    sleep(1000);
+    sleep(3000);
     gui.println("Suddenly, you feel a warmth in your pocket. The moral support has started to glow!");
     gui.println("Picking it up, it imbues with your soul. Voices of those who support you echo in your ears. \n");
     gui.println("\"You can do it!\"");
     gui.println("\"Don't give up!\"");
     gui.println("\"I believe in you!\"");
-    sleep(3000);
+    sleep(4000);
     gui.println("\nYour health has been completely restored!");
     gui.println("Your sword starts shining with the power of the gods. It now deals 100 damage!\n");
     gui.println("You face the enemy with a newfound confidence! You can do this!");
@@ -1092,7 +1092,7 @@ public class Game implements java.io.Serializable {
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
       if(!player.getTrial(9)){
-        gui.println("\"Hello, future Whisperer.\"");
+        gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\"");
       }else{
         gui.println();
         gui.println("\"I urge you forward, future Whisperer! Connie must be saved!\" Madlene says.");
@@ -1108,15 +1108,16 @@ public class Game implements java.io.Serializable {
     gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.");
     gui.println("\"Welcome to the Temple of the Sky Gods, traveller.\" the first figure says.");
     gui.println("\"You have made it past the first eight trials, traveller.\" the second figure says.");
-    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth the west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
+    gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
     gui.println("\"To aid you on your journey, we bestow upon you these divine artifacts.\" the first figure says.");
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
     inventory.addItem(itemMap.get("the shield of tableland"));
-    gui.println("\"We have graced you with the Sword and Shield of Tableland. We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
+    gui.println("\"We have graced you with the sacred Sword and Shield of Tableland. These are the vices you must use.\" says the first god.");
+    gui.println("\"We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
     gui.println("\"Now go! Defeat what thou awaits you! Reclaim your destiny, future Whisperer!\" says the third god.");
     player.talkedToSkyGods();
-    gui.println("With that, the gods vanish, and the peaceful ambience returns.");
+    gui.println("With that, the gods vanish before your eyes, and the peaceful ambience returns.");
     gui.println();
     gui.println("You know what you must do.");
     gui.println("Go to Hell to save your friend, once and for all.");
@@ -1159,7 +1160,7 @@ public class Game implements java.io.Serializable {
     if (secondWord != ""){
         gui.println(secondWord.toUpperCase() + "!!!!!!");
         gui.println("Feel better?");
-      }else{
+      } else {
         gui.println("ARGHHHHH!!!!!!");
         gui.println("Feel better?");
       }
@@ -1345,7 +1346,7 @@ public class Game implements java.io.Serializable {
   private void endOfGame() {
     gameEnded = true;
     gui.commandsPrinted(false);
-    sleep(1000);
+    sleep(4000);
     gui.println();
     gui.println("Congratulations! You did it!");
     gui.println("You are the future Whisperer!");
