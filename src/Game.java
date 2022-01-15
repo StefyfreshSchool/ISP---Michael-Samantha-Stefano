@@ -333,9 +333,11 @@ public class Game implements java.io.Serializable {
   private void restartGame() {
     resetSaveState();
     gui.reset();
+    gui.resetCommands();
     gui.centerText(false);
     gui.printInfo("Game restarted.\n");
     try {
+      music.stop();
       initItems();
       initRooms();
       initEnemies();
@@ -343,10 +345,10 @@ public class Game implements java.io.Serializable {
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(INVENTORY_WEIGHT);
       player = new Player(PLAYER_HEALTH);
+      startMusic();
     } catch (Exception e) {
       e.printStackTrace();
     }
-
     printWelcome();
   }
 
@@ -596,10 +598,6 @@ public class Game implements java.io.Serializable {
       return false;
     }
 
-    HashMap<String, Object> data = new HashMap<String, Object>();
-    data.put("inProgress", true);
-    data.put("room", currentRoom.getRoomName());
-
     Save game = new Save(roomMap, inventory, currentRoom, pastRoom, player, enemyMap);
     try {
       FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
@@ -612,7 +610,7 @@ public class Game implements java.io.Serializable {
     } catch (NotSerializableException e){
       gui.printerr("NotSerializableException - A class that needs to be saved does not implement Serializable!");
     } catch (IOException e){
-      e.printStackTrace();
+      gui.printerr("Error while saving! Could not save.");
     }
 
     return quit;
@@ -629,24 +627,25 @@ public class Game implements java.io.Serializable {
       save = (Save) in.readObject();
       in.close();
       fileIn.close();
-
       if (save != null){
+        music.stop();
         roomMap = save.getRoomMap();
         inventory = save.getInventory();
         pastRoom = save.getPastRoom();
         currentRoom = save.getCurrentRoom();
         player = save.getPlayer();
         enemyMap = save.getEnemyMap();
-        
+        startMusic();
+
         gui.reset();
         gui.printInfo("Game reloaded from saved data.\n");
+        gui.centerText(false);
         gui.println(currentRoom.longDescription());
       } else {
         gui.println("There is no valid state to load!");
       }
     } catch (ClassNotFoundException | IOException e) {
       gui.printerr("Error while loading! Could not load.");
-      e.printStackTrace();
     }   
   }
 
@@ -843,10 +842,10 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       if (enemyAttack(deslauriers)) return;
-      sleep(1000);
-      sleep(1000);
+      sleep(2000);
       gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
       gui.println("The world seems a little more vibrant.");
+      endOfGame();
       isInTrial = false;
     } else if (deslauriers.getIsDead() && currentRoom.getRoomName().equals("Hall of the Volcano King")) {
       gui.println("The world seems a little more vibrant.");
@@ -862,10 +861,11 @@ public class Game implements java.io.Serializable {
       if (!enemy.getIsDead()){
         if (enemy.isThisEnemy("deslauriers") && player.getHealth() - tempDamage < 1){
           tempDamage = player.getHealth() - 1;
+          player.setHealth(1);
           moralSupport();
         }
         if (!supportCheck){
-          if (!player.setHealth(tempDamage)){
+          if (!player.setDamage(tempDamage)){
             gui.commandsPrinted(false);
             gui.println();
             gui.println("You have perished!");
@@ -893,16 +893,20 @@ public class Game implements java.io.Serializable {
 
   private void moralSupport() {
     supportCheck = true;
+    gui.commandsPrinted(false);
     gui.println("Mr. DesLauriers' slashes you down to 1 HP!");
     gui.println("You can feel your surroundings grow fainter... \n");
+    sleep(1000);
     gui.println("Suddenly, you feel a warmth in your pocket. The moral support has started to glow!");
     gui.println("Picking it up, it imbues with your soul. Voices of those who support you echo in your ears. \n");
     gui.println("\"You can do it!\"");
-    gui.println("\"Add more messages!\"");
-    gui.println("\"I can't think of anything!\"\n");
-    gui.println("Your health has been completely restored!");
+    gui.println("\"Don't give up!\"");
+    gui.println("\"I believe in you!\"");
+    sleep(3000);
+    gui.println("\nYour health has been completely restored!");
     gui.println("Your sword starts shining with the power of the gods. It now deals 100 damage!\n");
     gui.println("You face the enemy with a newfound confidence! You can do this!");
+    gui.commandsPrinted(true);
     player.maxHeal();
     itemMap.get("sword").setDamage(100);
   }
@@ -1340,14 +1344,19 @@ public class Game implements java.io.Serializable {
 
   private void endOfGame() {
     gameEnded = true;
+    gui.commandsPrinted(false);
+    sleep(1000);
+    gui.println();
+    gui.println("Congratulations! You did it!");
+    gui.println("You are the future Whisperer!");
+    gui.println("\nPress Enter to continue.");
+    gui.readCommand();
     gui.reset();
     gui.centerText(true);
-    gui.commandsPrinted(false);
     while(music.getVolume() > -64){
       music.setVolume(music.getVolume() - 0.000002);
       if (music.getVolume() % 5 == 0) sleep(40);
     }
-    gui.println("\n");
     music.stop();
     MusicPlayer credits = null;
     try {
@@ -1433,18 +1442,18 @@ public class Game implements java.io.Serializable {
       out.close();
       fileOut.close();
     } catch (IOException i) {
-      i.printStackTrace();
+      gui.printerr("Error while resetting game save! Could not save.");
     }
   }
 
   public String getGUIGameString() {
+    if (gameEnded) return "";
     String roomExString = "";
     ArrayList<String> exits = new ArrayList<String>();
     for (Exit exit : currentRoom.getExits()) {
         exits.add(exit.getDirection());
     }
     roomExString = String.join(", ", exits);
-    if (!gameEnded) return "Inventory: " + inventory.getString() + " | Health: " + player.getHealth() + " | Exits: " + roomExString;
-    else return "";
+    return "Inventory: " + inventory.getString() + " | Health: " + player.getHealth() + " | Exits: " + roomExString;
   }
 }

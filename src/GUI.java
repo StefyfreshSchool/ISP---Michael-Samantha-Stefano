@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.KeyListener;
+import java.awt.Button;
 import java.io.File;
 import java.io.IOException;
 import java.awt.event.KeyEvent;
@@ -40,6 +41,7 @@ public class GUI {
     private JTextArea gameInfo;
     private boolean isErrored;
     private boolean commandsPrinted;
+    private KeyListener inputListener;
 
     //class variables
     private static GUI gui;
@@ -168,7 +170,7 @@ public class GUI {
         input.setFont(new Font("Consolas", Font.PLAIN, 14));
         input.setForeground(Color.LIGHT_GRAY);
         //add key listener for the input box to check when a command is entered
-        input.addKeyListener(new KeyListener(){
+        inputListener = new KeyListener(){
             ArrayList<String> commandsEntered = new ArrayList<String>();
             int commandIndex = 0;
             String inProgressCommand = "";
@@ -176,7 +178,7 @@ public class GUI {
 
             @Override
             public void keyPressed(KeyEvent e){
-                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String command = input.getText();
                     inputCommand = command;
                     commandIndex = commandsEntered.size();
@@ -191,7 +193,7 @@ public class GUI {
                         flush();
                     }
                 }
-                if(e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
+                if (e.getKeyCode() == KeyEvent.VK_UP && commandIndex > 0){
                     commandIndex--; 
                     if (!isBrowsing) inProgressCommand = input.getText();
                     input.setText(commandsEntered.get(commandIndex));
@@ -201,7 +203,7 @@ public class GUI {
                     commandIndex++;
                     input.setText(commandsEntered.get(commandIndex));
                 }
-                else if(e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex == commandsEntered.size() - 1){
+                else if (e.getKeyCode() == KeyEvent.VK_DOWN && commandIndex == commandsEntered.size() - 1){
                     commandIndex++;
                     input.setText(inProgressCommand);
                     isBrowsing = false;
@@ -209,6 +211,12 @@ public class GUI {
                 else if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
                     input.setText("");
                     inProgressCommand = "";
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_F23){
+                    commandsEntered = new ArrayList<String>();
+                    commandIndex = 0;
+                    inProgressCommand = "";
+                    isBrowsing = false;
                 }
             }
 
@@ -219,7 +227,8 @@ public class GUI {
             @Override
             public void keyReleased(KeyEvent e) {
             }
-        });
+        };
+        input.addKeyListener(inputListener);
 
 
         //add text area for the ">"
@@ -244,6 +253,7 @@ public class GUI {
         //initialize the frame
         pane.add(gameContainer);
         frame.setVisible(true);
+        input.requestFocusInWindow();
         append("\nStarting...\n\n", stylize(true, false, Color.LIGHT_GRAY));
         if (isErrored){
             GameError.fileNotFound("data/images/icon.png");
@@ -519,5 +529,14 @@ public class GUI {
      */
     public void commandsPrinted(boolean state) {
         commandsPrinted = state;
+    }
+
+    /**
+     * Resets the command memory.
+     */
+    public void resetCommands(){
+        Button a = new Button("click");
+        KeyEvent e = new KeyEvent(a, 1, 20, 1, KeyEvent.VK_F23, 'a');
+        inputListener.keyPressed(e);
     }
 }

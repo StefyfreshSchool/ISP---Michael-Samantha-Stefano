@@ -9,13 +9,17 @@ public class Player implements java.io.Serializable{
         talkedToSkyGods = false;
     }
 
-    public boolean setHealth(int damage){
+    public boolean setDamage(int damage){
         health -= damage;
         if (health <= 0){
             health = 0;
             return false;
         } 
         return true;
+    }
+
+    public void setHealth(int health){
+        this.health = health;
     }
 
     public void maxHeal(){
