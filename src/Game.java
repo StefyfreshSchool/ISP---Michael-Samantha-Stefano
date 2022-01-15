@@ -388,7 +388,9 @@ public class Game implements java.io.Serializable {
     } else if (c.equals("6")){
       player.talkedToSkyGods();
     } else if (c.equals("7")){
+      skyGods();
     } else if (c.equals("8")){
+      dogParadise();
     } else if (c.equals("")){
       player.maxHeal();
     } else if (c.equals("crash")){
@@ -956,14 +958,19 @@ public class Game implements java.io.Serializable {
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
       gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
-      inventory.addItem(currentRoom.getItem("moral support"));
-      gui.println("\"We have bestowed the glowing orb of moral support upon you.\"");
-      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the god's realm, and fill your head with the most encouraging of thoughts.\"");
+      inventory.addItem(itemMap.get("moral support"));
+      gui.println("\"We have bestowed the glowing orb of moral support upon you.\"\n");
+      gui.println("Moral support taken!");
+      gui.println(itemMap.get("moral support").getDescription());
+      sleep(4000);
+      gui.println("\nThe dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the god's realm, and fill your head with the most encouraging of thoughts.\"");
       gui.println("The dog named Maggie speaks to you. \"No being, mortal or deity, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
-      gui.println("You feel a sense of calm wash over you. You feel resolve for the first time in this whole journey.");
+      gui.println("You feel a sense of calm wash over you. You feel resolve for the first time in this whole journey.\n");
+      sleep(4000);
       gui.println("Lucky speaks. \"I sense your great potential. You have somewhere you need to be.\"");
       gui.println("Luna speaks. \"You are the Whisperer's successor. You must save our world.\"");
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
+      sleep(3000);
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
     } else {
@@ -1006,7 +1013,9 @@ public class Game implements java.io.Serializable {
           inventory.removeItem(itemMap.get("1000 british pounds"));
           inventory.addItem(itemMap.get("coonskin hat")); 
           inventory.addItem(itemMap.get("five hundred euros"));
-          gui.println("\"Pleasure doing business with you, good sir.\"");
+          gui.println("Coonskin Hat taken!");
+          gui.println(itemMap.get("coonskin hat").getDescription());
+          gui.println("\n\"Pleasure doing business with you, good sir.\"");
           player.setTrial(3);
         } else if (inventory.hasItem(itemMap.get("1000 british pounds")) && inventory.getCurrentWeight() - itemMap.get("1000 british pounds").getWeight() + itemMap.get("coonskin hat").getWeight() + itemMap.get("five hundred euros").getWeight() > inventory.getMaxWeight()){
           gui.println("\"Hmm... I can sense your pockets are too heavy. What a shame.");
@@ -1105,17 +1114,24 @@ public class Game implements java.io.Serializable {
   
   public void skyGods(){
     gui.println("The soothing ambience of the gods ring in your ears. It feels like your brain is being massaged by a baby deer.");
-    gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.");
+    gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.\n");
+    sleep(5000);
     gui.println("\"Welcome to the Temple of the Sky Gods, traveller.\" the first figure says.");
     gui.println("\"You have made it past the first eight trials, traveller.\" the second figure says.");
     gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
-    gui.println("\"To aid you on your journey, we bestow upon you these divine artifacts.\" the first figure says.");
+    gui.println("\"To aid you on your journey, we bestow upon you these divine artifacts.\" the first figure says.\n");
+    sleep(2000);
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
     inventory.addItem(itemMap.get("the shield of tableland"));
-    gui.println("\"We have graced you with the sacred Sword and Shield of Tableland. These are the vices you must use.\" says the first god.");
+    gui.println("The Sword of Tableland taken!");
+    gui.println(itemMap.get("the sword of tableland").getDescription());
+    gui.println("\nThe Shield of Tableland taken!");
+      gui.println(itemMap.get("the shield of tableland").getDescription());
+    gui.println("\n\"We have graced you with the sacred Sword and Shield of Tableland. These are the vices you must use.\" says the first god.");
     gui.println("\"We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
-    gui.println("\"Now go! Defeat what thou awaits you! Reclaim your destiny, future Whisperer!\" says the third god.");
+    gui.println("\"Now go! Defeat what thou awaits you! Reclaim your destiny, future Whisperer!\" says the third god.\n");
+    sleep(4000);
     player.talkedToSkyGods();
     gui.println("With that, the gods vanish before your eyes, and the peaceful ambience returns.");
     gui.println();
@@ -1348,8 +1364,16 @@ public class Game implements java.io.Serializable {
     gui.commandsPrinted(false);
     sleep(4000);
     gui.println();
-    gui.println("Congratulations! You did it!");
-    gui.println("You are the future Whisperer!");
+    gui.println("You feel the ever-changing world shift once again under your feet.");
+    gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
+    sleep(3000);
+    gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
+    gui.println("He motions cryptically with his hand. \n");
+    sleep(7000);
+    gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
+    gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
+    sleep(5000);
+    gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
     gui.readCommand();
     gui.reset();
