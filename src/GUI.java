@@ -27,6 +27,7 @@ import java.util.ArrayList;
  * The GUI class is a singleton class, meaning the class has only one object. 
  * To access the GUI object, the constructor is not used. Instead, a call to {@code GUI.getGUI()}
  * returns the GUI object of the singleton class.
+ * @author Stefano
  */
 public class GUI {
     //instance variables
@@ -180,7 +181,7 @@ public class GUI {
             @Override
             public void keyPressed(KeyEvent e){
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
-                    String command = input.getText();
+                    String command = input.getText().trim();
                     inputCommand = command;
                     commandIndex = commandsEntered.size();
                     commandsEntered.add(command);
