@@ -9,7 +9,7 @@
       "isTakeable": true,
       "isWeapon": true,
       "damage": 10,
-      "weight": 5,
+      "weight": 10,
       "startingRoom": "The Lair"
     },
     {
@@ -21,7 +21,7 @@
       "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "weight": 2,
+      "weight": 4,
       "startingRoom": "News News Vault"
     },
     {
@@ -33,7 +33,7 @@
       "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "weight": 2,
+      "weight": 4,
       "startingRoom": "gameRoom"
     },
     {
@@ -46,8 +46,8 @@
       "isWeapon": false,
       "damage": 0,
       "keyId": "1234",
-      "weight": 2,
-      "startingRoom": "Department Of Customer Service"
+      "weight": 4,
+      "startingRoom": "Dept. of Customer Service"
     },
     {
       "id": "moral support",
@@ -70,7 +70,7 @@
       "isTakeable": true,
       "isWeapon": true,
       "damage": 2,
-      "weight": 2,
+      "weight": 4,
       "startingRoom": "East Room"
     },
     {
@@ -82,7 +82,7 @@
       "isTakeable": true,
       "isWeapon": false,
       "damage": 0,
-      "weight": 1,
+      "weight": 2,
       "quantity": 3,
       "startingRoom": "East Room"
     },
@@ -95,7 +95,7 @@
       "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "weight": 1,
+      "weight": 2,
       "startingRoom": "The Lair"
     },
     {
@@ -107,7 +107,7 @@
       "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "weight": 4,
+      "weight": 8,
       "startingRoom": "gameRoom"
     },
     {
@@ -119,7 +119,7 @@
       "isTakeable": true,
       "isWeapon": false,
       "damage": 0,
-      "weight": 7,
+      "weight": 14,
       "startingRoom": "East Room"
     },
     {
@@ -131,7 +131,7 @@
       "isTakeable": true,
       "isWeapon": false,
       "damage": 0,
-      "weight": 7,
+      "weight": 14,
       "startingRoom": "Cheese Vault"
     },
     {
@@ -143,7 +143,7 @@
       "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "weight": 1,
+      "weight": 2,
       "startingRoom": "Lower Hall of Enemies"
     },
     {
@@ -155,7 +155,7 @@
       "isTakeable": false,
       "isWeapon": true,
       "damage": 25,
-      "weight": 5,
+      "weight": 25,
       "startingRoom": "gameRoom"
     },
     {
@@ -167,7 +167,7 @@
       "isTakeable": false,
       "isWeapon": false,
       "damage": 0,
-      "weight": 5,
+      "weight": 25,
       "startingRoom": "gameRoom"
     }
   ]
