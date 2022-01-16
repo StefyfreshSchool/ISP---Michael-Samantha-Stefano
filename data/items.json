@@ -8,6 +8,7 @@
       "isOpenable": false,
       "isTakeable": true,
       "isWeapon": true,
+      "isDroppable": true,
       "damage": 10,
       "weight": 10,
       "startingRoom": "The Lair"
@@ -20,6 +21,7 @@
       "isOpenable": true,
       "isTakeable": false,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 4,
       "startingRoom": "News News Vault"
@@ -30,8 +32,9 @@
       "aliases": ["euros", "500 euros"],
       "description": "A wad of colourful European banknotes, totalling 500. How it got here, nobody knows. Except for the fur salesman, but he only cares for furs.",
       "isOpenable": false,
-      "isTakeable": false,
+      "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 4,
       "startingRoom": "gameRoom"
@@ -44,6 +47,7 @@
       "isOpenable": false,
       "isTakeable": false,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "keyId": "1234",
       "weight": 4,
@@ -57,6 +61,7 @@
       "isOpenable": false,
       "isTakeable": false,
       "isWeapon": false,
+      "isDroppable": false,
       "damage": 0,
       "weight": 0,
       "startingRoom": "gameRoom"
@@ -69,6 +74,7 @@
       "isOpenable": true,
       "isTakeable": true,
       "isWeapon": true,
+      "isDroppable": true,
       "damage": 2,
       "weight": 4,
       "startingRoom": "East Room"
@@ -81,6 +87,7 @@
       "isOpenable": false,
       "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 2,
       "quantity": 3,
@@ -92,8 +99,9 @@
       "aliases": ["1000 pounds", "pounds", "paper"],
       "description": "A crisp thousand-pound bill, straight from England. You have no idea how it got here.",
       "isOpenable": false,
-      "isTakeable": false,
+      "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 2,
       "startingRoom": "The Lair"
@@ -104,8 +112,9 @@
       "aliases": ["hat", "fur hat", "furs", "fur cap"],
       "description": "A designer cap made from the pelt and tail of a raccoon. Poor raccoon.",
       "isOpenable": false,
-      "isTakeable": false,
+      "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 8,
       "startingRoom": "gameRoom"
@@ -118,6 +127,7 @@
       "isOpenable": true,
       "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 14,
       "startingRoom": "East Room"
@@ -130,6 +140,7 @@
       "isOpenable": true,
       "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 14,
       "startingRoom": "Cheese Vault"
@@ -140,8 +151,9 @@
       "aliases": ["key", "key of friendship", "friendship key"],
       "description": "A powerful, yet delicate brass key. It almost looks too pristine to use.",
       "isOpenable": false,
-      "isTakeable": false,
+      "isTakeable": true,
       "isWeapon": false,
+      "isDroppable": true,
       "damage": 0,
       "weight": 2,
       "startingRoom": "Lower Hall of Enemies"
@@ -154,6 +166,7 @@
       "isOpenable": false,
       "isTakeable": false,
       "isWeapon": true,
+      "isDroppable": false,
       "damage": 25,
       "weight": 25,
       "startingRoom": "gameRoom"
@@ -166,6 +179,7 @@
       "isOpenable": false,
       "isTakeable": false,
       "isWeapon": false,
+      "isDroppable": false,
       "damage": 0,
       "weight": 25,
       "startingRoom": "gameRoom"

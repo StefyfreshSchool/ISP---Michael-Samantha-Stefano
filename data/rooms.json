@@ -967,7 +967,7 @@
     {
       "id": "Caldera Bridge",
       "name": "Caldera Bridge",
-      "description": "Up ahead is the towering Table Caldera, named for its table-like top. Standing on a brimstone bridge over lava is not pleasant.",
+      "description": "You finally emerge from the forest. Up ahead is the towering Table Caldera, named for its table-like top. You would like to hurry, since standing on a brimstone bridge over lava is not pleasant.",
       "exits": [
         {
           "isLocked": false,
