@@ -27,7 +27,7 @@ public class Game implements java.io.Serializable {
   private boolean isInTrial;
   private boolean hasAnsweredNewsQuestions;
   private boolean gameEnded;
-  private final float DEFAULT_BACKGROUND_MUSIC_VOL = -25f;
+  private final float DEFAULT_BACKGROUND_MUSIC_VOL = -15f;
   private boolean supportCheck;
   private boolean hasOpenedVault;
   private final int PLAYER_HEALTH = 100;
@@ -56,7 +56,7 @@ public class Game implements java.io.Serializable {
       initItems();
       initRooms();
       initEnemies();
-      startMusic();
+      startMusic("data/audio/background.wav");
       currentRoom = roomMap.get("South of the Cyan House");
       hasAnsweredNewsQuestions = false;
       supportCheck = false;
@@ -234,11 +234,11 @@ public class Game implements java.io.Serializable {
   }
 
   /**Starts the background music. */
-  private void startMusic() {
+  private void startMusic(String musicSrc) {
     try {
-      music = new MusicPlayer("data/audio/background.wav", true);
+      music = new MusicPlayer(musicSrc, true);
     } catch (FileNotFoundException e) {
-      GameError.fileNotFound("data/audio/background.wav");
+      GameError.fileNotFound(musicSrc);
     }
     music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
     music.play();
@@ -264,6 +264,7 @@ public class Game implements java.io.Serializable {
    * Given a command, process (that is: execute) the command.
    * @param command
    * @return {@code 0} if no action is required, {@code 1} if the game should quit, {@code 2} if the game should restart
+   * @author Everyone added commands to this
    */
   private boolean processCommand(Command command) {
     if (command.isUnknown()) {
@@ -345,7 +346,7 @@ public class Game implements java.io.Serializable {
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(INVENTORY_WEIGHT);
       player = new Player(PLAYER_HEALTH);
-      startMusic();
+      startMusic("data/audio/background.wav");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -427,7 +428,10 @@ public class Game implements java.io.Serializable {
 
   /**
    * Allows the player to hit an enemy.
-   * @param command - 
+   * @param command - string of enemy you want to hit and the weapon you want to hit that enemy with
+   * @author Samantha - code
+   * @author Stefano - code
+   * @author Michael - code
    */
   private void hit(Command command) {
     int enemyHealth;
@@ -444,11 +448,11 @@ public class Game implements java.io.Serializable {
       } else if (!args.contains("with") && enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
-        gui.println("Hit with what weapon?");
       } else if (enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("Who would you like to hit?");
+      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
+        gui.println("Hit with what weapon?");
       } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("sword").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
         String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println(weirdItemName + " is not a weapon.");
@@ -661,7 +665,7 @@ public class Game implements java.io.Serializable {
         currentRoom = save.getCurrentRoom();
         player = save.getPlayer();
         enemyMap = save.getEnemyMap();
-        startMusic();
+        startMusic("data/audio/background.wav");
 
         gui.reset();
         gui.printInfo("Game reloaded from saved data.\n");
@@ -706,6 +710,7 @@ public class Game implements java.io.Serializable {
   /**
    * Try to go to one direction. If there is an exit, enter the new room, and do something
    * otherwise print an error message.
+   * @param command - direction the player wants to go
    * @author Everyone did a lot of things here.
    */
   private void goRoom(Command command) {
@@ -796,10 +801,17 @@ public class Game implements java.io.Serializable {
         player.setTrial(6);
       }
     }
+    //change music
+    if (roomMap.get("Gloomy Forest 1") == nextRoom && pastRoom.getRoomName().equals("Gates of Hell")){
+      fadeMusic(music, 30);
+      music.stop();
+      startMusic("data/audio/hell.wav");
+    }
   }
 
   /**
-   * Does things when you encounter the Sasquatch.
+   * The player's encounter with the sasquatch
+   * @author Samantha - everything
    */
   public void sasquatch(){
     Enemy sasquatch = enemyMap.get("sasquatch");
@@ -809,10 +821,15 @@ public class Game implements java.io.Serializable {
       gui.println(sasquatch.getCatchphrase() + " He screams.");
       gui.println("Realizing you have no weapon, you panic.");
       gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
+      fadeMusic(music, 1);
+      startMusic("data/audio/fighting.wav");
+      music.setVolume(-25);
       if (enemyAttack(sasquatch)) return;
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
-      itemMap.get("pounds").isTakeable(true);
+      currentRoom.getItem("pounds").isTakeable(true);
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can see a dark, ominous cave.");
@@ -834,11 +851,16 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
+      fadeMusic(music, 1);
+      startMusic("data/audio/fighting.wav");
+      music.setVolume(-25);
       if (enemyAttack(vaccuum)) return;
       gui.println("Past its lifeless body, you can see an aluminum ladder.");
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       itemMap.get("key of friendship").isTakeable(true);
       isInTrial = false;
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
     } else if(vaccuum.getIsDead() && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
       gui.println("The vaccuum sits on the concrete floor, out of battery.");
       if(!player.getTrial(4)){
@@ -860,10 +882,15 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
+      fadeMusic(music, 1);
+      startMusic("data/audio/fighting.wav");
+      music.setVolume(-25);
       if (enemyAttack(robot)) return;
       isInTrial = false;
       player.setTrial(5);
-    }else{
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
+    } else {
       gui.println("The Friends Robot still cowers in the corner.");
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
@@ -883,6 +910,8 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       if (enemyAttack(deslauriers)) return;
+      gameEnded = true;
+      sleep(2000);
       gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
       gui.println("The world seems a little more vibrant.");
       endOfGame();
@@ -894,8 +923,8 @@ public class Game implements java.io.Serializable {
 
   /**
    * Allows the enemy to attack you.
-   * @param enemy
-   * @return if the game will continue
+   * @param enemy the enemy that will attack you
+   * @return boolean value which represents whether or not the player has died
    * @author Stefano - GUI-based logic
    * @author Michael - implementation in enemies
    */
@@ -953,15 +982,20 @@ public class Game implements java.io.Serializable {
     gui.println("\"You can do it!\"");
     gui.println("\"Don't give up!\"");
     gui.println("\"I believe in you!\"");
-    sleep(4000);
+    sleep(4500);
     gui.println("\nYour health has been completely restored!");
-    gui.println("Your sword starts shining with the power of the gods. It now deals 100 damage!\n");
-    gui.println("You face the enemy with a newfound confidence! You can do this!");
+    gui.println("Your sword starts shining with the power of the gods. It now deals 100 damage!");
+    gui.println("You face the enemy with a newfound confidence! You can do this!\n");
     gui.commandsPrinted(true);
     player.maxHeal();
     itemMap.get("sword").setDamage(100);
   }
 
+/**
+   * The code for the News News Trial.
+   * @author Samantha - code and dialogue
+   * @author Michael - dialogue
+   */
   public void newsNewsScroll(){
     if (!hasAnsweredNewsQuestions){
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
@@ -996,7 +1030,11 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  // answers to news news problems: 4 8 15 16 23 42 (the numbers from Lost)
+  /**
+   * Checks if the answer to the News News Trial's riddles are correct.
+   * Answer is: 4 8 15 16 23 42 (the numbers from Lost)
+   * @author Samantha - everything
+   */
   private boolean newsNewsAnswers() {
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
@@ -1004,8 +1042,14 @@ public class Game implements java.io.Serializable {
     } return false;
   }
 
+  /**
+   * The code for Dog Paradise
+   * @author Samantha - code and dialogue
+   * @author Michael - dialogue
+   */
   public void dogParadise(){
     if (!player.getTrial(7)){
+      gui.commandsPrinted(false);
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
       sleep(7000);
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
@@ -1025,11 +1069,16 @@ public class Game implements java.io.Serializable {
       sleep(3000);
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
+      gui.commandsPrinted(true);
     } else {
       gui.println("There is nothing for you here.");
     }
   }
 
+  /**
+   * Does things when you meet balloony.
+   * @author Samantha - everything
+   */
   public void balloony(){
     Enemy balloony = enemyMap.get("balloony");
     if (!player.getTrial(6) && balloony.getHealth() > 0){
@@ -1037,13 +1086,18 @@ public class Game implements java.io.Serializable {
       gui.println("Floating above the wreckage is a large blue balloon.");
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland. Prepare to die.\"");
       gui.println(balloony.getCatchphrase());
+      fadeMusic(music, 1);
+      startMusic("data/audio/fighting.wav");
+      music.setVolume(-25);
       if (enemyAttack(balloony)) return;
       isInTrial = false;
       itemMap.get("balloony's corpse").isTakeable(true);
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
       gui.println("You never know when you'll need a balloon.");
-    } else if(balloony.getHealth() < 1 && !player.getTrial(6) && currentRoom.getRoomName().equals("Dept. of Customer Service")){
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
+    } else if (balloony.getHealth() < 1 && !player.getTrial(6) && currentRoom.getRoomName().equals("Dept. of Customer Service")){
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
       gui.println("You never know when you'll need a balloon.");
@@ -1165,6 +1219,10 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Activates when you go the the mysterious entrance to Hell (west tableland).
+   * @author Samantha - everything
+   */
   public void frogsMadleneAndJorge(){
     if(player.getTalkedToSkyGods()){
       gui.print("You see a pair of frogs at the entrance.");
@@ -1185,7 +1243,13 @@ public class Game implements java.io.Serializable {
     }
   }
   
+  /**
+   * Activates when you complete the trial in the sky.
+   * @author Samantha - code, dialogue
+   * @author Michael - dialogue, sleeps
+   */
   public void skyGods(){
+    gui.commandsPrinted(false);
     gui.println("The soothing ambience of the gods ring in your ears. It feels like your brain is being massaged by a baby deer.");
     gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.\n");
     sleep(5000);
@@ -1210,8 +1274,13 @@ public class Game implements java.io.Serializable {
     gui.println();
     gui.println("You know what you must do.");
     gui.println("Go to Hell to save your friend, once and for all.");
+    gui.commandsPrinted(true);
   }
 
+  /**
+   * Removes all your items (except moral support!)
+   * @author Samantha - everything
+   */
   public void removeItems(){
     if(inventory.hasItem(itemMap.get("geraldo"))){
       inventory.removeItem(itemMap.get("geraldo"));
@@ -1313,6 +1382,11 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   *  What happens when the scroll is read.
+   * @author Samantha - dialogue
+   * @author Michael - dialogue
+   */
   private void readScroll() {
     gui.println("Garbled, messy writing is scrawled onto the page. It reads:");
     gui.println();
@@ -1390,9 +1464,12 @@ public class Game implements java.io.Serializable {
   public static void printBalloonHelp() {
     gui.println("The clouds are too high in the sky. Maybe try inflating Balloony?");
   }
+
   /**
    * Print out some help information. Here we print some stupid, cryptic message
    * and a list of the command words.
+   * @author Stefano - dialogue
+   * @author Michael - dialogue
    */
   public void printHelp(Command command) {
     if (command.hasArgs()) Parser.printCommandHelp(command);
@@ -1449,29 +1526,24 @@ public class Game implements java.io.Serializable {
    * @author Michael - Wrote credits, dialogue
    */
   private void endOfGame() {
-    gameEnded = true;
     gui.commandsPrinted(false);
-    sleep(4000);
+    sleep(3000);
     gui.println();
     gui.println("You feel the ever-changing world shift once again under your feet.");
     gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
-    sleep(3000);
+    sleep(5000);
     gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
     gui.println("He motions cryptically with his hand. \n");
-    sleep(7000);
+    sleep(4000);
     gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
     gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
-    sleep(5000);
+    sleep(4000);
     gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
     gui.readCommand();
     gui.reset();
     gui.centerText(true);
-    while(music.getVolume() > -64){
-      music.setVolume(music.getVolume() - 0.000002);
-      if (music.getVolume() % 5 == 0) sleep(40);
-    }
-    music.stop();
+    fadeMusic(music, 30);
     MusicPlayer credits = null;
     try {
       credits = new MusicPlayer("data/audio/credits.wav", false);
@@ -1530,6 +1602,24 @@ public class Game implements java.io.Serializable {
         validInput = true;
       } else if (in.equals("n")) endGame();
     }
+    gui.commandsPrinted(true);
+  }
+
+  /**
+   * Fades the specified MusicPlayer out based on the time factor specified.
+   * @param toFade - The MusicPlayer to fade out.
+   * @param timeFactor - The time factor for the fade.
+   * This is roughly equivalent to a tenth of a second, so
+   * a time factor of 40 is roughly equivalent to 4 seconds.
+   */
+  private void fadeMusic(MusicPlayer toFade, int timeFactor) {
+    gui.commandsPrinted(false);
+    int vol = (int) toFade.getVolume();
+    while(toFade.getVolume() > -80){
+      toFade.setVolume(music.getVolume() - 0.000004);
+      if (toFade.getVolume() % 1 == 0) sleep(timeFactor - (vol + 20) > 0 ? timeFactor - (vol + 20) : 0);
+    }
+    toFade.stop();
     gui.commandsPrinted(true);
   }
 

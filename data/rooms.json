@@ -1009,9 +1009,13 @@
       "exits": [
         {
           "isLocked": false,
+          "direction": "Down",
+          "adjacentRoom": "Table Caldera Platform"
+        },
+        {
+          "isLocked": false,
           "direction": "In",
-          "adjacentRoom": "Hall of the Volcano King",
-          "keyId": "1234"
+          "adjacentRoom": "Hall of the Volcano King"
         }
       ]
     },
@@ -1023,8 +1027,7 @@
         {
           "isLocked": true,
           "direction": "None",
-          "adjacentRoom": "Volcano Peak",
-          "keyId": "0000"
+          "adjacentRoom": "Volcano Peak"
         }
       ]
     },
@@ -1078,7 +1081,7 @@
         {
           "isLocked": false,
           "direction": "North",
-          "adjacentRoom": "Gloomy Forest 26"
+          "adjacentRoom": "Gloomy Forest 25"
         }
       ]
     },
