@@ -402,7 +402,14 @@ public class Game implements java.io.Serializable {
       endOfGame();
     }
   }
-
+  
+  /**
+   * 
+   * @param room
+   * @return the enemy that is present in the room.
+   * @author Samantha - Sasquatch and Balloony
+   * @author Michael - Vaccuum, Friends Robot, DesLauriers
+   */
   private Enemy enemyRoomCheck(Room room){
     String name = room.getRoomName();
     if (name.equals("The Lair")){
@@ -499,6 +506,8 @@ public class Game implements java.io.Serializable {
   /**
    * Allows the player to threaten an enemy.
    * @param command - 
+   * @author Stefano - all logic
+   * @author Michael - Friends Robot stuff
    */
   private void threaten(Command command) {
     Enemy enemy = enemyRoomCheck(currentRoom);
@@ -695,8 +704,9 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-   * Try to go to one direction. If there is an exit, enter the new room,
+   * Try to go to one direction. If there is an exit, enter the new room, and do something
    * otherwise print an error message.
+   * @author Everyone did a lot of things here.
    */
   private void goRoom(Command command) {
     if (!command.hasArgs()) {
@@ -816,6 +826,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Does things when you encounter the Vaccuum.
+   * @author Michael - everything
    */
   public void vaccuum(){
     Enemy vaccuum = enemyMap.get("vaccuum");
@@ -841,6 +852,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Does things when you encounter the friends robot.
+   * @author Michael - everything
    */
   public void robot(){
     Enemy robot = enemyMap.get("friends robot");
@@ -860,6 +872,10 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Does things when you encounter Mr. DesLauriers.
+   * @author Michael - everything
+   */
   public void deslauriers(){
     Enemy deslauriers = enemyMap.get("deslauriers");
     if (!deslauriers.getIsDead()){
@@ -876,6 +892,13 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Allows the enemy to attack you.
+   * @param enemy
+   * @return if the game will continue
+   * @author Stefano - GUI-based logic
+   * @author Michael - implementation in enemies
+   */
   private boolean enemyAttack(Enemy enemy) {
     while(enemy.getHealth() > 0){
       int tempDamage = enemy.getDamage();
@@ -915,6 +938,10 @@ public class Game implements java.io.Serializable {
     return false;
   }
 
+  /**
+   * Occurs when Mr. DesLauriers slashes you down to 1 HP!
+   * @author Michael - everything
+   */
   private void moralSupport() {
     supportCheck = true;
     gui.commandsPrinted(false);
@@ -1026,18 +1053,8 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-
-  gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
-      gui.println("The world seems a little more vibrant.");
-      endOfGame();
-      isInTrial = false;
-    } else if (deslauriers.getIsDead() && currentRoom.getRoomName().equals("Hall of the Volcano King")) {
-      gui.println("The world seems a little more vibrant.");
-    }
-    */
-
-  /**
-   *  Does when you enter the fur store location. IT WORKS GUYSSS
+   * Does things when you go into the Fur Store room.
+   * @author Michael - everything
    */
   public void salesman(){
     if (!player.getTrial(3)){
@@ -1067,6 +1084,7 @@ public class Game implements java.io.Serializable {
   /**
    * Asks user if they want to buy furs.
    * @return true or false
+   * @author Michael - everything
    */
   public boolean buyFurs(){
     boolean validInput = false;
@@ -1086,6 +1104,10 @@ public class Game implements java.io.Serializable {
     return false;
   }
 
+  /**
+   * Does things if you enter the Cheese Vault room.
+   * @author Michael - everything
+   */
   public void cheeseVault(){
     if(!hasOpenedVault){
       gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
@@ -1107,12 +1129,22 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Checks if you entered the right code for the vault.
+   * @return if the code was correct
+   * @author Michael - everything
+   */
   public boolean correctCode(){
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("2956")) return true;
     return false;
   }
 
+  /**
+   * Does stuff for inflate command.
+   * @param secondWord
+   * @author Michael - everything
+   */
   private void inflate(String secondWord) {
     if (!secondWord.equals("")){
       if(player.skyGodsCheck()){
@@ -1223,9 +1255,10 @@ public class Game implements java.io.Serializable {
       }
   }
 
-  /*
+  /**
   * VERY IMPORTANT. lets player wear hat
   * @param command what the player is wearing
+  * @author Michael - everything
   */
   private void wear(String secondWord) {
     if (secondWord != ""){
@@ -1240,6 +1273,10 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Does stuff when you pray.
+   * @author Michael - everything
+   */
   private void pray() {
     if (currentRoom.getRoomName().equals("News News Temple")){
       gui.println("The sun's rays bounce off the skylight into your eyes.");
@@ -1257,6 +1294,8 @@ public class Game implements java.io.Serializable {
   /**
    * Lets player read items (tome, diary)
    * @param command
+   * @author Michael - for tome and diary
+   * @author Samantha - for scroll
    */
   private void read(String secondWord){
     if (secondWord != ""){
@@ -1288,6 +1327,7 @@ public class Game implements java.io.Serializable {
 
   /**
    *  Player reads princess diary
+   * @author Michael - everything
    */
   private void readDiary() {
     gui.println("\"Dear diary,\"");
@@ -1297,6 +1337,7 @@ public class Game implements java.io.Serializable {
 
   /**
    *  Player reads tome of tableland !!!
+   * @author Michael - everything
    */
   private void readTome() {
     gui.println("\"THE TWELVE TRIALS OF THE WHISPERER\"");
@@ -1314,6 +1355,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * when player types "heal" (no args).
+   * @author Michael - everything
    */
   private void heal() {
     if (!inventory.hasItem(itemMap.get("bandages"))){
@@ -1343,6 +1385,7 @@ public class Game implements java.io.Serializable {
 
   /**
    *  If you try to 'go up' with balloony in your inventory
+   * @author Michael - everything
    */
   public static void printBalloonHelp() {
     gui.println("The clouds are too high in the sky. Maybe try inflating Balloony?");
@@ -1400,6 +1443,11 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Plays after you kill Mr. DesLauriers (RIP)
+   * @author Stefano - Implemented credits, GUI scrolling, music
+   * @author Michael - Wrote credits, dialogue
+   */
   private void endOfGame() {
     gameEnded = true;
     gui.commandsPrinted(false);
