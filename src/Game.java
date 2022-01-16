@@ -953,6 +953,7 @@ public class Game implements java.io.Serializable {
               if (in.equals("y")){
                 restartGame();
                 validInput = true;
+                return true;
               } else if (in.equals("n")) endGame();
             }
             gui.commandsPrinted(true);
