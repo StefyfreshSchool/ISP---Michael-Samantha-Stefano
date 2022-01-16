@@ -16,7 +16,7 @@ public class Game implements java.io.Serializable {
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
-  public static HashMap<String, Room> roomMap;
+  public static HashMap<String, Room> roomMap; // hashmaps storing rooms, items, and enemies
   public static HashMap<String, Item> itemMap;
   public static HashMap<String, Enemy> enemyMap;
   private Inventory inventory;
@@ -24,14 +24,14 @@ public class Game implements java.io.Serializable {
   private Parser parser;
   private Room currentRoom;
   private Room pastRoom;
-  private boolean isInTrial;
+  private boolean isInTrial; // various game checks
   private boolean hasAnsweredNewsQuestions;
   private boolean gameEnded;
-  private final float DEFAULT_BACKGROUND_MUSIC_VOL = -15f;
   private boolean supportCheck;
   private boolean hasOpenedVault;
+  private final float DEFAULT_BACKGROUND_MUSIC_VOL = -15f;
   private final int PLAYER_HEALTH = 100;
-  private final int INVENTORY_WEIGHT = 50;
+  private final int INVENTORY_WEIGHT = 50; // max weight you can carry
 
   /**
    * Create the game and initialize its internal map.
@@ -819,7 +819,7 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Sasquatch steps out of the cave.");
       gui.println(sasquatch.getCatchphrase() + " He screams.");
-      gui.println("Realizing you have no weapon, you panic.");
+      gui.println("You panic, frozen with terror.");
       gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
       fadeMusic(music, 1);
       startMusic("data/audio/fighting.wav");
