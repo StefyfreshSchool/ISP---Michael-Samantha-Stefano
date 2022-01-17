@@ -194,6 +194,7 @@ public class Item extends OpenableObject implements java.io.Serializable {
     /**
      * Set isTakeable state.
      * @param state
+     * @author Stefano
      */
     public void isTakeable(boolean state) {
       isTakeable = state;
@@ -203,6 +204,7 @@ public class Item extends OpenableObject implements java.io.Serializable {
      * Checks if the item name inputted is the same as the current item ({@code this}).
      * @param itemName - The item name to check
      * @return True or false
+     * @author Stefano
      */
     public boolean isThisItem(String itemName){
       boolean out = false;

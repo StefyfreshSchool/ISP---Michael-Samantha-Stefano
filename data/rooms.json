@@ -268,7 +268,7 @@
       "exits": [
         {
           "isLocked": false,
-          "direction": "Northwest",
+          "direction": "Southwest",
           "adjacentRoom": "Overgrown Path"
         },
         {
