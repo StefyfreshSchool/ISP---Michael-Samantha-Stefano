@@ -688,7 +688,6 @@ public class Game implements java.io.Serializable {
       gui.println("save " + command.getStringifiedArgs() + " is not a valid save command!");
       return false;
     }
-
     Save game = new Save(roomMap, inventory, currentRoom, pastRoom, player, enemyMap);
     try {
       FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
@@ -696,14 +695,12 @@ public class Game implements java.io.Serializable {
       out.writeObject(game);
       out.close();
       fileOut.close();
-
       gui.println(quit ? "Game saved! Quitting." : "Game saved!");
     } catch (NotSerializableException e){
       gui.printerr("NotSerializableException - A class that needs to be saved does not implement Serializable!");
     } catch (IOException e){
       gui.printerr("Error while saving! Could not save.");
     }
-
     return quit;
   }
 
@@ -797,7 +794,7 @@ public class Game implements java.io.Serializable {
     } else {
        //print images
        if (nextRoom.getRoomName().equals("East of the Cyan House")) gui.printImg("data/images/cyan_house_east.png");
-       if (nextRoom.getRoomName().equals("Parliament Entrance Room") && pastRoom.getRoomName().equals("Parliament Steps")) gui.printImg("data/images/parliament.png");
+       if (nextRoom.getRoomName().equals("Parliament Entrance Room")) gui.printImg("data/images/parliament.png");
        if (nextRoom.getRoomName().equals("News News Temple")) gui.printImg("data/images/temple_room.png");
        if (nextRoom.getRoomName().equals("Campsite Ruins")) gui.printImg("data/images/laser_frog.png");
 
@@ -895,10 +892,10 @@ public class Game implements java.io.Serializable {
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(sasquatch)) return;
-      fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
       gui.println();
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
       isInTrial = false;
       currentRoom.getItem("pounds").isTakeable(true);
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
@@ -929,11 +926,11 @@ public class Game implements java.io.Serializable {
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(vaccuum)) return;
-      fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
       gui.println();
       gui.println("Past its lifeless body, you can see an aluminum ladder.");
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
       itemMap.get("key of friendship").isTakeable(true);
       isInTrial = false;
     } else if(vaccuum.getIsDead() && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
@@ -1089,13 +1086,12 @@ public class Game implements java.io.Serializable {
       gui.cutsceneMode(true);
       gui.println();
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
-      sleep(3000);
       gui.println();
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
       sleep(4000);
       gui.println();
       gui.println("Question 1: How many Whisperer articles have there been?");
-      gui.println("Question 2: How many planets are in our solar system, not including dwarves?");
+      gui.println("Question 2: How many planets are in our solar system, not including dwarf planets?");
       gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
       gui.println("Question 4: What is the average age of the grade elevens?");
       gui.println("Question 5: What is the lowest prime number with consecutive digits?");
@@ -1201,14 +1197,14 @@ public class Game implements java.io.Serializable {
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(balloony)) return;
-      fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
-      gui.println();
-      isInTrial = false;
       itemMap.get("balloony's corpse").isTakeable(true);
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
       gui.println("You never know when you'll need a balloon.");
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
+      gui.println();
+      isInTrial = false;
     } else if (balloony.getHealth() < 1 && !player.getTrial(6) && currentRoom.getRoomName().equals("Dept. of Customer Service")){
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
@@ -1670,18 +1666,18 @@ public class Game implements java.io.Serializable {
   private void endOfGame() {
     gameEnded = true;
     gui.cutsceneMode(true);
-    // sleep(3500);
-    // gui.println();
-    // gui.println("You feel the ever-changing world shift once again under your feet.");
-    // gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
-    // sleep(5000);
-    // gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
-    // gui.println("He motions cryptically with his hand. \n");
-    // sleep(4500);
-    // gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
-    // gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
-    // sleep(4500);
-    // gui.println("To be continued...");
+    sleep(3500);
+    gui.println();
+    gui.println("You feel the ever-changing world shift once again under your feet.");
+    gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
+    sleep(5000);
+    gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
+    gui.println("He motions cryptically with his hand. \n");
+    sleep(4500);
+    gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
+    gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
+    sleep(4500);
+    gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
     gui.cutsceneMode(false);
     gui.readCommand();
