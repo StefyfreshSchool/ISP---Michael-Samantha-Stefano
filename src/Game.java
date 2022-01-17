@@ -429,7 +429,7 @@ public class Game implements java.io.Serializable {
       skyGods();
     } else if (c.equals("8")){
       dogParadise();
-    } else if (c.equals("")){
+    } else if (c.equals("heal")){
       player.maxHeal();
     } else if (c.equals("crash")){
       GameError.crashGame();
@@ -437,6 +437,14 @@ public class Game implements java.io.Serializable {
       gui.printImg("data/images/img.png");
     } else if (c.equals("credits")){
       endOfGame();
+    } else if (c.equals("sasquatch")){
+      currentRoom = roomMap.get("The Lair");
+      sasquatch();
+    } else if (c.equals("9")){
+      player.talkedToSkyGods();
+      frogsMadleneAndJorge();
+    } else if (c.equals("10")){
+      skyGods();
     }
   }
   
@@ -588,6 +596,9 @@ public class Game implements java.io.Serializable {
         if (enemyMap.get("friends robot").isThisEnemy(enemy.getName()) && !enemyMap.get("friends robot").getIsDead()){
           enemyMap.get("friends robot").setIsDead(true);
           enemyMap.get("friends robot").setHealth(0);
+          gui.cutsceneMode(true);
+          sleep(1000);
+          gui.println();
           gui.println("The Friends Robot cowers in fear from your dominance. It seems to be perturbed from the water bottle in your hand.");
           gui.println("\"P1eA5e d0N't hUrt m3! 1 hav3 frI3nDs!\" it says, with a robotic quaver in its voice.");
           gui.println("Trembling quietly, it moves out of your path, revealing a carefully chiseled inscription in the wall.");
@@ -783,28 +794,28 @@ public class Game implements java.io.Serializable {
     } else {
        //print images
        if (nextRoom.getRoomName().equals("East of the Cyan House")) gui.printImg("data/images/cyan_house_east.png");
-       if (nextRoom.getRoomName().equals("Parliament Entrance Room")) gui.printImg("data/images/parliament.png");
+       if (nextRoom.getRoomName().equals("Parliament Entrance Room") && pastRoom.getRoomName().equals("Parliament Steps")) gui.printImg("data/images/parliament.png");
        if (nextRoom.getRoomName().equals("News News Temple")) gui.printImg("data/images/temple_room.png");
        if (nextRoom.getRoomName().equals("Campsite Ruins")) gui.printImg("data/images/laser_frog.png");
+
       // Tests for going into trials
-      
-      if (!isInTrial && (currentRoom.getRoomName().equals("Upper Hall of Enemies") || nextRoom.getRoomName().equals("Upper Hall of Enemies"))) {
+      if (!isInTrial && nextRoom.getRoomName().equals("Upper Hall of Enemies")) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         robot();
-      } else if (!isInTrial && (currentRoom.getRoomName().equals("Lower Hall of Enemies") || nextRoom.getRoomName().equals("Lower Hall of Enemies"))) {
+      } else if (!isInTrial && nextRoom.getRoomName().equals("Lower Hall of Enemies")) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         vaccuum();
-      } else if (!isInTrial && (currentRoom.getRoomName().equals("The Lair") || nextRoom.getRoomName().equals("The Lair"))){
+      } else if (!isInTrial && nextRoom.getRoomName().equals("The Lair")){
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         sasquatch();
-      } else if (!isInTrial && (currentRoom.getRoomName().equals("Hall of the Volcano King") || nextRoom.getRoomName().equals("Hall of the Volcano King"))) {
+      } else if (!isInTrial && nextRoom.getRoomName().equals("Hall of the Volcano King")) {
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         deslauriers();
-      } else if (!isInTrial && (currentRoom.getRoomName().equals("Dept. of Customer Service") || nextRoom.getRoomName().equals("Dept. of Customer Service"))){
+      } else if (!isInTrial && nextRoom.getRoomName().equals("Dept. of Customer Service")){
         currentRoom = nextRoom;
         gui.println(currentRoom.shortDescription());
         balloony();
@@ -831,6 +842,7 @@ public class Game implements java.io.Serializable {
         dogParadise();
       }
     }
+    
     // Set trial stuff 
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("1000 british pounds"))){
@@ -853,6 +865,7 @@ public class Game implements java.io.Serializable {
         player.setTrial(6);
       }
     }
+
     //change music
     if (roomMap.get("Gloomy Forest 1") == nextRoom && pastRoom.getRoomName().equals("Gates of Hell")){
       fadeMusic(music, 30);
@@ -863,7 +876,8 @@ public class Game implements java.io.Serializable {
 
   /**
    * The player's encounter with the sasquatch
-   * @author Samantha - everything
+   * @author Samantha - everything important
+   * @author Stefano - music
    */
   public void sasquatch(){
     Enemy sasquatch = enemyMap.get("sasquatch");
@@ -873,15 +887,17 @@ public class Game implements java.io.Serializable {
       gui.println(sasquatch.getCatchphrase() + " He screams.");
       gui.println("You panic, frozen with terror.");
       gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
-      fadeMusic(music, 1);
+      fadeMusic(music);
+      music.stop();
       startMusic("data/audio/fighting.wav");
-      music.setVolume(-25);
+      fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(sasquatch)) return;
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
+      gui.println();
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
       currentRoom.getItem("pounds").isTakeable(true);
-      fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
       gui.println("Past the corpse, you can see a dark, ominous cave.");
@@ -890,12 +906,14 @@ public class Game implements java.io.Serializable {
       } else if (player.getTrial(0)) {
         gui.println("Your conscience speaks to you. \"There are more important things to do than explore perilous caves.\" You know you must leave this place.");
       }
+      gui.println(currentRoom.exitString());
     }
   }
 
   /**
    * Does things when you encounter the Vaccuum.
-   * @author Michael - everything
+   * @author Michael - everything important
+   * @author Stefano - music
    */
   public void vaccuum(){
     Enemy vaccuum = enemyMap.get("vaccuum");
@@ -903,16 +921,18 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
-      fadeMusic(music, 1);
+      fadeMusic(music);
+      music.stop();
       startMusic("data/audio/fighting.wav");
-      music.setVolume(-25);
+      fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(vaccuum)) return;
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
+      gui.println();
       gui.println("Past its lifeless body, you can see an aluminum ladder.");
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       itemMap.get("key of friendship").isTakeable(true);
       isInTrial = false;
-      fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
     } else if(vaccuum.getIsDead() && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
       gui.println("The vaccuum sits on the concrete floor, out of battery.");
       if(!player.getTrial(4)){
@@ -921,12 +941,14 @@ public class Game implements java.io.Serializable {
       if (!enemyMap.get("friends robot").getIsDead()){
         gui.println("Past its lifeless body, you can see an aluminum ladder.");
       }
+      gui.println(currentRoom.exitString());
     }
   }
 
   /**
    * Does things when you encounter the friends robot.
-   * @author Michael - everything
+   * @author Michael - everything important
+   * @author Stefano - music
    */
   public void robot(){
     Enemy robot = enemyMap.get("friends robot");
@@ -934,18 +956,20 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
-      fadeMusic(music, 1);
+      fadeMusic(music);
+      music.stop();
       startMusic("data/audio/fighting.wav");
-      music.setVolume(-25);
+      fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(robot)) return;
-      isInTrial = false;
-      player.setTrial(5);
       fadeMusic(music, 20);
       startMusic("data/audio/background.wav");
+      isInTrial = false;
+      player.setTrial(5);
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
       gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
       gui.println("The Friends Robot cowers in fear in the corner, and has now developed a phobia of water.");
+      gui.println(currentRoom.exitString());
     }
   }
 
@@ -959,8 +983,15 @@ public class Game implements java.io.Serializable {
       isInTrial = true;
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
+      fadeMusic(music);
+      music.stop();
+      startMusic("data/audio/end.wav");
+      fadeInMusic(music, 10, -60, 0);
       if (enemyAttack(deslauriers)) return;
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
       gameEnded = true;
+      gui.cutsceneMode(true);
       sleep(2000);
       gui.println("\nMr. DesLauriers ascends towards the gods, eyes illuminated. With a flash, he disappears.");
       gui.println("The world seems a little more vibrant.");
@@ -968,6 +999,7 @@ public class Game implements java.io.Serializable {
       isInTrial = false;
     } else if (deslauriers.getIsDead() && currentRoom.getRoomName().equals("Hall of the Volcano King")) {
       gui.println("The world seems a little more vibrant.");
+      gui.println(currentRoom.exitString());
     }
   }
 
@@ -1020,11 +1052,12 @@ public class Game implements java.io.Serializable {
 
   /**
    * Occurs when Mr. DesLauriers slashes you down to 1 HP!
-   * @author Michael - everything
+   * @author Michael - everything important
+   * @author Stefano - GUI cutscene
    */
   private void moralSupport() {
     supportCheck = true;
-    gui.commandsPrinted(false);
+    gui.cutsceneMode(true);
     gui.println("Mr. DesLauriers' slashes you down to 1 HP!");
     gui.println("You can feel your surroundings grow fainter... \n");
     sleep(3000);
@@ -1037,7 +1070,7 @@ public class Game implements java.io.Serializable {
     gui.println("\nYour health has been completely restored!");
     gui.println("Your sword starts shining with the power of the gods. It now deals 100 damage!");
     gui.println("You face the enemy with a newfound confidence! You can do this!\n");
-    gui.commandsPrinted(true);
+    gui.cutsceneMode(false);
     player.maxHeal();
     itemMap.get("sword").setDamage(100);
   }
@@ -1046,15 +1079,20 @@ public class Game implements java.io.Serializable {
    * The code for the News News Trial.
    * @author Samantha - code and dialogue
    * @author Michael - dialogue
+   * @author Stefano - GUI cutscene
    */
   public void newsNewsScroll(){
     if (!hasAnsweredNewsQuestions){
+      gui.cutsceneMode(true);
+      gui.println();
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       sleep(3000);
+      gui.println();
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
-      sleep(7000);
+      sleep(4000);
+      gui.println();
       gui.println("Question 1: How many Whisperer articles have there been?");
-      gui.println("Question 2: How many planets are in our solar system?");
+      gui.println("Question 2: How many planets are in our solar system, including dwarves?");
       gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
       gui.println("Question 4: What is the average age of the grade elevens?");
       gui.println("Question 5: What is the lowest prime number that contains consecutive digits?");
@@ -1062,9 +1100,12 @@ public class Game implements java.io.Serializable {
       gui.println("\"You will have six numbers, each an answer to the six questions. Only then you will prove your worth!\"");
       gui.println("\"What is the code?\"");
       if (newsNewsAnswers()){
+        gui.cutsceneMode(true);
         gui.println("\"Wow. I'm truly impressed. Those are the right numbers! Traveller, you have proved yourself more than worthy of the scroll.\"");
+        gui.println();
         gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       } else {
+        gui.cutsceneMode(true);
         gui.println("\"I'm afraid, traveller, that those aren't the right numbers. You clearly are not worthy to be in this temple! Good riddance!\"");
         currentRoom = roomMap.get("Temple Pavillion");
         gui.println(currentRoom.shortDescription());
@@ -1072,10 +1113,11 @@ public class Game implements java.io.Serializable {
       }
       itemMap.get("scroll").isTakeable(true);
       hasAnsweredNewsQuestions = true;
+      gui.cutsceneMode(false);
     } else {
-      if(player.getTrial(1)){
+      if (player.getTrial(1)){
         gui.println("On the other side of the room is an empty glass case.");
-      }else{
+      } else {
         gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
       }
     }
@@ -1087,6 +1129,7 @@ public class Game implements java.io.Serializable {
    * @author Samantha - everything
    */
   private boolean newsNewsAnswers() {
+    gui.cutsceneMode(false);
     String in = gui.readCommand();
     if (in.equalsIgnoreCase("4 8 15 16 23 42") || in.equalsIgnoreCase("4, 8, 15, 16, 23, 42") || in.equalsIgnoreCase("4,8,15,16,23,42")){
       return true;
@@ -1097,30 +1140,42 @@ public class Game implements java.io.Serializable {
    * The code for Dog Paradise
    * @author Samantha - logic and dialogue
    * @author Michael - dialogue
+   * @author Stefano - GUI cutscene
    */
   public void dogParadise(){
     if (!player.getTrial(7)){
-      gui.commandsPrinted(false);
+      gui.cutsceneMode(true);
+      sleep(3000);
+      gui.println();
       gui.println("Three adorable dogs walk up to you. The first dog is a caramel mini-labradoodle. The second is a lighter-coloured cockapoo. The third, a brown-and-white spotted Australian lab.");
-      sleep(7000);
       gui.println("Their name tags read 'Lucky', 'Luna', and 'Maggie' respectively.");
+      sleep(6500);
+      gui.println();
       gui.println("The dog named Lucky speaks to you. \"Hello, potential Whisperer successor. We would like to offer you our guidance as you complete your arduous journey.\"");
       inventory.addItem(itemMap.get("moral support"));
       gui.println("\"We have bestowed the glowing orb of moral support upon you.\"\n");
       gui.println("Moral support taken!");
       gui.println(itemMap.get("moral support").getDescription());
-      sleep(4000);
-      gui.println("\nThe dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the god's realm, and fill your head with the most encouraging of thoughts.\"");
+      sleep(7500);
+      gui.println();
+      gui.println("The dog named Luna speaks to you. \"This, mortal, is Moral Support. It will glow brighter than all the stars in the god's realm, and fill your head with the most encouraging of thoughts.\"");
+      sleep(5500);
+      gui.println();
       gui.println("The dog named Maggie speaks to you. \"No being, mortal or deity, can harness its power alone. Its ethereal glow will activate when you need it most.\"");
-      gui.println("You feel a sense of calm wash over you. You feel resolve for the first time in this whole journey.\n");
       sleep(4000);
+      gui.println();
+      gui.println("You feel a sense of calm wash over you. You feel resolve for the first time in this whole journey.");
+      sleep(3000);
+      gui.println();
       gui.println("Lucky speaks. \"I sense your great potential. You have somewhere you need to be.\"");
       gui.println("Luna speaks. \"You are the Whisperer's successor. You must save our world.\"");
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
-      sleep(3000);
+      sleep(5500);
+      gui.println();
       gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
-      gui.commandsPrinted(true);
+      sleep(1000);
+      gui.cutsceneMode(false);
     } else {
       gui.println("There is nothing for you here.");
     }
@@ -1128,7 +1183,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Does things when you meet balloony.
-   * @author Samantha - everything
+   * @author Samantha - everything except music fades
    * @author Stefano - music fades
    */
   public void balloony(){
@@ -1138,23 +1193,27 @@ public class Game implements java.io.Serializable {
       gui.println("Floating above the wreckage is a large blue balloon.");
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland. Prepare to die.\"");
       gui.println(balloony.getCatchphrase());
-      fadeMusic(music, 1);
+      fadeMusic(music);
+      music.stop();
       startMusic("data/audio/fighting.wav");
-      music.setVolume(-25);
+      fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(balloony)) return;
+      fadeMusic(music, 20);
+      startMusic("data/audio/background.wav");
+      gui.println();
       isInTrial = false;
       itemMap.get("balloony's corpse").isTakeable(true);
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
       gui.println("You never know when you'll need a balloon.");
-      fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
     } else if (balloony.getHealth() < 1 && !player.getTrial(6) && currentRoom.getRoomName().equals("Dept. of Customer Service")){
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
       gui.println("You never know when you'll need a balloon.");
+      gui.println(currentRoom.exitString());
     } else if (currentRoom.getRoomName().equals("Dept. of Customer Service")){
       gui.println("There is nothing for you here.");
+      gui.println(currentRoom.exitString());
     }
   }
 
@@ -1254,12 +1313,12 @@ public class Game implements java.io.Serializable {
    */
   private void inflate(String secondWord) {
     if (!secondWord.equals("")){
-      if(player.skyGodsCheck()){
+      if (player.skyGodsCheck()){
         if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
           gui.println("You inflated Balloony's corpse.");
           gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
           currentRoom = roomMap.get("Sky Temple Pavillion");
-          gui.println(currentRoom.shortDescription());
+          gui.println(currentRoom.longDescription());
         } else if (!player.getTalkedToSkyGods()){
           gui.println("The gods block entrance to their domain. You must do this, you tell yourself.");
         } else {
@@ -1276,23 +1335,33 @@ public class Game implements java.io.Serializable {
 
   /**
    * Activates when you go the the mysterious entrance to Hell (west tableland).
-   * @author Samantha - everything
+   * @author Samantha - everything important
+   * @author Stefano - GUI cutscene
    */
   public void frogsMadleneAndJorge(){
-    if(player.getTalkedToSkyGods()){
-      gui.print("You see a pair of frogs at the entrance.");
-      if(!player.getTrial(9)){
+    if (player.getTalkedToSkyGods()){
+      gui.cutsceneMode(true);
+      gui.println("You see a pair of frogs at the entrance.");
+      if (!player.getTrial(9)) {
+        sleep(2000);
+        gui.println();
         gui.println("\"Hello future Whisperer. We are messagers from the Sky Gods. We are here to give you further instructions on how to rescue your friend and save Tableland.\" says one of the frogs.");
         gui.println("\"My name is Madlene,\" the first frog says, \"and this is Jorge,\" she gestures to the other frog.");
+        sleep(5500);
+        gui.println();
         gui.println("\"You must venture forth into the plains of Hell in West Tableland and save your friend from the being that resides in the Volcano!\" Jorge says. ");
+        sleep(3500);
+        gui.println();
         gui.println("Madlene hopped up to the tunnel and removed the boards from the tunnel.");
         gui.println("You can peer into the tunnel, but all you see is darkness.");
         gui.println("\"Go forward and save your friend!\" Jorge says. ");
-      }else{
+        sleep(3000);
+      } else {
         gui.println();
         gui.println("\"I urge you forward, future Whisperer! Connie must be saved!\" Madlene says.");
       }
-    }else{
+      gui.cutsceneMode(false);
+    } else {
       gui.println("The tunnel is boarded up, and you cannot pass through wood.");
       gui.println("Even still, you feel a strong pull from this place. Somehow you know it's very important. Maybe you should come back much later.");
     }
@@ -1301,35 +1370,38 @@ public class Game implements java.io.Serializable {
   /**
    * Activates when you complete the trial in the sky.
    * @author Samantha - code, dialogue
-   * @author Michael - dialogue, sleeps
+   * @author Michael - dialogue
+   * @author Stefano - GUI cutscene
    */
   public void skyGods(){
-    gui.commandsPrinted(false);
+    gui.cutsceneMode(true);
     gui.println("The soothing ambience of the gods ring in your ears. It feels like your brain is being massaged by a baby deer.");
     gui.println("You glance up from your prayer and see the three towering thrones. On them sit three humans, who were not there before. Somehow, you know they are the true Gods of Tableland.\n");
-    sleep(5000);
+    sleep(6000);
     gui.println("\"Welcome to the Temple of the Sky Gods, traveller.\" the first figure says.");
     gui.println("\"You have made it past the first eight trials, traveller.\" the second figure says.");
     gui.println("\"All you must do to prove yourself worthy of the title Whisperer...  Venture forth west and rescue the missing Customer Serviceman, from the being that resides there.\" says the third god.");
     gui.println("\"To aid you on your journey, we bestow upon you these divine artifacts.\" the first figure says.\n");
-    sleep(2000);
+    sleep(9000);
     removeItems();
     inventory.addItem(itemMap.get("the sword of tableland"));
     inventory.addItem(itemMap.get("the shield of tableland"));
     gui.println("The Sword of Tableland taken!");
     gui.println(itemMap.get("the sword of tableland").getDescription());
     gui.println("\nThe Shield of Tableland taken!");
-      gui.println(itemMap.get("the shield of tableland").getDescription());
+    gui.println(itemMap.get("the shield of tableland").getDescription());
+    sleep(3000);
     gui.println("\n\"We have graced you with the sacred Sword and Shield of Tableland. These are the vices you must use.\" says the first god.");
     gui.println("\"We'll be taking any of your worthless mortal trinkets. You won't be needing any of those, I'm afraid.\" says the second god.");
     gui.println("\"Now go! Defeat what thou awaits you! Reclaim your destiny, future Whisperer!\" says the third god.\n");
-    sleep(4000);
+    sleep(7000);
     player.talkedToSkyGods();
     gui.println("With that, the gods vanish before your eyes, and the peaceful ambience returns.");
+    sleep(3000);
     gui.println();
     gui.println("You know what you must do.");
     gui.println("Go to Hell to save your friend, once and for all.");
-    gui.commandsPrinted(true);
+    gui.cutsceneMode(false);
   }
 
   /**
@@ -1589,27 +1661,30 @@ public class Game implements java.io.Serializable {
 
   /**
    * Plays after you kill Mr. DesLauriers (RIP)
-   * @author Stefano - Implemented credits, GUI scrolling, music
+   * @author Stefano - Implemented credits, GUI cutscene, music
    * @author Michael - Wrote credits, dialogue
    */
   private void endOfGame() {
-    gui.commandsPrinted(false);
-    sleep(3000);
-    gui.println();
-    gui.println("You feel the ever-changing world shift once again under your feet.");
-    gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
-    sleep(5000);
-    gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
-    gui.println("He motions cryptically with his hand. \n");
-    sleep(4000);
-    gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
-    gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
-    sleep(4000);
-    gui.println("To be continued...");
+    gameEnded = true;
+    gui.cutsceneMode(true);
+    // sleep(3500);
+    // gui.println();
+    // gui.println("You feel the ever-changing world shift once again under your feet.");
+    // gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
+    // sleep(5000);
+    // gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
+    // gui.println("He motions cryptically with his hand. \n");
+    // sleep(4500);
+    // gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
+    // gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
+    // sleep(4500);
+    // gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
+    gui.cutsceneMode(false);
     gui.readCommand();
     gui.reset();
     gui.centerText(true);
+    gui.cutsceneMode(true);
     fadeMusic(music, 30);
     MusicPlayer credits = null;
     try {
@@ -1619,16 +1694,16 @@ public class Game implements java.io.Serializable {
     }
     credits.setVolume(0);
     credits.play();
-    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     gui.printlnNoScroll("Credits");
     gui.printlnNoScroll("\n\n\n\n");
     gui.printlnNoScroll("Developers");
     gui.printlnNoScroll();
     gui.printlnNoScroll("Gods of Tableland Studios");
-    gui.printlnNoScroll("Stefano Esposto        Michael Gee        Samantha Sedran");
-    gui.printlnNoScroll("\n\n");
+    gui.printlnNoScroll("Stefano Esposto       Michael Gee       Samantha Sedran");
+    gui.printlnNoScroll("\n\n\n");
     gui.printlnNoScroll("Characters");
-    gui.printlnNoScroll("\n");
+    gui.printlnNoScroll();
     gui.printlnNoScroll("Mr. DesLauriers        Himself        ");
     gui.printlnNoScroll(" Constantine Vrachas Matthaios        Himself, Customer Service Rep.");
     gui.printlnNoScroll("           Christopher Cha        Himself, Head of News News");
@@ -1639,25 +1714,31 @@ public class Game implements java.io.Serializable {
     gui.printlnNoScroll("     Geraldo        Abused Rocks");
     gui.printlnNoScroll("  Lucky        Herself");
     gui.printlnNoScroll("   Luna        Herself");
-    gui.printlnNoScroll(" Maggie        Herself\n\n\n");
-    gui.printlnNoScroll("Music\n\n");
-    gui.printlnNoScroll("Daniel Rosenfeld (C418)");
-    gui.printlnNoScroll("Lena Raine");
-    gui.printlnNoScroll("Samantha Sedran\n\n\n");
+    gui.printlnNoScroll(" Maggie        Herself");
+    gui.printlnNoScroll();
     gui.printInfo("Disclaimer: Any similarities to actual people,");
     gui.printInfo("living or dead, is purely coincidental.");
     gui.printlnNoScroll("\n\n\n");
+    gui.printlnNoScroll("Music");
+    gui.printlnNoScroll();
+    gui.printlnNoScroll("Daniel Rosenfeld (C418)");
+    gui.printlnNoScroll("Lena Raine");
+    gui.printlnNoScroll("Samantha Sedran");
+    gui.printlnNoScroll("\n\n\n\n\n");
     gui.printlnNoScroll("Rest in Peace");
     gui.printlnNoScroll();
     gui.printlnNoScroll("Balloony");
     gui.printlnNoScroll("2018-2019");
     gui.printlnNoScroll();
     gui.printlnNoScroll("Forever in our hearts");    
-    gui.printlnNoScroll("\n\n\n\n\n\nSpecial Thanks\n");
-    gui.printlnNoScroll("You\n\n\n\n\n\n\n\n\n");
-    gui.printlnNoScroll("Thanks for playing! Would you like to play again?");
+    gui.printlnNoScroll("\n\n\n\n\n\n\n");
+    gui.printlnNoScroll("Special Thanks\n");
+    gui.printlnNoScroll("You!\n\n\n\n\n\n\n\n\n\n\n\n");
+    gui.printlnNoScroll("Thanks for playing! Would you like to play again?\n");
     gui.printlnNoScroll("Press [y] to play again, [n] to quit.\n");
     gui.scrollSmooth(50);
+    gui.cutsceneMode(false);
+    gui.centerText(false);
     boolean validInput = false;
     while(!validInput){
       String in = gui.readCommand();
@@ -1681,14 +1762,43 @@ public class Game implements java.io.Serializable {
    * @author Stefano - everything
    */
   private void fadeMusic(MusicPlayer toFade, int timeFactor) {
-    gui.commandsPrinted(false);
     int vol = (int) toFade.getVolume();
     while(toFade.getVolume() > -80){
       toFade.setVolume(music.getVolume() - 0.000004);
       if (toFade.getVolume() % 1 == 0) sleep(timeFactor - (vol + 20) > 0 ? timeFactor - (vol + 20) : 0);
     }
     toFade.stop();
-    gui.commandsPrinted(true);
+  }
+
+  /**
+   * Fades the specified MusicPlayer out.
+   * @param toFade - The MusicPlayer to fade out.
+   * @author Stefano
+   */
+  private void fadeMusic(MusicPlayer toFade) {
+    while(toFade.getVolume() > -64){
+      toFade.setVolume(music.getVolume() - 0.000002);
+    }
+    toFade.stop();
+  }
+
+  /**
+   * Fades the specified MusicPlayer in based on the time factor specified.
+   * Also starts the music.
+   * @param toFade - The MusicPlayer to fade in.
+   * @param timeFactor - The time factor for the fade.
+   * This is not a specific amount of time.
+   * @param fromVol - Volume to start at.
+   * @param toVol - Volume to get to.
+   * @author Stefano
+   */
+  private void fadeInMusic(MusicPlayer toFade, int timeFactor, double fromVol, double toVol) {
+    toFade.setVolume(fromVol);
+    toFade.play();
+    while(toFade.getVolume() < toVol - 1){
+      toFade.setVolume(music.getVolume() + 0.000004);
+      if (toFade.getVolume() % 1 == 0) sleep(timeFactor > 0 ? timeFactor : 0);
+    }
   }
 
   //Below are utility functions, serving a purpose only for internal game management.
@@ -1724,7 +1834,8 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-   * The string the player sees at the bottom of the GUI
+   * Returns the string for use in the GUI's info panel.
+   * @return The string.
    * @author Stefano - everything
    */
   public String getGUIGameString() {
