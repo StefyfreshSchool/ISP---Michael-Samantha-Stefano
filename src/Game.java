@@ -65,6 +65,7 @@ public class Game implements java.io.Serializable {
       hasAnsweredNewsQuestions = false;
       supportCheck = false;
       hasOpenedVault = false;
+      musicPlaying = true;
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -265,7 +266,8 @@ public class Game implements java.io.Serializable {
       GameError.fileNotFound(musicSrc);
     }
     music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
-    music.play();
+    if (musicPlaying) music.play();
+    else music.stop();
   }
 
   public static MusicPlayer getMusicPlayer() {
@@ -608,6 +610,8 @@ public class Game implements java.io.Serializable {
           gui.println("The Friends Robot cowers in fear from your dominance. It seems to be perturbed from the water bottle in your hand.");
           gui.println("\"P1eA5e d0N't hUrt m3! 1 hav3 frI3nDs!\" it says, with a robotic quaver in its voice.");
           gui.println("Trembling quietly, it moves out of your path, revealing a carefully chiseled inscription in the wall.");
+          sleep(3000);
+          gui.cutsceneMode(false);
         } else {
           gui.println("That doesn't seem to do anything.");
         }
@@ -897,7 +901,6 @@ public class Game implements java.io.Serializable {
       gui.println("You panic, frozen with terror.");
       gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(sasquatch)) return;
@@ -931,7 +934,6 @@ public class Game implements java.io.Serializable {
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(vaccuum)) return;
@@ -966,7 +968,6 @@ public class Game implements java.io.Serializable {
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(robot)) return;
@@ -993,7 +994,6 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/end.wav");
       fadeInMusic(music, 10, -60, 0);
       if (enemyAttack(deslauriers)) return;
@@ -1203,7 +1203,6 @@ public class Game implements java.io.Serializable {
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland. Prepare to die.\"");
       gui.println(balloony.getCatchphrase());
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(balloony)) return;
@@ -1700,7 +1699,8 @@ public class Game implements java.io.Serializable {
       GameError.fileNotFound("data/audio/credits.wav");
     }
     credits.setVolume(0);
-    credits.play();
+    if (musicPlaying) credits.play();
+    else credits.stop();
     gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     gui.printlnNoScroll("Credits");
     gui.printlnNoScroll("\n\n\n\n");
@@ -1752,7 +1752,7 @@ public class Game implements java.io.Serializable {
       if (in.equals("y")){
         credits.stop();
         music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
-        music.play();
+        if (musicPlaying) music.play();
         restartGame();
         validInput = true;
       } else if (in.equals("n")) endGame();
@@ -1801,7 +1801,7 @@ public class Game implements java.io.Serializable {
    */
   private void fadeInMusic(MusicPlayer toFade, int timeFactor, double fromVol, double toVol) {
     toFade.setVolume(fromVol);
-    toFade.play();
+    if (musicPlaying) toFade.play();
     while(toFade.getVolume() < toVol - 1){
       toFade.setVolume(music.getVolume() + 0.000004);
       if (toFade.getVolume() % 1 == 0) sleep(timeFactor > 0 ? timeFactor : 0);
