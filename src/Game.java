@@ -16,6 +16,8 @@ public class Game implements java.io.Serializable {
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
+  private boolean musicPlaying;
+  private double musicVolumeOffset;
   public static HashMap<String, Room> roomMap; // hashmaps storing rooms, items, and enemies
   public static HashMap<String, Item> itemMap;
   public static HashMap<String, Enemy> enemyMap;
@@ -373,6 +375,10 @@ public class Game implements java.io.Serializable {
       initRooms();
       initEnemies();
       isInTrial = false;
+      hasAnsweredNewsQuestions = false;
+      hasOpenedVault = false;
+      supportCheck = false;
+      gameEnded = false;
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(INVENTORY_WEIGHT);
       player = new Player(PLAYER_HEALTH);
@@ -1036,12 +1042,12 @@ public class Game implements java.io.Serializable {
             while(!validInput){
               String in = gui.readCommand();
               if (in.equals("y")){
+                gui.commandsPrinted(true);
                 restartGame();
                 validInput = true;
                 return true;
               } else if (in.equals("n")) endGame();
             }
-            gui.commandsPrinted(true);
           }
           gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
         } else {
@@ -1630,31 +1636,29 @@ public class Game implements java.io.Serializable {
   public void music(Command command){
     if (!command.hasArgs()) gui.println("What do you want to do with the music?");
     else if (command.getStringifiedArgs().equals("stop")){
-      Game.getMusicPlayer().stop();
+      music.stop();
+      musicPlaying = false;
       gui.println("Music stopped.");
     } 
-    else if (command.getStringifiedArgs().equals("start")){
-      Game.getMusicPlayer().play();
-      gui.println("Music started!");
-    } 
-    else if (command.getStringifiedArgs().equals("play")){
-      Game.getMusicPlayer().play();
+    else if (command.getStringifiedArgs().equals("start") || command.getStringifiedArgs().equals("play")){
+      music.play();
+      musicPlaying = true;
       gui.println("Music started!");
     } 
     else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() - 5);
       gui.println("Music volume down.");
     } 
     else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() + 5);
       gui.println("Music volume up.");
     } 
     else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() - 5);
       gui.println("Music volume down.");
     } 
     else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() + 5);
       gui.println("Music volume up.");
     } 
     else {
@@ -1670,18 +1674,18 @@ public class Game implements java.io.Serializable {
   private void endOfGame() {
     gameEnded = true;
     gui.cutsceneMode(true);
-    // sleep(3500);
-    // gui.println();
-    // gui.println("You feel the ever-changing world shift once again under your feet.");
-    // gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
-    // sleep(5000);
-    // gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
-    // gui.println("He motions cryptically with his hand. \n");
-    // sleep(4500);
-    // gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
-    // gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
-    // sleep(4500);
-    // gui.println("To be continued...");
+    sleep(3500);
+    gui.println();
+    gui.println("You feel the ever-changing world shift once again under your feet.");
+    gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
+    sleep(5000);
+    gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
+    gui.println("He motions cryptically with his hand. \n");
+    sleep(4500);
+    gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
+    gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
+    sleep(4500);
+    gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
     gui.cutsceneMode(false);
     gui.readCommand();
