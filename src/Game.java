@@ -860,22 +860,27 @@ public class Game implements java.io.Serializable {
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("1000 british pounds"))){
         player.setTrial(0);
+        gui.println(); //do not delete
       }
     } else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies")) || (pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
       if (inventory.hasItem(itemMap.get("key of friendship"))){
         player.setTrial(4);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
       if (inventory.hasItem(itemMap.get("scroll of news news"))){
         player.setTrial(1);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
       if (inventory.hasItem(itemMap.get("alaskan cheese"))){
         player.setTrial(2);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room") || pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Teleporter Room")){
       if (inventory.hasItem(itemMap.get("balloony's corpse"))){
         player.setTrial(6);
+        gui.println();//do not delete
       }
     }
 
@@ -971,10 +976,11 @@ public class Game implements java.io.Serializable {
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(robot)) return;
+      player.setTrial(5);
+      gui.println();
       fadeMusic(music, 20);
       startMusic("data/audio/background.wav");
       isInTrial = false;
-      player.setTrial(5);
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
       gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
@@ -1181,9 +1187,8 @@ public class Game implements java.io.Serializable {
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       sleep(5500);
       gui.println();
-      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
-      sleep(1000);
+      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       gui.cutsceneMode(false);
     } else {
       gui.println("There is nothing for you here.");
@@ -1244,8 +1249,8 @@ public class Game implements java.io.Serializable {
           inventory.addItem(itemMap.get("five hundred euros"));
           gui.println("Coonskin Hat taken!");
           gui.println(itemMap.get("coonskin hat").getDescription());
-          gui.println("\n\"Pleasure doing business with you, good sir.\"");
           player.setTrial(3);
+          gui.println("\n\"Pleasure doing business with you, good sir.\"");
         } else {
           gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
         }
@@ -1470,6 +1475,7 @@ public class Game implements java.io.Serializable {
     if (secondWord != ""){
       if ((secondWord.equals("hat") || secondWord.equals("cap")) && inventory.hasItem(itemMap.get("coonskin hat"))){
         gui.println("You are now wearing the fur cap. How stylish!");
+        player.setTrial(3);
         inventory.removeItem(itemMap.get("coonskin hat"));
       } else {
         gui.println("You cannot wear that!");
