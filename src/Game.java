@@ -743,6 +743,9 @@ public class Game implements java.io.Serializable {
     if (nextRoom == null)
       gui.println(direction + " is not a valid direction.");
     else if (!currentRoom.canGoDirection(direction, inventory, player)){
+      if (nextRoom.getRoomName().equals("Tableland Plains") || nextRoom.getRoomName().equals("Town Plaza") || nextRoom.getRoomName().equals("Shadowed Plains")){
+        printTomeHelp();
+      }
       gui.println("You can't go this way yet. Try looking around.");
     } else {
        //print images
@@ -1045,10 +1048,10 @@ public class Game implements java.io.Serializable {
       sleep(4000);
       gui.println();
       gui.println("Question 1: How many Whisperer articles have there been?");
-      gui.println("Question 2: How many planets are in our solar system, including dwarves?");
+      gui.println("Question 2: How many planets are in our solar system, not including dwarves?");
       gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
       gui.println("Question 4: What is the average age of the grade elevens?");
-      gui.println("Question 5: What is the lowest prime number that contains consecutive digits?");
+      gui.println("Question 5: What is the lowest prime number with consecutive digits?");
       gui.println("Question 6: What is the answer to the ultimate question of life, the universe, and everything?");
       gui.println("\"You will have six numbers, each an answer to the six questions. Only then you will prove your worth!\"");
       gui.println("\"What is the code?\"");
@@ -1056,7 +1059,7 @@ public class Game implements java.io.Serializable {
         gui.cutsceneMode(true);
         gui.println("\"Wow. I'm truly impressed. Those are the right numbers! Traveller, you have proved yourself more than worthy of the scroll.\"");
         gui.println();
-        gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
+        gui.println("On the other side of the room, an antique scroll sits in an unlocked, glass case.");
       } else {
         gui.cutsceneMode(true);
         gui.println("\"I'm afraid, traveller, that those aren't the right numbers. You clearly are not worthy to be in this temple! Good riddance!\"");
