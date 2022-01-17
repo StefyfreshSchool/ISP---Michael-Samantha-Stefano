@@ -32,6 +32,10 @@ public class Player implements java.io.Serializable{
         return health;
     }
 
+    /**
+     * After the player talks to the sky gods, it sets boolean talkedToSkyGods to true.
+     * @author Samantha
+     */
     public void talkedToSkyGods(){
         talkedToSkyGods = true;
     }
@@ -60,6 +64,10 @@ public class Player implements java.io.Serializable{
         trials = new boolean[11];
     }
 
+    /**
+     * This checks if the player has completed the eight trials that let it talk to the sky gods.
+     * @author Samantha
+     */
     public boolean skyGodsCheck(){
         for (int i = 0; i < 8; i++){
             if (!trials[i]){

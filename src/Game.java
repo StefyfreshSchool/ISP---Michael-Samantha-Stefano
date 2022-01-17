@@ -16,6 +16,8 @@ public class Game implements java.io.Serializable {
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
   private static MusicPlayer music;
+  private boolean musicPlaying;
+  private double musicVolumeOffset;
   public static HashMap<String, Room> roomMap; // hashmaps storing rooms, items, and enemies
   public static HashMap<String, Item> itemMap;
   public static HashMap<String, Enemy> enemyMap;
@@ -63,6 +65,7 @@ public class Game implements java.io.Serializable {
       hasAnsweredNewsQuestions = false;
       supportCheck = false;
       hasOpenedVault = false;
+      musicPlaying = true;
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -263,7 +266,8 @@ public class Game implements java.io.Serializable {
       GameError.fileNotFound(musicSrc);
     }
     music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
-    music.play();
+    if (musicPlaying) music.play();
+    else music.stop();
   }
 
   public static MusicPlayer getMusicPlayer() {
@@ -373,6 +377,10 @@ public class Game implements java.io.Serializable {
       initRooms();
       initEnemies();
       isInTrial = false;
+      hasAnsweredNewsQuestions = false;
+      hasOpenedVault = false;
+      supportCheck = false;
+      gameEnded = false;
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(INVENTORY_WEIGHT);
       player = new Player(PLAYER_HEALTH);
@@ -602,6 +610,8 @@ public class Game implements java.io.Serializable {
           gui.println("The Friends Robot cowers in fear from your dominance. It seems to be perturbed from the water bottle in your hand.");
           gui.println("\"P1eA5e d0N't hUrt m3! 1 hav3 frI3nDs!\" it says, with a robotic quaver in its voice.");
           gui.println("Trembling quietly, it moves out of your path, revealing a carefully chiseled inscription in the wall.");
+          sleep(3000);
+          gui.cutsceneMode(false);
         } else {
           gui.println("That doesn't seem to do anything.");
         }
@@ -847,22 +857,27 @@ public class Game implements java.io.Serializable {
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("1000 british pounds"))){
         player.setTrial(0);
+        gui.println(); //do not delete
       }
     } else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies")) || (pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
       if (inventory.hasItem(itemMap.get("key of friendship"))){
         player.setTrial(4);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
       if (inventory.hasItem(itemMap.get("scroll of news news"))){
         player.setTrial(1);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
       if (inventory.hasItem(itemMap.get("alaskan cheese"))){
         player.setTrial(2);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room") || pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Teleporter Room")){
       if (inventory.hasItem(itemMap.get("balloony's corpse"))){
         player.setTrial(6);
+        gui.println();//do not delete
       }
     }
 
@@ -888,7 +903,6 @@ public class Game implements java.io.Serializable {
       gui.println("You panic, frozen with terror.");
       gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(sasquatch)) return;
@@ -922,7 +936,6 @@ public class Game implements java.io.Serializable {
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(vaccuum)) return;
@@ -957,14 +970,14 @@ public class Game implements java.io.Serializable {
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(robot)) return;
+      player.setTrial(5);
+      gui.println();
       fadeMusic(music, 20);
       startMusic("data/audio/background.wav");
       isInTrial = false;
-      player.setTrial(5);
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
       gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
@@ -984,7 +997,6 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/end.wav");
       fadeInMusic(music, 10, -60, 0);
       if (enemyAttack(deslauriers)) return;
@@ -1033,12 +1045,12 @@ public class Game implements java.io.Serializable {
             while(!validInput){
               String in = gui.readCommand();
               if (in.equals("y")){
+                gui.commandsPrinted(true);
                 restartGame();
                 validInput = true;
                 return true;
               } else if (in.equals("n")) endGame();
             }
-            gui.commandsPrinted(true);
           }
           gui.println(enemy.getHurtMessage() + " You lost " + tempDamage + " HP!");
         } else {
@@ -1171,9 +1183,8 @@ public class Game implements java.io.Serializable {
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       sleep(5500);
       gui.println();
-      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
-      sleep(1000);
+      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       gui.cutsceneMode(false);
     } else {
       gui.println("There is nothing for you here.");
@@ -1193,7 +1204,6 @@ public class Game implements java.io.Serializable {
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland. Prepare to die.\"");
       gui.println(balloony.getCatchphrase());
       fadeMusic(music);
-      music.stop();
       startMusic("data/audio/fighting.wav");
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(balloony)) return;
@@ -1235,8 +1245,8 @@ public class Game implements java.io.Serializable {
           inventory.addItem(itemMap.get("five hundred euros"));
           gui.println("Coonskin Hat taken!");
           gui.println(itemMap.get("coonskin hat").getDescription());
-          gui.println("\n\"Pleasure doing business with you, good sir.\"");
           player.setTrial(3);
+          gui.println("\n\"Pleasure doing business with you, good sir.\"");
         } else {
           gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
         }
@@ -1461,6 +1471,7 @@ public class Game implements java.io.Serializable {
     if (secondWord != ""){
       if ((secondWord.equals("hat") || secondWord.equals("cap")) && inventory.hasItem(itemMap.get("coonskin hat"))){
         gui.println("You are now wearing the fur cap. How stylish!");
+        player.setTrial(3);
         inventory.removeItem(itemMap.get("coonskin hat"));
       } else {
         gui.println("You cannot wear that!");
@@ -1626,31 +1637,29 @@ public class Game implements java.io.Serializable {
   public void music(Command command){
     if (!command.hasArgs()) gui.println("What do you want to do with the music?");
     else if (command.getStringifiedArgs().equals("stop")){
-      Game.getMusicPlayer().stop();
+      music.stop();
+      musicPlaying = false;
       gui.println("Music stopped.");
     } 
-    else if (command.getStringifiedArgs().equals("start")){
-      Game.getMusicPlayer().play();
-      gui.println("Music started!");
-    } 
-    else if (command.getStringifiedArgs().equals("play")){
-      Game.getMusicPlayer().play();
+    else if (command.getStringifiedArgs().equals("start") || command.getStringifiedArgs().equals("play")){
+      music.play();
+      musicPlaying = true;
       gui.println("Music started!");
     } 
     else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() - 5);
       gui.println("Music volume down.");
     } 
     else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() + 5);
       gui.println("Music volume up.");
     } 
     else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() - 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() - 5);
       gui.println("Music volume down.");
     } 
     else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
-      Game.getMusicPlayer().setVolume(Game.getMusicPlayer().getVolume() + 5);
+      music.setVolume(Game.getMusicPlayer().getVolume() + 5);
       gui.println("Music volume up.");
     } 
     else {
@@ -1692,7 +1701,8 @@ public class Game implements java.io.Serializable {
       GameError.fileNotFound("data/audio/credits.wav");
     }
     credits.setVolume(0);
-    credits.play();
+    if (musicPlaying) credits.play();
+    else credits.stop();
     gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     gui.printlnNoScroll("Credits");
     gui.printlnNoScroll("\n\n\n\n");
@@ -1744,7 +1754,7 @@ public class Game implements java.io.Serializable {
       if (in.equals("y")){
         credits.stop();
         music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
-        music.play();
+        if (musicPlaying) music.play();
         restartGame();
         validInput = true;
       } else if (in.equals("n")) endGame();
@@ -1793,7 +1803,7 @@ public class Game implements java.io.Serializable {
    */
   private void fadeInMusic(MusicPlayer toFade, int timeFactor, double fromVol, double toVol) {
     toFade.setVolume(fromVol);
-    toFade.play();
+    if (musicPlaying) toFade.play();
     while(toFade.getVolume() < toVol - 1){
       toFade.setVolume(music.getVolume() + 0.000004);
       if (toFade.getVolume() % 1 == 0) sleep(timeFactor > 0 ? timeFactor : 0);
