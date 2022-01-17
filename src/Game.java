@@ -25,16 +25,18 @@ public class Game implements java.io.Serializable {
   private Room currentRoom;
   private Room pastRoom;
   private boolean isInTrial; // various game checks
-  private boolean hasAnsweredNewsQuestions;
+  private boolean hasAnsweredNewsQuestions; //is set to true if player has beat the riddles in News News Temple
   private boolean gameEnded;
   private boolean supportCheck;
-  private boolean hasOpenedVault;
+  private boolean hasOpenedVault; //is set to true if player opens the vault in temple of alaskan cheese
   private final float DEFAULT_BACKGROUND_MUSIC_VOL = -15f;
   private final int PLAYER_HEALTH = 100;
   private final int INVENTORY_WEIGHT = 50; // max weight you can carry
 
   /**
    * Create the game and initialize its internal map.
+   * @author Stefano - logic
+   * @author adapted from Mr. DesLauriers's code
    */
   public Game() {
     gui = GUI.getGUI();
@@ -122,12 +124,18 @@ public class Game implements java.io.Serializable {
     parser = new Parser();
   }
 
-  /**Checks if the required Java dependencies are accessible. */
+  /**Checks if the required Java dependencies are accessible. 
+   * @author Stefano - logic
+   * @author adapted from Mr. DesLauriers's code
+  */
   private void existJavaDependencies() {
     new JSONArray();
     new Awaitility();
   }
 
+  /**Initializes Enemies json 
+   * @author Stefano - everything
+  */
   private void initEnemies() {
     if (Enemy.getEnemies() == null) GameError.fileNotFound("data/enemies.json");
     enemyMap = new HashMap<String, Enemy>();
@@ -156,6 +164,10 @@ public class Game implements java.io.Serializable {
     isInTrial = false;
   }
 
+  /**Initializes items json 
+   * @author Stefano - logic
+   * @author adapted from Mr. DesLauriers's code
+  */
   private void initItems() {
     if (Item.getItems() == null) GameError.fileNotFound("data/items.json");
     itemMap = new HashMap<String, Item>();
@@ -192,6 +204,10 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**Initializes rooms json 
+   * @author Stefano - logic
+   * @author adapted from Mr. DesLauriers's code
+  */
   private void initRooms() {
     if (Room.getRooms() == null) GameError.fileNotFound("data/rooms.json");
     roomMap = new HashMap<String, Room>();
@@ -220,7 +236,10 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  /** Main play routine. Loops until end of play. */
+  /** Main play routine. Loops until end of play.
+   * @author Stefano - logic
+   * @author adapted from Mr. DesLauriers's code
+  */
   public void play() {
     printWelcome();
     
@@ -234,7 +253,9 @@ public class Game implements java.io.Serializable {
     }
   }
 
-  /**Starts the background music. */
+  /**Starts the background music. 
+   * @author Stefano - everything
+  */
   private void startMusic(String musicSrc) {
     try {
       music = new MusicPlayer(musicSrc, true);
@@ -249,7 +270,11 @@ public class Game implements java.io.Serializable {
     return music;
   }
 
-  /** Print out the opening message for the player. */
+  /** Print out the opening message for the player.
+   * @author Stefano - dialogue
+   * @author Michael - dialogue
+   * @author adapted from Mr. DesLauriers's code
+   */
   private void printWelcome() {
     gui.reset();
     gui.println("Welcome to the illustrious realm of Tableland!\n");
@@ -332,6 +357,10 @@ public class Game implements java.io.Serializable {
     return false;
   }
 
+  /**
+   * Restarts the game
+   * @author Stefano - everything
+   */
   private void restartGame() {
     resetSaveState();
     gui.reset();
@@ -354,6 +383,11 @@ public class Game implements java.io.Serializable {
     printWelcome();
   }
 
+  /**
+   * Restarts the game
+   * @author Stefano - everything
+   * @author adapted from Mr. DesLauriers's code
+   */
   private void endGame() {
     music.stop();
     gui.println("Thank you for playing. Goodbye!");
@@ -365,7 +399,8 @@ public class Game implements java.io.Serializable {
 
   /**
    * This method is for testing the game.
-   * FEEL FREE to add stuff for testing things!!
+   * FEEL FREE to add stuff for testing things!
+   * @author Stefano - everything
    */
   private void testing(Command command) {
     // gui.println("Don't you dare use this command if you aren't a dev!");
@@ -437,10 +472,11 @@ public class Game implements java.io.Serializable {
 
   /**
    * Allows the player to hit an enemy.
-   * @param command - string of enemy you want to hit and the weapon you want to hit that enemy with
-   * @author Samantha - code
-   * @author Stefano - code
-   * @author Michael - code
+   * @param command - string of enemy you want to hit and the weapon you want to hit that enemy with: "enemy with item"
+   * @author Samantha - Logic
+   * @author Stefano - Logic
+   * @author Michael - friend's robot and Mr. DesLauriers
+   * 
    */
   private void hit(Command command) {
     int enemyHealth;
@@ -457,7 +493,7 @@ public class Game implements java.io.Serializable {
       } else if (!args.contains("with") && enemyMap.get(argsStr.trim()) == null) { // hit, invalid enemy
         gui.println(argsStr + " is not an enemy.");
         gui.println("What would you like to hit?");
-      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, missing either weapon or with
+      } else if (((!args.contains("geraldo") || !args.contains("sword") || !args.contains("water")) && command.getLastArg().equals("with")) || !args.contains("with")){ // hit, args missing either weapon or with
         gui.println("Hit with what weapon?");
       } else if (enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()) == null) { // hit with, invalid enemy
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
@@ -470,10 +506,11 @@ public class Game implements java.io.Serializable {
         gui.println(enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).getName() + " is not an enemy in this room.");
       } else if (!inventory.hasItem(itemMap.get(argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length())))) {
         gui.println("You do not have that item.");
-      } else if (enemyMap.get("friends robot").isThisEnemy(enemy.getName()) && !enemyMap.get("friends robot").getIsDead()) {
+      } else if (enemyMap.get("friends robot").isThisEnemy(enemy.getName()) && !enemyMap.get("friends robot").getIsDead()) { //runs when you try to hit the friends robot with something
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println("The " + weaponName + " just bounces off its titanium armor. It dealt 0 damage.");
         gui.println("Maybe there's another way to defeat it?");
+        gui.println("Is there anything that you have in your inventory that machines hate?");
       } else if (enemyMap.get("deslauriers").isThisEnemy(enemy.getName()) && enemy.getHealth() <= 25 && !supportCheck) {
         String weaponName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
         gui.println("Mr. DesLauriers eyes start to glow.");
@@ -518,9 +555,10 @@ public class Game implements java.io.Serializable {
 
   /**
    * Allows the player to threaten an enemy.
-   * @param command - 
+   * @param command - string of enemy you want to threaten and the weapon you want to threaten that enemy with: "enemy with item"
    * @author Stefano - all logic
    * @author Michael - Friends Robot stuff
+   * @author Samantha - check to see if item is in player's inventory
    */
   private void threaten(Command command) {
     Enemy enemy = enemyRoomCheck(currentRoom);
@@ -543,12 +581,12 @@ public class Game implements java.io.Serializable {
         gui.println(argsStr.substring(0, argsStr.indexOf("with")).trim() + " is not an enemy.");
         gui.println("Who would you like to threaten?");
       } else if (!itemMap.get("geraldo").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("sword").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim()) && !itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // hit enemy with, invalid weapon
-        String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length());
+        String weirdItemName = argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length()); 
         gui.println(weirdItemName + " is not a weapon.");
         gui.println("What would you like to threaten " + enemy.getName() + " with?");
       } else if (!enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).isThisEnemy(enemy.getName())){ // valid enemy, invalid room
         gui.println(enemyMap.get(argsStr.substring(0, argsStr.indexOf("with")).trim()).getName() + " is not an enemy in this room.");
-      } else if (!inventory.hasItem(itemMap.get(argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length())))) {
+      } else if (!inventory.hasItem(itemMap.get(argsStr.substring(argsStr.indexOf(" with ") + 6, argsStr.length())))) { //check to see if item is in player's inventory
         gui.println("You do not have that item.");
       } else if (!itemMap.get("water").isThisItem(argsStr.substring(argsStr.indexOf(" with ") + 6).trim())){ // threaten enemy with, invalid weapon
         gui.println("That doesn't seem to scare the enemy.");
@@ -574,6 +612,8 @@ public class Game implements java.io.Serializable {
   /**
    * Allows the player to take items from the current room. Also now prints description.
    * @param command
+   * @author Stefano - everything
+   * @author adapted from Mr. DesLauriers's code
    */
   private void take(Command command) {
     if (!command.hasArgs()){
@@ -601,6 +641,12 @@ public class Game implements java.io.Serializable {
     }
   }
 
+  /**
+   * Allows the player to drop items.
+   * @param command
+   * @author Stefano - everything
+   * @author adapted from Mr. DesLauriers's code
+   */
   private void drop(Command command) {
     if (!command.hasArgs()){
       gui.println("Drop what?");
@@ -624,6 +670,7 @@ public class Game implements java.io.Serializable {
   /**
    * Saves the game and optionally quits.
    * @param command
+   * @author Stefano - everything
    */
   private boolean save(Command command) {
     boolean quit = false;
@@ -662,7 +709,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Allows the game to load a previously saved state of the game.
-   * @author Stefano
+   * @author Stefano - everything
    */
   private void loadSave() {
     Save save = null;
@@ -699,7 +746,7 @@ public class Game implements java.io.Serializable {
    * After user input, it returns true or false.
    * @param string - Prints whether the operation is a quit or restart.
    * @return True or false based on if the user cancelled the operation or not.
-   * @author Stefano
+   * @author Stefano - everything
    */
   private boolean quitRestart(String string, Command command) {
     if (command.getLastArg().equalsIgnoreCase("confirm") || command.getLastArg().equalsIgnoreCase("y")) return true;
@@ -1094,7 +1141,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * The code for Dog Paradise
-   * @author Samantha - code and dialogue
+   * @author Samantha - logic and dialogue
    * @author Michael - dialogue
    * @author Stefano - GUI cutscene
    */
@@ -1139,8 +1186,8 @@ public class Game implements java.io.Serializable {
 
   /**
    * Does things when you meet balloony.
-   * @author Samantha - everything important
-   * @author Stefano - music
+   * @author Samantha - everything except music fades
+   * @author Stefano - music fades
    */
   public void balloony(){
     Enemy balloony = enemyMap.get("balloony");
@@ -1175,7 +1222,8 @@ public class Game implements java.io.Serializable {
 
   /**
    * Does things when you go into the Fur Store room.
-   * @author Michael - everything
+   * @author Michael - logic and dialogue
+   * @author Samantha - setTrials
    */
   public void salesman(){
     if (!player.getTrial(3)){
@@ -1394,7 +1442,9 @@ public class Game implements java.io.Serializable {
   }
 
   /** 
+   * Allows the player to yell in the game
    * @param secondWord
+   * @author Mr. DesLauriers
    */
   public void yell(String secondWord) {
     if (secondWord != ""){
@@ -1443,7 +1493,7 @@ public class Game implements java.io.Serializable {
   }
 
   /**
-   * Lets player read items (tome, diary)
+   * Lets player read items (tome, diary, scroll)
    * @param command
    * @author Michael - for tome and diary
    * @author Samantha - for scroll
@@ -1575,7 +1625,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Plays music.
-   * @author - Stefano
+   * @author Stefano - everything
    */
   public void music(Command command){
     if (!command.hasArgs()) gui.println("What do you want to do with the music?");
@@ -1712,7 +1762,7 @@ public class Game implements java.io.Serializable {
    * @param timeFactor - The time factor for the fade.
    * This is roughly equivalent to a tenth of a second, so
    * a time factor of 40 is roughly equivalent to 4 seconds.
-   * @author Stefano
+   * @author Stefano - everything
    */
   private void fadeMusic(MusicPlayer toFade, int timeFactor) {
     int vol = (int) toFade.getVolume();
@@ -1761,7 +1811,7 @@ public class Game implements java.io.Serializable {
    * for the specified number of milliseconds, subject to the precision and accuracy 
    * of system timers and schedulers.
    * @param m - milliseconds to sleep for.
-   * @author Stefano
+   * @author Stefano - everything
    */
   public void sleep(long m){
     try {
@@ -1772,7 +1822,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Resets the game save state.
-   * @author Stefano
+   * @author Stefano - everything
    */
   private void resetSaveState() {
     try {
@@ -1789,7 +1839,7 @@ public class Game implements java.io.Serializable {
   /**
    * Returns the string for use in the GUI's info panel.
    * @return The string.
-   * @author Stefano
+   * @author Stefano - everything
    */
   public String getGUIGameString() {
     if (gameEnded) return "";
