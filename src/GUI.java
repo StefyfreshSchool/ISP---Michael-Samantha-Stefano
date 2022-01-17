@@ -7,6 +7,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import static org.awaitility.Awaitility.await;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.BorderLayout;
@@ -101,11 +102,12 @@ public class GUI {
         output.setMargin(new Insets(5,5,5,5));
         output.setFont(new Font("Consolas", Font.PLAIN, 14));
         output.setForeground(Color.LIGHT_GRAY);
-        output.setAutoscrolls(true);
         
 
         //add scroll bar beside text area
         scroll = new JScrollPane(output);
+        scroll.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        output.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         scroll.getVerticalScrollBar().setBackground(Color.BLACK);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -156,7 +158,7 @@ public class GUI {
         gameInfo.setCaretColor(Color.WHITE);
         gameInfo.setBackground(Color.BLACK);
         gameInfo.setHighlighter(null);
-        gameInfo.setMaximumSize(new Dimension(800, 100));
+        gameInfo.setMaximumSize(new Dimension(1500, 100));
         gameInfo.setFont(new Font("Consolas", Font.ITALIC, 14));
         gameInfo.setForeground(Color.LIGHT_GRAY);
         gameContainer.add(gameInfo);
@@ -236,6 +238,7 @@ public class GUI {
         //add text area for the ">"
         JTextField cmd = new JTextField("> ");
         cmd.setEditable(false);
+        cmd.setEnabled(false);
         cmd.setFont(new Font("Consolas", Font.PLAIN, 14));
         cmd.setForeground(Color.LIGHT_GRAY);
         cmd.setBackground(Color.BLACK);
@@ -248,7 +251,7 @@ public class GUI {
         inputContainer.setLayout(new BorderLayout());
         inputContainer.add(input, BorderLayout.CENTER);
         inputContainer.add(cmd, BorderLayout.LINE_START);
-        inputContainer.setMaximumSize(new Dimension(800, 40));
+        inputContainer.setMaximumSize(new Dimension(1500, 40));
         gameContainer.add(inputContainer);
 
 
@@ -512,9 +515,9 @@ public class GUI {
         gameObj = game;
 	}
    
-    public void scrollSmooth(int milisSteps) {
-        int end = scroll.getVerticalScrollBar().getMaximum();
+    public void scrollSmooth(int milisSteps) {    
         int i = 0;
+        int end = scroll.getVerticalScrollBar().getMaximum();
         while(i < end - scroll.getVerticalScrollBar().getHeight()){
             scroll.getVerticalScrollBar().setValue(i);
             end = scroll.getVerticalScrollBar().getMaximum();
@@ -523,6 +526,20 @@ public class GUI {
             } catch (InterruptedException e) {}
             i++;
         }
+        flush();
+    }
+
+    /**
+     * Enables or disables cutscene mode.
+     * @param state
+     */
+    public void cutsceneMode(Boolean state){
+        commandsPrinted = !state;
+        scroll.getVerticalScrollBar().setEnabled(!state);
+        scroll.setWheelScrollingEnabled(!state);
+        scroll.setEnabled(!state);
+        input.setEnabled(!state);
+        if (!state) input.requestFocusInWindow();
     }
 
     /**
