@@ -72,7 +72,7 @@ public class GUI {
         System.setProperty("swing.aatext", "true");
         frame = new JFrame("Adventure Into Tableland - Trials of The Whisperer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 450);
+        frame.setSize(1000, 550);
         try {
             frame.setIconImage(ImageIO.read(new File("data/images/icon.png")));
         } catch (IOException e1) {
@@ -518,9 +518,10 @@ public class GUI {
     public void scrollSmooth(int milisSteps) {    
         int i = 0;
         int end = scroll.getVerticalScrollBar().getMaximum();
+        if (end < 1500) end = 10000;
         while(i < end - scroll.getVerticalScrollBar().getHeight()){
             scroll.getVerticalScrollBar().setValue(i);
-            end = scroll.getVerticalScrollBar().getMaximum();
+            if (i > 10 && i < 15) end = scroll.getVerticalScrollBar().getMaximum();
             try {
                 Thread.sleep(milisSteps);
             } catch (InterruptedException e) {}

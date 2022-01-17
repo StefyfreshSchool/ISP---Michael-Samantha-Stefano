@@ -85,8 +85,10 @@ public class Room implements java.io.Serializable {
    * @throws IllegalArgumentException if the direction is not valid.
    */
   public boolean canGoDirection(String direction, Inventory inventory, Player player) {
-    if ((roomName.equals("West of the Cyan House") || roomName.equals("East of the Cyan House") || roomName.equals("North of the Cyan House")) && inventory.hasItem(Game.itemMap.get("tome"))){
+    if ((roomName.equals("West of the Cyan House") || roomName.equals("East of the Cyan House") || roomName.equals("North of the Cyan House")) && player.getHasReadTome()){
         return true;
+    } else if (!player.getHasReadTome()){
+      Game.printTomeHelp();
     }
     
     if (roomName.equals("Shadowed Plains") && inventory.hasItem(Game.itemMap.get("balloony"))){
