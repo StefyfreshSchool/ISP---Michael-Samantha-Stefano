@@ -26,11 +26,11 @@ public class Game implements java.io.Serializable {
   private Parser parser;
   private Room currentRoom;
   private Room pastRoom;
-  private boolean isInTrial; // various game checks
-  private boolean hasAnsweredNewsQuestions; //is set to true if player has beat the riddles in News News Temple
-  private boolean gameEnded;
-  private boolean supportCheck;
-  private boolean hasOpenedVault; //is set to true if player opens the vault in temple of alaskan cheese
+  private boolean isInTrial; // various game checks. if player is in a trial
+  private boolean hasAnsweredNewsQuestions; // if player has solved Temple riddles
+  private boolean gameEnded; // if game ends
+  private boolean supportCheck; // if player used Moral Support
+  private boolean hasOpenedVault; // if player opens Alaskan Cheese vault 
   private final double DEFAULT_BACKGROUND_MUSIC_VOL = -15;
   private final int PLAYER_HEALTH = 100;
   private final int INVENTORY_WEIGHT = 50; // max weight you can carry
@@ -130,7 +130,7 @@ public class Game implements java.io.Serializable {
 
   /**Checks if the required Java dependencies are accessible. 
    * @author Stefano - logic
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
   */
   private void existJavaDependencies() {
     new JSONArray();
@@ -138,7 +138,8 @@ public class Game implements java.io.Serializable {
   }
 
   /**Initializes Enemies json 
-   * @author Stefano - everything
+   * @author Stefano - everything else
+   * @author Michael - catchphrases, messages, damageMin/Max
   */
   private void initEnemies() {
     if (Enemy.getEnemies() == null) GameError.fileNotFound("data/enemies.json");
@@ -152,7 +153,7 @@ public class Game implements java.io.Serializable {
       Long damageMax = (Long) ((JSONObject) enemyObj).get("damageMax");
       ArrayList<String> messages = new ArrayList<String>();
       for (Object message : (JSONArray) ((JSONObject) enemyObj).get("messages")) {
-        messages.add((String) message);
+        messages.add((String) message); // messages when the enemy attacks you!
       }
       ArrayList<String> aliases = new ArrayList<String>();
       for (Object alias : (JSONArray) ((JSONObject) enemyObj).get("aliases")) {
@@ -169,8 +170,9 @@ public class Game implements java.io.Serializable {
   }
 
   /**Initializes items json 
-   * @author Stefano - logic
-   * @author adapted from Mr. DesLauriers's code
+   * @author Stefano - logic, everything else
+   * @author Michael - quantity, isWeapon, isDroppable, damage
+   * @author adapted from Mr. DesLauriers' code
   */
   private void initItems() {
     if (Item.getItems() == null) GameError.fileNotFound("data/items.json");
@@ -210,7 +212,7 @@ public class Game implements java.io.Serializable {
 
   /**Initializes rooms json 
    * @author Stefano - logic
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
   */
   private void initRooms() {
     if (Room.getRooms() == null) GameError.fileNotFound("data/rooms.json");
@@ -242,7 +244,7 @@ public class Game implements java.io.Serializable {
 
   /** Main play routine. Loops until end of play.
    * @author Stefano - logic
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
   */
   public void play() {
     printWelcome();
@@ -278,9 +280,9 @@ public class Game implements java.io.Serializable {
   }
 
   /** Print out the opening message for the player.
-   * @author Stefano - dialogue
+   * @author Stefano - logic
    * @author Michael - dialogue
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
    */
   private void printWelcome() {
     gui.reset();
@@ -397,13 +399,13 @@ public class Game implements java.io.Serializable {
   /**
    * Restarts the game
    * @author Stefano - everything
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
    */
   private void endGame() {
     music.stop();
     gui.println("Thank you for playing. Goodbye!");
 
-    //Nice transition to exit the game
+    // Nice transition to exit the game
     sleep(1000);
     System.exit(0);
   }
@@ -412,6 +414,7 @@ public class Game implements java.io.Serializable {
    * This method is for testing the game.
    * FEEL FREE to add stuff for testing things!
    * @author Stefano - everything
+   * @author Michael - added tests
    */
   private void testing(Command command) {
     // gui.println("Don't you dare use this command if you aren't a dev!");
@@ -472,11 +475,10 @@ public class Game implements java.io.Serializable {
   }
   
   /**
-   * 
    * @param room
    * @return the enemy that is present in the room.
    * @author Samantha - Sasquatch and Balloony
-   * @author Michael - Vaccuum, Friends Robot, DesLauriers
+   * @author Michael - Vaccuum, Friends Robot, Mr. DesLauriers
    */
   private Enemy enemyRoomCheck(Room room){
     String name = room.getRoomName();
@@ -498,7 +500,7 @@ public class Game implements java.io.Serializable {
    * @param command - string of enemy you want to hit and the weapon you want to hit that enemy with: "enemy with item"
    * @author Samantha - Logic
    * @author Stefano - Logic
-   * @author Michael - friend's robot and Mr. DesLauriers
+   * @author Michael - Friends robot, Mr. DesLauriers, battling code
    * 
    */
   private void hit(Command command) {
@@ -580,7 +582,7 @@ public class Game implements java.io.Serializable {
    * Allows the player to threaten an enemy.
    * @param command - string of enemy you want to threaten and the weapon you want to threaten that enemy with: "enemy with item"
    * @author Stefano - all logic
-   * @author Michael - Friends Robot stuff
+   * @author Michael - everything else
    * @author Samantha - check to see if item is in player's inventory
    */
   private void threaten(Command command) {
@@ -638,7 +640,7 @@ public class Game implements java.io.Serializable {
    * Allows the player to take items from the current room. Also now prints description.
    * @param command
    * @author Stefano - everything
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
    */
   private void take(Command command) {
     if (!command.hasArgs()){
@@ -670,7 +672,7 @@ public class Game implements java.io.Serializable {
    * Allows the player to drop items.
    * @param command
    * @author Stefano - everything
-   * @author adapted from Mr. DesLauriers's code
+   * @author adapted from Mr. DesLauriers' code
    */
   private void drop(Command command) {
     if (!command.hasArgs()){
@@ -872,31 +874,31 @@ public class Game implements java.io.Serializable {
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("1000 british pounds"))){
         player.setTrial(0);
-        gui.println(); //do not delete
+        gui.println(); // do not delete
       }
     } else if ((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies")) || (pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
       if (inventory.hasItem(itemMap.get("key of friendship"))){
         player.setTrial(4);
-        gui.println(); //do not delete
+        gui.println(); // do not delete
       }
     } else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
       if (inventory.hasItem(itemMap.get("scroll of news news"))){
         player.setTrial(1);
-        gui.println(); //do not delete
+        gui.println(); // do not delete
       }
     } else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
       if (inventory.hasItem(itemMap.get("alaskan cheese"))){
         player.setTrial(2);
-        gui.println(); //do not delete
+        gui.println(); // do not delete
       }
     } else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room") || pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Teleporter Room")){
       if (inventory.hasItem(itemMap.get("balloony's corpse"))){
         player.setTrial(6);
-        gui.println();//do not delete
+        gui.println();// do not delete
       }
     }
 
-    //change music
+    // change music
     if (roomMap.get("Gloomy Forest 1") == nextRoom && pastRoom.getRoomName().equals("Gates of Hell")){
       fadeMusic(music, 30);
       music.stop();
@@ -1015,7 +1017,7 @@ public class Game implements java.io.Serializable {
     Enemy deslauriers = enemyMap.get("deslauriers");
     if (!deslauriers.getIsDead()){
       isInTrial = true;
-      gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
+      gui.println("Eyes blazing, Mr. DesLauriers suddenly stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       fadeMusic(music);
       startMusic("data/audio/end.wav", -60);
@@ -1041,7 +1043,7 @@ public class Game implements java.io.Serializable {
    * @param enemy the enemy that will attack you
    * @return boolean value which represents whether or not the player has died
    * @author Stefano - GUI-based logic
-   * @author Michael - implementation in enemies
+   * @author Michael - Everything else, implementation in enemies
    */
   private boolean enemyAttack(Enemy enemy) {
     while(enemy.getHealth() > 0){
@@ -1215,7 +1217,7 @@ public class Game implements java.io.Serializable {
 
   /**
    * Does things when you meet balloony.
-   * @author Samantha - everything except music fades
+   * @author Samantha - everything important
    * @author Stefano - music fades
    */
   public void balloony(){
@@ -1703,17 +1705,17 @@ public class Game implements java.io.Serializable {
   private void endOfGame() {
     gameEnded = true;
     gui.cutsceneMode(true);
-    // sleep(3500);
-    // gui.println();
-    // gui.println("You feel the ever-changing world shift once again under your feet.");
-    // gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
-    // sleep(5000);
-    // gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
-    // gui.println("He motions cryptically with his hand. \n");
-    // sleep(4500);
-    // gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
-    // gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
-    // sleep(4500);
+    sleep(3500);
+    gui.println();
+    gui.println("You feel the ever-changing world shift once again under your feet.");
+    gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
+    sleep(5000);
+    gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
+    gui.println("He motions cryptically with his hand. \n");
+    sleep(4500);
+    gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
+    gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
+    sleep(4500);
     gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
     gui.cutsceneMode(false);
@@ -1812,7 +1814,7 @@ public class Game implements java.io.Serializable {
   /**
    * Fades the specified MusicPlayer out.
    * @param toFade - The MusicPlayer to fade out.
-   * @author Stefano
+   * @author Stefano - everything
    */
   private void fadeMusic(MusicPlayer toFade) {
     while(toFade.getVolume() > -64){
@@ -1829,7 +1831,7 @@ public class Game implements java.io.Serializable {
    * This is not a specific amount of time.
    * @param fromVol - Volume to start at.
    * @param toVol - Volume to get to.
-   * @author Stefano
+   * @author Stefano - everything
    */
   private void fadeInMusic(MusicPlayer toFade, int timeFactor, double fromVol, double toVol) {
     toFade.setVolume(fromVol);
