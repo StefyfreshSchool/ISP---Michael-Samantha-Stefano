@@ -713,7 +713,6 @@ public class Game implements java.io.Serializable {
       gui.println("save " + command.getStringifiedArgs() + " is not a valid save command!");
       return false;
     }
-
     Save game = new Save(roomMap, inventory, currentRoom, pastRoom, player, enemyMap);
     try {
       FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
@@ -721,14 +720,12 @@ public class Game implements java.io.Serializable {
       out.writeObject(game);
       out.close();
       fileOut.close();
-
       gui.println(quit ? "Game saved! Quitting." : "Game saved!");
     } catch (NotSerializableException e){
       gui.printerr("NotSerializableException - A class that needs to be saved does not implement Serializable!");
     } catch (IOException e){
       gui.printerr("Error while saving! Could not save.");
     }
-
     return quit;
   }
 
@@ -822,7 +819,7 @@ public class Game implements java.io.Serializable {
     } else {
        //print images
        if (nextRoom.getRoomName().equals("East of the Cyan House")) gui.printImg("data/images/cyan_house_east.png");
-       if (nextRoom.getRoomName().equals("Parliament Entrance Room") && pastRoom.getRoomName().equals("Parliament Steps")) gui.printImg("data/images/parliament.png");
+       if (nextRoom.getRoomName().equals("Parliament Entrance Room") && !isInTrial) gui.printImg("data/images/parliament.png");
        if (nextRoom.getRoomName().equals("News News Temple")) gui.printImg("data/images/temple_room.png");
        if (nextRoom.getRoomName().equals("Campsite Ruins")) gui.printImg("data/images/laser_frog.png");
 
@@ -875,22 +872,27 @@ public class Game implements java.io.Serializable {
     if (pastRoom.getRoomName().equals("The Lair") && currentRoom.getRoomName().equals("North of Crater")){
       if (inventory.hasItem(itemMap.get("1000 british pounds"))){
         player.setTrial(0);
+        gui.println(); //do not delete
       }
     } else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies")) || (pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
       if (inventory.hasItem(itemMap.get("key of friendship"))){
         player.setTrial(4);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("News News Vault") && currentRoom.getRoomName().equals("News News Temple")){
       if (inventory.hasItem(itemMap.get("scroll of news news"))){
         player.setTrial(1);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("Cheese Vault") && currentRoom.getRoomName().equals("Upper Atrium")){
       if (inventory.hasItem(itemMap.get("alaskan cheese"))){
         player.setTrial(2);
+        gui.println(); //do not delete
       }
     } else if (pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Parliament Entrance Room") || pastRoom.getRoomName().equals("Dept. of Customer Service") && currentRoom.getRoomName().equals("Teleporter Room")){
       if (inventory.hasItem(itemMap.get("balloony's corpse"))){
         player.setTrial(6);
+        gui.println();//do not delete
       }
     }
 
@@ -992,10 +994,11 @@ public class Game implements java.io.Serializable {
       startMusic("data/audio/fighting.wav", -60);
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(robot)) return;
+      player.setTrial(5);
+      gui.println();
       fadeMusic(music, 20);
       startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       isInTrial = false;
-      player.setTrial(5);
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
       gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
@@ -1116,13 +1119,13 @@ public class Game implements java.io.Serializable {
       gui.cutsceneMode(true);
       gui.println();
       gui.println("On the other side of the room, an antique scroll sits in a clear, glass case.");
-      sleep(3000);
+      sleep(2000);
       gui.println();
       gui.println("You hear a booming, disembodied voice: \"Have you come to steal the precious scroll of News News, traveller? Well, you must solve these riddles six.\"");
       sleep(4000);
       gui.println();
       gui.println("Question 1: How many Whisperer articles have there been?");
-      gui.println("Question 2: How many planets are in our solar system, not including dwarves?");
+      gui.println("Question 2: How many planets are in our solar system, not including dwarf planets?");
       gui.println("Question 3: What is the largest number represented by a single character in hexadecimal?");
       gui.println("Question 4: What is the average age of the grade elevens?");
       gui.println("Question 5: What is the lowest prime number with consecutive digits?");
@@ -1202,9 +1205,8 @@ public class Game implements java.io.Serializable {
       gui.println("Maggie speaks. \"Do not fall astray from your path. We all will watch your journey with the greatest interest.\"");
       sleep(5500);
       gui.println();
-      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       player.setTrial(7);
-      sleep(1000);
+      gui.println("The canine trio suddenly vanish when you blink, leaving you bewildered.");
       gui.cutsceneMode(false);
     } else {
       gui.println("There is nothing for you here.");
@@ -1265,8 +1267,8 @@ public class Game implements java.io.Serializable {
           inventory.addItem(itemMap.get("five hundred euros"));
           gui.println("Coonskin Hat taken!");
           gui.println(itemMap.get("coonskin hat").getDescription());
-          gui.println("\n\"Pleasure doing business with you, good sir.\"");
           player.setTrial(3);
+          gui.println("\n\"Pleasure doing business with you, good sir.\"");
         } else {
           gui.println("\"Hmm... I can sense you are lacking the funds. What a shame.\"");
         }
@@ -1493,6 +1495,7 @@ public class Game implements java.io.Serializable {
     if (secondWord != ""){
       if ((secondWord.equals("hat") || secondWord.equals("cap")) && inventory.hasItem(itemMap.get("coonskin hat"))){
         gui.println("You are now wearing the fur cap. How stylish!");
+        player.setTrial(3);
         inventory.removeItem(itemMap.get("coonskin hat"));
       } else {
         gui.println("You cannot wear that!");

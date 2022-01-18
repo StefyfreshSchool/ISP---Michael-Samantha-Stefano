@@ -17,7 +17,7 @@
       "id": "scroll of news news",
       "name": "Scroll of News News",
       "aliases": ["scroll", "news news scroll"],
-      "description": "A worn-down, beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but it seems too stupid to read.",
+      "description": "A worn-down, beat up scroll. It reads 'not yet news news: Connie and Balloony Tie Election!'\nYou can read the rest, but should you?",
       "isOpenable": true,
       "isTakeable": false,
       "isWeapon": false,
