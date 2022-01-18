@@ -12,6 +12,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.awaitility.Awaitility;
 
+/**
+ * Plays Zork.
+ */
 public class Game implements java.io.Serializable { 
   private static final String GAME_SAVE_LOCATION = "data/Game Save.ser";
   private transient static GUI gui;
