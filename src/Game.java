@@ -324,7 +324,7 @@ public class Game implements java.io.Serializable {
     } else if (commandWord.equals("music")) {
       music(command);
 
-    } else if(commandWord.equals("hit")){
+    } else if (commandWord.equals("hit")){
       hit(command);
     } else if (commandWord.equals("restart")) {
       if (quitRestart("restart", command)){
@@ -482,13 +482,13 @@ public class Game implements java.io.Serializable {
     String name = room.getRoomName();
     if (name.equals("The Lair")){
       return enemyMap.get("sasquatch");
-    } else if(name.equals("Lower Hall of Enemies")){
+    } else if (name.equals("Lower Hall of Enemies")){
       return enemyMap.get("vaccuum");
-    } else if(name.equals("Upper Hall of Enemies")){
+    } else if (name.equals("Upper Hall of Enemies")){
       return enemyMap.get("friends robot");
-    } else if(name.equals("Dept. of Customer Service")){
+    } else if (name.equals("Dept. of Customer Service")){
       return enemyMap.get("balloony");
-    } else if(name.equals("Hall of the Volcano King")){
+    } else if (name.equals("Hall of the Volcano King")){
       return enemyMap.get("deslauriers");
     } return null;
   }
@@ -506,7 +506,7 @@ public class Game implements java.io.Serializable {
     Enemy enemy = enemyRoomCheck(currentRoom);
     if (enemy == null){
       gui.println("There is no enemy here. You cannot hit anything.");
-    } else if(enemy.getIsDead()){
+    } else if (enemy.getIsDead()){
       gui.println("The threat has been neutralized. There is no longer an enemy here. You cannot hit anything.");
     } else {
       ArrayList<String> args = command.getArgs();
@@ -588,7 +588,7 @@ public class Game implements java.io.Serializable {
     if (enemy == null){
         gui.println("You are imposing. You are powerful. You stand a little bit straighter.");
         gui.println("There is no enemy here to threaten.");
-    } else if(enemy.getIsDead()){
+    } else if (enemy.getIsDead()){
       gui.println("The threat has been neutralized. There is no longer an enemy here to threaten.");
     } else {
       String argsStr = command.getStringifiedArgs();
@@ -874,7 +874,7 @@ public class Game implements java.io.Serializable {
         player.setTrial(0);
         gui.println(); //do not delete
       }
-    } else if((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies")) || (pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
+    } else if ((pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Upper Hall of Enemies")) || (pastRoom.getRoomName().equals("Lower Hall of Enemies") && currentRoom.getRoomName().equals("Mystery Door of Mystery"))){
       if (inventory.hasItem(itemMap.get("key of friendship"))){
         player.setTrial(4);
         gui.println(); //do not delete
@@ -967,9 +967,9 @@ public class Game implements java.io.Serializable {
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       itemMap.get("key of friendship").isTakeable(true);
       isInTrial = false;
-    } else if(vaccuum.getIsDead() && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
+    } else if (vaccuum.getIsDead() && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
       gui.println("The vaccuum sits on the concrete floor, out of battery.");
-      if(!player.getTrial(4)){
+      if (!player.getTrial(4)){
         gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       }
       if (!enemyMap.get("friends robot").getIsDead()){
@@ -1306,7 +1306,7 @@ public class Game implements java.io.Serializable {
    * @author Michael - everything
    */
   public void cheeseVault(){
-    if(!hasOpenedVault){
+    if (!hasOpenedVault){
       gui.println("The safe's dial taunts you. Maybe it's time to enter the code.");
       gui.println("ENTER CODE:");
       if (correctCode()){
@@ -1320,7 +1320,7 @@ public class Game implements java.io.Serializable {
       }
     } else {
       gui.println("The vault door still hangs wide open, just as you left it.");
-      if(!player.getTrial(2)){
+      if (!player.getTrial(2)){
         gui.println("You see small morsels of pristine Alaskan Cheese inside the princess' vault.");
       }
     }
@@ -1349,7 +1349,7 @@ public class Game implements java.io.Serializable {
           gui.println("You inflated Balloony's corpse.");
           gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
           fadeMusic(music, 30);
-          startMusic("data/audio/sky_gods.wav", DEFAULT_BACKGROUND_MUSIC_VOL - 5);
+          startMusic("data/audio/sky.wav", DEFAULT_BACKGROUND_MUSIC_VOL - 5);
           currentRoom = roomMap.get("Sky Temple Pavillion");
           gui.println(currentRoom.longDescription());
         } else if (!player.getTalkedToSkyGods()){
@@ -1358,7 +1358,7 @@ public class Game implements java.io.Serializable {
           gui.println("Your soul is not ready. Complete the 8 trials detailed in the Tome of Tableland before attempting.");
           gui.println("Try reading the Tome of Tableland.");
         }
-      } else{
+      } else {
         gui.println("That doesn't seem like a good idea.");
       }
     } else {
@@ -1442,31 +1442,31 @@ public class Game implements java.io.Serializable {
    * @author Samantha - everything
    */
   public void removeItems(){
-    if(inventory.hasItem(itemMap.get("geraldo"))){
+    if (inventory.hasItem(itemMap.get("geraldo"))){
       inventory.removeItem(itemMap.get("geraldo"));
     }
-    if(inventory.hasItem(itemMap.get("scroll of news news"))){
+    if (inventory.hasItem(itemMap.get("scroll of news news"))){
       inventory.removeItem(itemMap.get("scroll of news news"));
     }
-    if(inventory.hasItem(itemMap.get("five hundred euros"))){
+    if (inventory.hasItem(itemMap.get("five hundred euros"))){
       inventory.removeItem(itemMap.get("five hundred euros"));
     }
-    if(inventory.hasItem(itemMap.get("balloony's corpse"))){
+    if (inventory.hasItem(itemMap.get("balloony's corpse"))){
       inventory.removeItem(itemMap.get("balloony's corpse"));
     }
-    if(inventory.hasItem(itemMap.get("bottle of water"))){
+    if (inventory.hasItem(itemMap.get("bottle of water"))){
       inventory.removeItem(itemMap.get("bottle of water"));
     }
-    if(inventory.hasItem(itemMap.get("bandages"))){
+    if (inventory.hasItem(itemMap.get("bandages"))){
       inventory.removeItem(itemMap.get("bandages"));
     }
-    if(inventory.hasItem(itemMap.get("coonskin hat"))){
+    if (inventory.hasItem(itemMap.get("coonskin hat"))){
       inventory.removeItem(itemMap.get("coonskin hat"));
     }
-    if(inventory.hasItem(itemMap.get("alaskan cheese"))){
+    if (inventory.hasItem(itemMap.get("alaskan cheese"))){
       inventory.removeItem(itemMap.get("alaskan cheese"));
     }
-    if(inventory.hasItem(itemMap.get("key of friendship"))){
+    if (inventory.hasItem(itemMap.get("key of friendship"))){
       inventory.removeItem(itemMap.get("key of friendship"));
     }
   }
@@ -1645,7 +1645,7 @@ public class Game implements java.io.Serializable {
    */
   public void printHelp(Command command) {
     if (command.hasArgs()) Parser.printCommandHelp(command);
-    else{
+    else {
       gui.println("You are an adventurer in the marvelous lands of Tableland,");
       gui.println("always in search for things to do and items to collect.");
       gui.println();
@@ -1703,17 +1703,17 @@ public class Game implements java.io.Serializable {
   private void endOfGame() {
     gameEnded = true;
     gui.cutsceneMode(true);
-    sleep(3500);
-    gui.println();
-    gui.println("You feel the ever-changing world shift once again under your feet.");
-    gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
-    sleep(5000);
-    gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
-    gui.println("He motions cryptically with his hand. \n");
-    sleep(4500);
-    gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
-    gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
-    sleep(4500);
+    // sleep(3500);
+    // gui.println();
+    // gui.println("You feel the ever-changing world shift once again under your feet.");
+    // gui.println("With the power of the gods at your side, you have vanquished the terrorizing foe and have saved this realm. \n");
+    // sleep(5000);
+    // gui.println("Suddenly, Constantine, co-head of Customer Service, appears before you, hovering metres in the air.");
+    // gui.println("He motions cryptically with his hand. \n");
+    // sleep(4500);
+    // gui.println("The earth shakes once more. The volcano is about to collapse on itself!");
+    // gui.println("You dash to its edges, looking for a way out, when your vision suddenly blanks... \n");
+    // sleep(4500);
     gui.println("To be continued...");
     gui.println("\nPress Enter to continue.");
     gui.cutsceneMode(false);
@@ -1730,7 +1730,10 @@ public class Game implements java.io.Serializable {
     }
     credits.setVolume(0 + musicVolumeOffset <= 0 ? musicVolumeOffset : 0);
     if (!musicPlaying) credits.stop();
-    gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    else credits.play();
+    for (int i = 0; i < gui.textLines() - 2; i++) {
+      gui.printlnNoScroll();
+    }
     gui.printlnNoScroll("Credits");
     gui.printlnNoScroll("\n\n\n\n");
     gui.printlnNoScroll("Developers");

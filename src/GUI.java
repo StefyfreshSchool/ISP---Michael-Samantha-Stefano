@@ -559,4 +559,11 @@ public class GUI {
         KeyEvent e = new KeyEvent(a, 1, 20, 1, KeyEvent.VK_F23, 'a');
         inputListener.keyPressed(e);
     }
+
+    /**
+     * Gets the number of available text lines.
+     */
+    public int textLines() {
+        return frame.getHeight() / 18;
+    }
 }
