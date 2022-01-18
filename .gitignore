@@ -8,3 +8,5 @@ game.ser
 Game Save.ser
 *.jar
 *.ogg
+*.opus
+data/audio/old

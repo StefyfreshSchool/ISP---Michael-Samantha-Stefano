@@ -31,7 +31,7 @@ public class Game implements java.io.Serializable {
   private boolean gameEnded;
   private boolean supportCheck;
   private boolean hasOpenedVault; //is set to true if player opens the vault in temple of alaskan cheese
-  private final float DEFAULT_BACKGROUND_MUSIC_VOL = -15f;
+  private final double DEFAULT_BACKGROUND_MUSIC_VOL = -15;
   private final int PLAYER_HEALTH = 100;
   private final int INVENTORY_WEIGHT = 50; // max weight you can carry
 
@@ -60,12 +60,13 @@ public class Game implements java.io.Serializable {
       initItems();
       initRooms();
       initEnemies();
-      startMusic("data/audio/background.wav");
+      musicPlaying = true;
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       currentRoom = roomMap.get("South of the Cyan House");
       hasAnsweredNewsQuestions = false;
       supportCheck = false;
       hasOpenedVault = false;
-      musicPlaying = true;
+      
       
       //Initialize the game if a previous state was recorded
       Save save = null;
@@ -259,15 +260,17 @@ public class Game implements java.io.Serializable {
   /**Starts the background music. 
    * @author Stefano - everything
   */
-  private void startMusic(String musicSrc) {
+  private void startMusic(String musicSrc, double volume) {
     try {
       music = new MusicPlayer(musicSrc, true);
     } catch (FileNotFoundException e) {
       GameError.fileNotFound(musicSrc);
     }
-    music.setVolume(DEFAULT_BACKGROUND_MUSIC_VOL);
-    if (musicPlaying) music.play();
-    else music.stop();
+    double vol = volume + musicVolumeOffset;
+    if (vol < -79.9) vol = -80;
+    if (vol > 0) vol = 0;
+    music.setVolume(vol);
+    if (!musicPlaying) music.stop();
   }
 
   public static MusicPlayer getMusicPlayer() {
@@ -384,7 +387,7 @@ public class Game implements java.io.Serializable {
       currentRoom = roomMap.get("South of the Cyan House");
       inventory = new Inventory(INVENTORY_WEIGHT);
       player = new Player(PLAYER_HEALTH);
-      startMusic("data/audio/background.wav");
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -453,6 +456,18 @@ public class Game implements java.io.Serializable {
       frogsMadleneAndJorge();
     } else if (c.equals("10")){
       skyGods();
+    } else if (c.equals("11")){
+      inventory.addItem(itemMap.get("balloony"));
+      inventory.addItem(itemMap.get("tome"));
+      player.setTrial(0);
+      player.setTrial(1);
+      player.setTrial(2);
+      player.setTrial(3);
+      player.setTrial(4);
+      player.setTrial(5);
+      player.setTrial(6);
+      player.setTrial(7);
+      player.setTrial(8);
     }
   }
   
@@ -737,7 +752,7 @@ public class Game implements java.io.Serializable {
         currentRoom = save.getCurrentRoom();
         player = save.getPlayer();
         enemyMap = save.getEnemyMap();
-        startMusic("data/audio/background.wav");
+        startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
 
         gui.reset();
         gui.printInfo("Game reloaded from saved data.\n");
@@ -883,7 +898,13 @@ public class Game implements java.io.Serializable {
     if (roomMap.get("Gloomy Forest 1") == nextRoom && pastRoom.getRoomName().equals("Gates of Hell")){
       fadeMusic(music, 30);
       music.stop();
-      startMusic("data/audio/hell.wav");
+      startMusic("data/audio/hell.wav", DEFAULT_BACKGROUND_MUSIC_VOL - 5);
+    }
+
+    if (pastRoom.getRoomName().equals("Sky Temple Pavillion") && nextRoom.getRoomName().equals("Shadowed Plains")){
+      fadeMusic(music, 30);
+      music.stop();
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
     }
   }
 
@@ -901,11 +922,11 @@ public class Game implements java.io.Serializable {
       gui.println("You panic, frozen with terror.");
       gui.println("Then you notice the pile of rocks on the ground. Maybe they can be used as a weapon?");
       fadeMusic(music);
-      startMusic("data/audio/fighting.wav");
+      startMusic("data/audio/fighting.wav", -60);
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(sasquatch)) return;
       fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       gui.println();
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
@@ -934,11 +955,11 @@ public class Game implements java.io.Serializable {
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
       fadeMusic(music);
-      startMusic("data/audio/fighting.wav");
+      startMusic("data/audio/fighting.wav", -60);
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(vaccuum)) return;
       fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       gui.println();
       gui.println("Past its lifeless body, you can see an aluminum ladder.");
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
@@ -968,11 +989,11 @@ public class Game implements java.io.Serializable {
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       fadeMusic(music);
-      startMusic("data/audio/fighting.wav");
+      startMusic("data/audio/fighting.wav", -60);
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(robot)) return;
       fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       isInTrial = false;
       player.setTrial(5);
     }
@@ -994,11 +1015,11 @@ public class Game implements java.io.Serializable {
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       fadeMusic(music);
-      startMusic("data/audio/end.wav");
+      startMusic("data/audio/end.wav", -60);
       fadeInMusic(music, 10, -60, 0);
       if (enemyAttack(deslauriers)) return;
       fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       gameEnded = true;
       gui.cutsceneMode(true);
       sleep(2000);
@@ -1203,11 +1224,11 @@ public class Game implements java.io.Serializable {
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland. Prepare to die.\"");
       gui.println(balloony.getCatchphrase());
       fadeMusic(music);
-      startMusic("data/audio/fighting.wav");
+      startMusic("data/audio/fighting.wav", -60);
       fadeInMusic(music, 1, -60, -25);
       if (enemyAttack(balloony)) return;
       fadeMusic(music, 20);
-      startMusic("data/audio/background.wav");
+      startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       gui.println();
       isInTrial = false;
       itemMap.get("balloony's corpse").isTakeable(true);
@@ -1325,6 +1346,8 @@ public class Game implements java.io.Serializable {
         if ((secondWord.equals("balloon") || secondWord.equals("balloony")) && inventory.hasItem(itemMap.get("balloony")) && currentRoom.equals(roomMap.get("Shadowed Plains"))){
           gui.println("You inflated Balloony's corpse.");
           gui.println("You feel the air rush around you, as the balloon propels you into the Gods' domain.");
+          fadeMusic(music, 30);
+          startMusic("data/audio/sky_gods.wav", DEFAULT_BACKGROUND_MUSIC_VOL - 5);
           currentRoom = roomMap.get("Sky Temple Pavillion");
           gui.println(currentRoom.longDescription());
         } else if (!player.getTalkedToSkyGods()){
@@ -1646,18 +1669,22 @@ public class Game implements java.io.Serializable {
     } 
     else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume-down")){
       music.setVolume(Game.getMusicPlayer().getVolume() - 5);
+      musicVolumeOffset -= 5;
       gui.println("Music volume down.");
     } 
     else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume-up")){
       music.setVolume(Game.getMusicPlayer().getVolume() + 5);
+      musicVolumeOffset += 5;
       gui.println("Music volume up.");
     } 
     else if (Game.getMusicPlayer().getVolume() > -75.1f && command.getStringifiedArgs().equals("volume down")){
       music.setVolume(Game.getMusicPlayer().getVolume() - 5);
+      musicVolumeOffset -= 5;
       gui.println("Music volume down.");
     } 
     else if (Game.getMusicPlayer().getVolume() < -5f && command.getStringifiedArgs().equals("volume up")){
       music.setVolume(Game.getMusicPlayer().getVolume() + 5);
+      musicVolumeOffset += 5;
       gui.println("Music volume up.");
     } 
     else {
@@ -1689,7 +1716,7 @@ public class Game implements java.io.Serializable {
     gui.cutsceneMode(false);
     gui.readCommand();
     gui.reset();
-    gui.centerText(true);
+    gui.centerText(false);
     gui.cutsceneMode(true);
     fadeMusic(music, 30);
     MusicPlayer credits = null;
@@ -1698,9 +1725,8 @@ public class Game implements java.io.Serializable {
     } catch (FileNotFoundException e) {
       GameError.fileNotFound("data/audio/credits.wav");
     }
-    credits.setVolume(0);
-    if (musicPlaying) credits.play();
-    else credits.stop();
+    credits.setVolume(0 + musicVolumeOffset <= 0 ? musicVolumeOffset : 0);
+    if (!musicPlaying) credits.stop();
     gui.printlnNoScroll("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     gui.printlnNoScroll("Credits");
     gui.printlnNoScroll("\n\n\n\n");
@@ -1743,9 +1769,9 @@ public class Game implements java.io.Serializable {
     gui.printlnNoScroll("You!\n\n\n\n\n\n\n\n\n\n\n\n");
     gui.printlnNoScroll("Thanks for playing! Would you like to play again?\n");
     gui.printlnNoScroll("Press [y] to play again, [n] to quit.\n");
+    gui.centerText(true);
     gui.scrollSmooth(50);
     gui.cutsceneMode(false);
-    gui.centerText(false);
     boolean validInput = false;
     while(!validInput){
       String in = gui.readCommand();

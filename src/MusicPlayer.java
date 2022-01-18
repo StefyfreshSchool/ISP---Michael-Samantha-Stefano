@@ -12,6 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * A simple music player that accepts AIFC, AIFF, AU, SND and WAVE input formats.
+ * @author Stefano
  */
 public class MusicPlayer {
     private AudioInputStream audioInput;
