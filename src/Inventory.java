@@ -49,7 +49,14 @@ public class Inventory implements java.io.Serializable {
    */
   public Item getItem(String name){
     int i = items.indexOf(Game.itemMap.get(name));
-    return i == -1 ? null : items.get(i);
+    if (i > -1) return items.get(i);
+    for (Item invItem : items) {
+      if (invItem.getName().equalsIgnoreCase(name)) return invItem;
+      for (String alias : invItem.getAliases()) {
+        if (alias.equalsIgnoreCase(name)) return invItem;
+      }
+    }
+    return null;
   }
 
   public boolean removeItem(Item item) {
@@ -62,6 +69,15 @@ public class Inventory implements java.io.Serializable {
   }
 
   public boolean hasItem(Item item){
-    return items.contains(item);
+    if (items.contains(item)) return true;
+    for (Item invItem : items) {
+      if (invItem.getName().equalsIgnoreCase(item.getName())) return true;
+      for (String alias : invItem.getAliases()) {
+        for (String alias2 : item.getAliases()) {
+          if (alias.equalsIgnoreCase(alias2)) return true;
+        }
+      }
+    }
+    return false;
   }
 }

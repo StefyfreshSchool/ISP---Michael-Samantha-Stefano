@@ -34,6 +34,8 @@ public class Game implements java.io.Serializable {
   private final double DEFAULT_BACKGROUND_MUSIC_VOL = -15;
   private final int PLAYER_HEALTH = 100;
   private final int INVENTORY_WEIGHT = 50; // max weight you can carry
+  private String musicString;
+  private int trial;
 
   /**
    * Create the game and initialize its internal map.
@@ -100,14 +102,18 @@ public class Game implements java.io.Serializable {
         while(!validInput){
           String in = gui.readCommand();
           if (in.equalsIgnoreCase("y") || in.equalsIgnoreCase("yes")){
-            gui.reset();
-
             roomMap = save.getRoomMap();
             inventory = save.getInventory();
             pastRoom = save.getPastRoom();
             currentRoom = save.getCurrentRoom();
             player = save.getPlayer();
             enemyMap = save.getEnemyMap();
+            isInTrial = save.getIsInTrial();
+            trial = save.getTrial();
+            hasAnsweredNewsQuestions = save.getHasAnsweredNewsQuestions();
+            hasOpenedVault = save.getHasOpenedVault();
+            supportCheck = save.getSupportCheck();
+
             gui.printInfo("Restored from saved game.\n");
             validInput = true;
           } else if (in.equalsIgnoreCase("n") || in.equalsIgnoreCase("no") || in.equalsIgnoreCase("cancel")){
@@ -246,6 +252,13 @@ public class Game implements java.io.Serializable {
   */
   public void play() {
     printWelcome();
+    if (isInTrial){
+      if (trial == 1) sasquatch();
+      if (trial == 2) vaccuum();
+      if (trial == 3) robot();
+      if (trial == 4) deslauriers();
+      if (trial == 5) balloony();
+    }
     
     // Enter the main command loop. Here we repeatedly read commands and
     // execute them until the game is over.
@@ -271,6 +284,7 @@ public class Game implements java.io.Serializable {
     if (vol > 0) vol = 0;
     music.setVolume(vol);
     if (!musicPlaying) music.stop();
+    musicString = musicSrc;
   }
 
   public static MusicPlayer getMusicPlayer() {
@@ -414,61 +428,62 @@ public class Game implements java.io.Serializable {
    * @author Stefano - everything
    */
   private void testing(Command command) {
-    // gui.println("Don't you dare use this command if you aren't a dev!");
-    // return;
+    if (command.getStringifiedArgs().equals("easter egg")) gui.println("You found an easter egg!\nYou are either really curious or cheated and looked at the game code.");
+    else gui.println("Don't you dare use this command if you aren't a dev!");
+    return;
     // In the game, type "test #" to activate one of the following tests.
-    String c = command.getStringifiedArgs();
-    if (c.equals("1")){
-      inventory.addItem(itemMap.get("pounds"));
-      salesman();
-    } else if (c.equals("2")){
-      currentRoom = roomMap.get("Castle Grounds");
-    } else if (c.equals("3")){
-      currentRoom = roomMap.get("North of Crater");
-    } else if (c.equals("4")){
-      inventory.addItem(itemMap.get("sword"));
-      inventory.addItem(itemMap.get("bottle"));
-      inventory.addItem(itemMap.get("rocks"));
-      currentRoom = roomMap.get("Mystery Door of Mystery");
-    } else if (c.equals("5")){
-      inventory.addItem(itemMap.get("sword"));
-      inventory.addItem(itemMap.get("bottle"));
-      currentRoom = roomMap.get("Caldera Bridge");
-    } else if (c.equals("6")){
-      player.talkedToSkyGods();
-    } else if (c.equals("7")){
-      skyGods();
-    } else if (c.equals("8")){
-      dogParadise();
-    } else if (c.equals("heal")){
-      player.maxHeal();
-    } else if (c.equals("crash")){
-      GameError.crashGame();
-    } else if (c.equals("img")){
-      gui.printImg("data/images/img.png");
-    } else if (c.equals("credits")){
-      endOfGame();
-    } else if (c.equals("sasquatch")){
-      currentRoom = roomMap.get("The Lair");
-      sasquatch();
-    } else if (c.equals("9")){
-      player.talkedToSkyGods();
-      frogsMadleneAndJorge();
-    } else if (c.equals("10")){
-      skyGods();
-    } else if (c.equals("11")){
-      inventory.addItem(itemMap.get("balloony"));
-      inventory.addItem(itemMap.get("tome"));
-      player.setTrial(0);
-      player.setTrial(1);
-      player.setTrial(2);
-      player.setTrial(3);
-      player.setTrial(4);
-      player.setTrial(5);
-      player.setTrial(6);
-      player.setTrial(7);
-      player.setTrial(8);
-    }
+    // String c = command.getStringifiedArgs();
+    // if (c.equals("1")){
+    //   inventory.addItem(itemMap.get("pounds"));
+    //   salesman();
+    // } else if (c.equals("2")){
+    //   currentRoom = roomMap.get("Castle Grounds");
+    // } else if (c.equals("3")){
+    //   currentRoom = roomMap.get("North of Crater");
+    // } else if (c.equals("4")){
+    //   inventory.addItem(itemMap.get("sword"));
+    //   inventory.addItem(itemMap.get("bottle"));
+    //   inventory.addItem(itemMap.get("rocks"));
+    //   currentRoom = roomMap.get("Mystery Door of Mystery");
+    // } else if (c.equals("5")){
+    //   inventory.addItem(itemMap.get("sword"));
+    //   inventory.addItem(itemMap.get("bottle"));
+    //   currentRoom = roomMap.get("Caldera Bridge");
+    // } else if (c.equals("6")){
+    //   player.talkedToSkyGods();
+    // } else if (c.equals("7")){
+    //   skyGods();
+    // } else if (c.equals("8")){
+    //   dogParadise();
+    // } else if (c.equals("heal")){
+    //   player.maxHeal();
+    // } else if (c.equals("crash")){
+    //   GameError.crashGame();
+    // } else if (c.equals("img")){
+    //   gui.printImg("data/images/img.png");
+    // } else if (c.equals("credits")){
+    //   endOfGame();
+    // } else if (c.equals("sasquatch")){
+    //   currentRoom = roomMap.get("The Lair");
+    //   sasquatch();
+    // } else if (c.equals("9")){
+    //   player.talkedToSkyGods();
+    //   frogsMadleneAndJorge();
+    // } else if (c.equals("10")){
+    //   skyGods();
+    // } else if (c.equals("11")){
+    //   inventory.addItem(itemMap.get("balloony"));
+    //   inventory.addItem(itemMap.get("tome"));
+    //   player.setTrial(0);
+    //   player.setTrial(1);
+    //   player.setTrial(2);
+    //   player.setTrial(3);
+    //   player.setTrial(4);
+    //   player.setTrial(5);
+    //   player.setTrial(6);
+    //   player.setTrial(7);
+    //   player.setTrial(8);
+    // }
   }
   
   /**
@@ -679,14 +694,14 @@ public class Game implements java.io.Serializable {
     }
     String itemName = command.getStringifiedArgs().toLowerCase();
     if (!Item.isValidItem(itemName)){
-      gui.print("Not a valid item!");
+      gui.println("Not a valid item!");
     } else if (!inventory.hasItem(itemMap.get(itemName))){
-      gui.print("You don't seem to have that item.");
+      gui.println("You don't seem to have that item.");
     } else if (!itemMap.get(itemName).getIsDroppable()){
-      gui.print("You can't drop that item!");
+      gui.println("You can't drop that item!");
     } else {
       Item item = itemMap.get(itemName);
-      inventory.removeItem(item);
+      inventory.removeItem(inventory.getItem(itemName));
       currentRoom.addItem(item);
       gui.println("You dropped " + item.getName() + ".");
     }
@@ -713,7 +728,7 @@ public class Game implements java.io.Serializable {
       gui.println("save " + command.getStringifiedArgs() + " is not a valid save command!");
       return false;
     }
-    Save game = new Save(roomMap, inventory, currentRoom, pastRoom, player, enemyMap);
+    Save game = new Save(roomMap, inventory, currentRoom, pastRoom, player, enemyMap, musicString, isInTrial, hasAnsweredNewsQuestions, hasOpenedVault, supportCheck, trial);
     try {
       FileOutputStream fileOut = new FileOutputStream(GAME_SAVE_LOCATION);
       ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -749,12 +764,24 @@ public class Game implements java.io.Serializable {
         currentRoom = save.getCurrentRoom();
         player = save.getPlayer();
         enemyMap = save.getEnemyMap();
-        startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
-
+        isInTrial = save.getIsInTrial();
+        trial = save.getTrial();
+        hasAnsweredNewsQuestions = save.getHasAnsweredNewsQuestions();
+        hasOpenedVault = save.getHasOpenedVault();
+        supportCheck = save.getSupportCheck();
         gui.reset();
-        gui.printInfo("Game reloaded from saved data.\n");
         gui.centerText(false);
-        gui.println(currentRoom.longDescription());
+        gui.printInfo("Game reloaded from saved data.\n");
+        printWelcome();
+        if (!isInTrial){
+          startMusic(save.getMusic(), DEFAULT_BACKGROUND_MUSIC_VOL);          
+        } else {
+          if (trial == 1) sasquatch();
+          if (trial == 2) vaccuum();
+          if (trial == 3) robot();
+          if (trial == 4) deslauriers();
+          if (trial == 5) balloony();
+        }
       } else {
         gui.println("There is no valid state to load!");
       }
@@ -919,6 +946,7 @@ public class Game implements java.io.Serializable {
     Enemy sasquatch = enemyMap.get("sasquatch");
     if (!(sasquatch.getHealth() <= 0)){
       isInTrial = true;
+      trial = 1;
       gui.println("The Sasquatch steps out of the cave.");
       gui.println(sasquatch.getCatchphrase() + " He screams.");
       gui.println("You panic, frozen with terror.");
@@ -932,6 +960,7 @@ public class Game implements java.io.Serializable {
       gui.println();
       gui.println("Just inside of the cave you can see muddy pieces of paper. What are they?");
       isInTrial = false;
+      trial = 0;
       currentRoom.getItem("pounds").isTakeable(true);
     } else if ((sasquatch.getHealth() <= 0) && currentRoom.getRoomName().equals("The Lair")) {
       gui.println("The sasquatch's corpse lies strewn on the ground.");
@@ -954,6 +983,7 @@ public class Game implements java.io.Serializable {
     Enemy vaccuum = enemyMap.get("vaccuum");
     if (vaccuum.getHealth() > 0){
       isInTrial = true;
+      trial = 2;
       gui.println("The Vaccuum wheels itself towards you.");
       gui.println(vaccuum.getCatchphrase() + " Your ears ache from the noise.");
       fadeMusic(music);
@@ -967,6 +997,7 @@ public class Game implements java.io.Serializable {
       gui.println("A brass key lies on the floor, dropped by the vaccuum.");
       itemMap.get("key of friendship").isTakeable(true);
       isInTrial = false;
+      trial = 0;
     } else if (vaccuum.getIsDead() && currentRoom.getRoomName().equals("Lower Hall of Enemies")){
       gui.println("The vaccuum sits on the concrete floor, out of battery.");
       if (!player.getTrial(4)){
@@ -988,6 +1019,7 @@ public class Game implements java.io.Serializable {
     Enemy robot = enemyMap.get("friends robot");
     if (robot.getHealth() > 0){
       isInTrial = true;
+      trial = 3;
       gui.println("The Friends Robot marches mechanically, gazing at you with a happy expression.");
       gui.println(robot.getCatchphrase() + " It beeps. It is blocking your path. You have no choice but to defeat it.");
       fadeMusic(music);
@@ -999,6 +1031,7 @@ public class Game implements java.io.Serializable {
       fadeMusic(music, 20);
       startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       isInTrial = false;
+      trial = 0;
     }
     if (enemyMap.get("friends robot").getIsDead() && currentRoom.getRoomName().equals("Upper Hall of Enemies")){
       gui.println("The wall states: \"Pray before the three\". What could that possibly mean?");
@@ -1015,6 +1048,7 @@ public class Game implements java.io.Serializable {
     Enemy deslauriers = enemyMap.get("deslauriers");
     if (!deslauriers.getIsDead()){
       isInTrial = true;
+      trial = 4;
       gui.println("Mr. DesLauriers stands up from his throne. He is twelve feet tall. \nHe is the guardian of this realm, and you know you must defeat him.");
       gui.println(deslauriers.getCatchphrase() + " He yells.");
       fadeMusic(music);
@@ -1030,6 +1064,7 @@ public class Game implements java.io.Serializable {
       gui.println("The world seems a little more vibrant.");
       endOfGame();
       isInTrial = false;
+      trial = 0;
     } else if (deslauriers.getIsDead() && currentRoom.getRoomName().equals("Hall of the Volcano King")) {
       gui.println("The world seems a little more vibrant.");
       gui.println(currentRoom.exitString());
@@ -1222,6 +1257,7 @@ public class Game implements java.io.Serializable {
     Enemy balloony = enemyMap.get("balloony");
     if (!player.getTrial(6) && balloony.getHealth() > 0){
       isInTrial = true;
+      trial = 5;
       gui.println("Floating above the wreckage is a large blue balloon.");
       gui.println("\"My name is Balloony, I am the rightful head of customer service of Tableland. Prepare to die.\"");
       gui.println(balloony.getCatchphrase());
@@ -1233,6 +1269,7 @@ public class Game implements java.io.Serializable {
       startMusic("data/audio/background.wav", DEFAULT_BACKGROUND_MUSIC_VOL);
       gui.println();
       isInTrial = false;
+      trial = 0;
       itemMap.get("balloony's corpse").isTakeable(true);
       gui.println("Balloony's corpse lays crumpled on the ground.");
       gui.println("You hear a little voice inside you saying \"Take the balloon.\"");
